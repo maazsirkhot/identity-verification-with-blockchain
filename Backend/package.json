@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "description": "This service manages the backend for identity and data verification using Blockchain",
   "main": "server.js",
-  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon --exec babel-node server.js"
@@ -20,17 +19,19 @@
   "author": "Maaz, Krutika, Shraddha, Hetal",
   "license": "ISC",
   "devDependencies": {
-    "@babel/cli": "^7.12.10",
-    "@babel/core": "^7.12.10",
-    "@babel/node": "^7.12.10",
-    "@babel/preset-env": "^7.12.10",
     "eslint": "^7.15.0",
     "eslint-config-airbnb": "^18.2.1",
     "nodemon": "^2.0.6"
   },
   "dependencies": {
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
-    "mongoose": "^5.11.7"
+    "fs": "^0.0.1-security",
+    "mongoose": "^5.11.7",
+    "morgan": "^1.10.0",
+    "morgan-body": "^2.5.2",
+    "path": "^0.12.7"
   }
 }
