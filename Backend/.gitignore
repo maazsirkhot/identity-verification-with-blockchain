@@ -8,5 +8,6 @@ node_modules/
 .env
 
 # Log files
-logs
-detailedLogs.log
+!logs/
+logs/*
+!logs/about.md
