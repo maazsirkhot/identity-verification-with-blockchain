@@ -8,6 +8,9 @@ const fs = require('fs');
 const path = require('path');
 const config = require('./bin/config');
 const constants = require('./utils/constants');
+const textract = require('./awstextract/textract');
+const multer = require('multer'); 
+const upload = multer({dest : './images'});
 
 const app = express();
 
@@ -48,6 +51,16 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors({ origin: '*', credentials: false }));
 
 app.get('/ping', (req, res) => res.status(200).send());
+
+// API to use Amazon Textract
+app.post('/fetchUserDetailsFromId',upload.single("document"),(req,res) => {
+  textract.fetchUserDetailsFromId(req,res);
+});
+
+// API to test
+app.get('/test',(req,res) => {
+  textract.getRelevantText(req,res);
+});
 
 // eslint-disable-next-line no-unused-vars
 app.use((err, req, res, next) => {
