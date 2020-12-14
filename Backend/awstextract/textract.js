@@ -13,10 +13,34 @@ getRelevantText = (data) => {
     var wordsjson = {};
     var keyJson = [];
     var valueJson = [];
+    var output = [];
 
     blocks.forEach(function(innerdata) {
         var BlockType = innerdata.BlockType;
         var TextType = innerdata.TextType;
+        if(BlockType == "LINE" && innerdata.Text 
+            && innerdata.Text.substring(0,2) == "FN"){
+                var d = {};
+                d["key"] = "First Name";
+                d["value"] = innerdata.Text.substring(2);
+                output.push(d);
+            }
+        if(BlockType == "LINE" && innerdata.Text 
+            && innerdata.Text.substring(0,2) == "LN"){
+                var d = {};
+                d["key"] = "Last Name";
+                d["value"] = innerdata.Text.substring(2);
+                output.push(d);
+            }
+        
+        if(BlockType == "LINE" && innerdata.Text 
+            && innerdata.Text.substring(0,3) == "DOB"){
+                var d = {};
+                d["key"] = "DOB";
+                d["value"] = innerdata.Text.substring(4);
+                output.push(d);
+            }
+        
         if(BlockType == "WORD" && TextType == "PRINTED"){
             wordsjson[innerdata.Id] = innerdata.Text;
         }
@@ -38,14 +62,16 @@ getRelevantText = (data) => {
                 keyJson.push(inn);
             }else if(EntityTypes[0] == "VALUE"){
                 var inn = {};
-                relationships.forEach(function(valueblock) {
-                    var ids = valueblock.Ids;
-                    var type = valueblock.Type;
-                    if(type == "CHILD"){
-                        inn["child"] = ids;
-                        inn["mainid"] = innerdata.Id;
-                    }
-                });
+                if(relationships != undefined){
+                    relationships.forEach(function(valueblock) {
+                        var ids = valueblock.Ids;
+                        var type = valueblock.Type;
+                        if(type == "CHILD"){
+                            inn["child"] = ids;
+                            inn["mainid"] = innerdata.Id;
+                        }
+                    });
+                }
                 valueJson.push(inn);
             }
         }
@@ -56,12 +82,14 @@ getRelevantText = (data) => {
 
     // forming the output data
     
-    output = [];
+    
     keyJson.forEach(function(key) {
         var keyword = "";
         var valueword = "";
         var innerout = {};
         var childs = key.child;
+        if(childs === undefined)
+            return;
         childs.forEach(function(c) {
             keyword+= wordsjson[c] + " ";
         });
@@ -89,17 +117,17 @@ var textract = new AWS.Textract();
 fetchUserDetailsFromId = (req,res) => {
     console.log(req.file);
 
-    fs.rename(req.file.path, './images/doc.jpg', (err)=>{ 
-        console.log(err); 
-    }); 
+    // fs.rename(req.file.path, './images/doc.jpg', (err)=>{ 
+    //     console.log(err); 
+    // }); 
 
-    var bitmap = fs.readFileSync('./images/doc.jpg');
+    var bitmap = fs.readFileSync(req.file.path);
     // convert binary data to base64 encoded string
     var img =  new Buffer(bitmap).toString('base64');
 
     var params = {
         Document: { /* required */
-          Bytes: Buffer.from(img, 'base64') || 'img' /* Strings will be Base-64 encoded on your behalf */
+          Bytes: Buffer.from(img, 'base64') || img /* Strings will be Base-64 encoded on your behalf */
         //   S3Object: {
         //     Bucket: 'STRING_VALUE',
         //     Name: 'STRING_VALUE',
@@ -114,6 +142,7 @@ fetchUserDetailsFromId = (req,res) => {
     textract.analyzeDocument(params, function (err, data) {
         if (err) console.log(err, err.stack); // an error occurred
         else{
+            console.log(data);
             getRelevantText(data);
         }           // successful response
     });
