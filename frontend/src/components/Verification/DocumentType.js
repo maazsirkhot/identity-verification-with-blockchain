@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { Redirect } from "react-router-dom";
-import NavBar from "../Header/NavBar";
 import DocumentBanner from "./DocumentBanner";
 import passport from "./passport.png";
 import license from "./drivers-license.png";
@@ -22,7 +21,6 @@ export class DocumentType extends Component {
     return (
       <div>
         {redirectVar}
-        <NavBar />
         <DocumentBanner />
         <form onSubmit={this.onSubmit}>
           <section className="document-main">

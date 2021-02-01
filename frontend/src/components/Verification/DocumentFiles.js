@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import NavBar from "../Header/NavBar";
 import DocumentBanner from "./DocumentBanner";
 import axios from "axios";
 
@@ -66,7 +65,6 @@ export class DocumentFiles extends Component {
   render() {
     return (
       <div>
-        <NavBar />
         <DocumentBanner />
         <form onSubmit={this.onSubmit}>
           <section className="document-main">

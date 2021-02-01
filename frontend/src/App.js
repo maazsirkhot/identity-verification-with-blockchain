@@ -1,19 +1,19 @@
-import { BrowserRouter, Route } from "react-router-dom";
-import Home from "./components/Homepage/Home";
-import DocumentType from "./components/Verification/DocumentType";
-import DocumentFiles from "./components/Verification/DocumentFiles";
-import "./App.css";
+import { BrowserRouter } from "react-router-dom";
+import AOS from "aos";
+import Routes from "./components/Routes";
+import "./assets/css/custom.css";
+import "./assets/css/aos.css";
+
+AOS.init();
 
 function App() {
   return (
-    <div className="App">
-      <BrowserRouter>
-        <Route exact path="/" component={Home} />
-        <Route path="/documenttype" component={DocumentType} />
-        <Route path="/documentfiles" component={DocumentFiles} />
-      </BrowserRouter>
-    </div>
-  );  
+    <BrowserRouter>
+      <div className="App">
+        <Routes />
+      </div>
+    </BrowserRouter>
+  );
 }
 
 export default App;
