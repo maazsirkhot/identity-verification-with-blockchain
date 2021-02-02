@@ -18,6 +18,7 @@
     }
   });
   $(document).ready(function () {
+    $(".venobox").venobox();
     // Header scroll class
     $(window).scroll(function () {
       if ($(this).scrollTop() > 100) {

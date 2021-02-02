@@ -9,28 +9,6 @@ export class NavBar extends Component {
     return (
       <div>
         <div id="mysidemenu">
-          <div class="profile">
-            <img alt="Hetal" class="img-fluid rounded-circle" />
-            <h2>Hetal Shah</h2>
-            <div class="social-links text-center">
-              <a
-                href="https://github.com/ihetal"
-                target="_blank"
-                class="github"
-                rel="noreferrer"
-              >
-                <i class="fa fa-github"></i>
-              </a>
-              <a
-                href="https://www.linkedin.com/in/ihetalshah/"
-                target="_blank"
-                class="linkedin"
-                rel="noreferrer"
-              >
-                <i class="fa fa-linkedin"></i>
-              </a>
-            </div>
-          </div>
           <nav class="nav-menu">
             <ul>
               <li>
@@ -50,23 +28,23 @@ export class NavBar extends Component {
                     aria-hidden="true"
                     style={{ fontSize: "18px" }}
                   ></i>{" "}
-                  About
+                  Dashboard
                 </a>
               </li>
 
               <li>
                 <a href="/#experience">
-                  <i class="fa fa-file" aria-hidden="true"></i> Experience
+                  <i class="fa fa-file" aria-hidden="true"></i> Login
                 </a>
               </li>
               <li>
                 <a href="/#projects">
-                  <i class="fa fa-folder-open" aria-hidden="true"></i> Projects
+                  <i class="fa fa-folder-open" aria-hidden="true"></i> Signup
                 </a>
               </li>
               <li>
                 <a href="/#contact">
-                  <i class="fa fa-envelope" aria-hidden="true"></i> Contact Me
+                  <i class="fa fa-envelope" aria-hidden="true"></i> Contact us
                 </a>
               </li>
             </ul>
