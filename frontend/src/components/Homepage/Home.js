@@ -325,8 +325,7 @@ export class Home extends Component {
             </div>
           </div>
         </section>
-        <br />
-        <br />
+
         <footer id="footer">
           <div class="footer-newsletter" data-aos="fade-up">
             <div class="container">

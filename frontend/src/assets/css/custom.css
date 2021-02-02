@@ -387,11 +387,11 @@ section {
 
 .contact .info i {
   font-size: 20px;
-  color: #ffb10a;
+  color: #fff;
   float: left;
   width: 44px;
   height: 44px;
-  background: #fdf1ec;
+  background: #4eb5f1;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -445,7 +445,7 @@ section {
 }
 
 .contact .php-email-form button[type="submit"] {
-  background: #2d71a1;
+  background: #4eb5f1;
   border: 0;
   padding: 10px 24px;
   color: #fff;
@@ -504,7 +504,7 @@ section {
   background: none;
   font-size: 16px;
   padding: 0 20px;
-  background: #2d71a1;
+  background: #4eb5f1;
   color: #fff;
   transition: 0.3s;
   border-radius: 4px;
