@@ -33,14 +33,14 @@ export class NavBar extends Component {
               </li>
 
               <li>
-                <a href="/#experience">
+                <Link to="/login">
                   <i class="fa fa-file" aria-hidden="true"></i> Login
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="/#projects">
+                <Link to="/signup">
                   <i class="fa fa-folder-open" aria-hidden="true"></i> Signup
-                </a>
+                </Link>
               </li>
               <li>
                 <a href="/#contact">
@@ -85,13 +85,19 @@ export class NavBar extends Component {
                   </a>
                 </li>
                 <li>
-                  <a href="/#experience">Login</a>
+                  <Link class="nav-link" to="/login">
+                    Login
+                  </Link>
                 </li>
                 <li>
-                  <a href="/#projects">Sign Up</a>
+                  <Link class="nav-link" to="/signup">
+                    Sign Up
+                  </Link>
                 </li>
                 <li>
-                  <a href="/#contact">Contact Us</a>
+                  <a class="nav-link" href="/#contact">
+                    Contact Us
+                  </a>
                 </li>
               </ul>
             </nav>

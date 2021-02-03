@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import NavBar from "../Header/NavBar";
 import logo from "../../assets/img/logo.png";
 import phone1 from "../../assets/img/phone_1.png";
 import phone2 from "../../assets/img/phone_2.png";
@@ -14,6 +15,7 @@ export class Home extends Component {
   render() {
     return (
       <div>
+        <NavBar />
         <section class="hero-section" id="hero">
           <div class="wave">
             <svg width="100%" height="355px" viewBox="0 0 1920 355">
