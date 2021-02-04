@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
 import "../../assets/css/login.css";
 
 export class Login extends Component {
@@ -24,7 +25,7 @@ export class Login extends Component {
 
   onClick = (event) => {
     event.preventDefault();
-    event.target.name === "signIn"
+    event.target.name == "signIn"
       ? this.container.current.classList.remove("right-panel-active")
       : this.container.current.classList.add("right-panel-active");
     this.setState({ errorMessage: "" });
@@ -52,13 +53,13 @@ export class Login extends Component {
             <form onSubmit={this.signUp}>
               <h2>Create Account</h2>
               <div class="social-container">
-                <a href="#" class="social">
+                <a href="/" class="social">
                   <i class="fab fa-facebook-f"></i>
                 </a>
-                <a href="#" class="social">
+                <a href="/" class="social">
                   <i class="fab fa-google-plus-g"></i>
                 </a>
-                <a href="#" class="social">
+                <a href="/" class="social">
                   <i class="fab fa-linkedin-in"></i>
                 </a>
               </div>
@@ -95,19 +96,25 @@ export class Login extends Component {
                 <option value="verifier">Verifier</option>
               </select>
               <button>Sign Up</button>
+              <p>
+                Already have an account?{" "}
+                <Link class="custom-link" onClick={this.onClick} name="signIn">
+                  Login here!
+                </Link>
+              </p>
             </form>
           </div>
           <div class="form-container sign-in-container">
             <form onSubmit={this.signIn}>
               <h2>Sign in</h2>
               <div class="social-container">
-                <a href="#" class="social">
+                <a href="/" class="social">
                   <i class="fab fa-facebook-f"></i>
                 </a>
-                <a href="#" class="social">
+                <a href="/" class="social">
                   <i class="fab fa-google-plus-g"></i>
                 </a>
-                <a href="#" class="social">
+                <a href="/" class="social">
                   <i class="fab fa-linkedin-in"></i>
                 </a>
               </div>
@@ -127,6 +134,12 @@ export class Login extends Component {
               />
 
               <button>Sign In</button>
+              <p>
+                New User?{" "}
+                <Link class="custom-link" onClick={this.onClick}>
+                  Sign up here!
+                </Link>
+              </p>
             </form>
           </div>
           <div class="overlay-container">

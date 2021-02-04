@@ -102,7 +102,7 @@
   overflow: hidden;
   width: 768px;
   max-width: 100%;
-  min-height: 480px;
+  min-height: 600px;
 }
 
 .register .form-container {
@@ -111,7 +111,9 @@
   height: 100%;
   transition: all 0.6s ease-in-out;
 }
-
+.register .form-container .custom-link {
+  text-decoration: underline;
+}
 .sign-in-container {
   left: 0;
   width: 50%;
@@ -230,4 +232,33 @@
   margin: 0 5px;
   height: 40px;
   width: 40px;
+}
+
+.social-container a:hover {
+  background: #333;
+}
+.social-container a:hover i {
+  color: #fff;
+}
+
+@media (max-width: 780px) {
+  .register .registercontainer {
+    width: 80%;
+  }
+}
+@media (max-width: 730px) {
+  .overlay-container {
+    display: none;
+  }
+  .sign-in-container,
+  .sign-up-container {
+    width: 100%;
+  }
+  .register form {
+    padding: 0 30px;
+  }
+  .registercontainer.right-panel-active .sign-in-container,
+  .registercontainer.right-panel-active .sign-up-container {
+    transform: translateX(0%);
+  }
 }

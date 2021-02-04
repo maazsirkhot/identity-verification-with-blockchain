@@ -1,15 +1,11 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
 import NavBar from "../Header/NavBar";
 import logo from "../../assets/img/logo.png";
 import phone1 from "../../assets/img/phone_1.png";
 import phone2 from "../../assets/img/phone_2.png";
 import features1 from "../../assets/img/features1.png";
 import features2 from "../../assets/img/features2.jpg";
-
-// import "../../assets/css/test.css";
-
-// import "../../assets/css/boot.css";
-// import "../../assets/css/nine.css";
 
 export class Home extends Component {
   render() {
@@ -53,9 +49,9 @@ export class Home extends Component {
                       blockchain
                     </p>
                     <p data-aos="fade-right" data-aos-delay="200">
-                      <a href="#" class="btn btn-outline-white">
+                      <Link to="/login" class="btn btn-outline-white">
                         Get started
-                      </a>
+                      </Link>
                     </p>
                   </div>
                   <div
