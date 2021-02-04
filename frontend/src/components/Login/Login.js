@@ -25,7 +25,7 @@ export class Login extends Component {
 
   onClick = (event) => {
     event.preventDefault();
-    event.target.name == "signIn"
+    event.target.name === "signIn"
       ? this.container.current.classList.remove("right-panel-active")
       : this.container.current.classList.add("right-panel-active");
     this.setState({ errorMessage: "" });
