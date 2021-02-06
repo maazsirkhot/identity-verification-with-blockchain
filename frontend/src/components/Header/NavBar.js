@@ -17,7 +17,7 @@ export class NavBar extends Component {
                     class="fa fa-home"
                     aria-hidden="true"
                     style={{ fontSize: "18px" }}
-                  ></i>{" "}
+                  ></i>
                   Home
                 </a>
               </li>
@@ -27,7 +27,7 @@ export class NavBar extends Component {
                     class="fa fa-user"
                     aria-hidden="true"
                     style={{ fontSize: "18px" }}
-                  ></i>{" "}
+                  ></i>
                   Dashboard
                 </a>
               </li>
@@ -67,7 +67,7 @@ export class NavBar extends Component {
                 src={logo}
                 width="120"
                 height="45"
-                class="d-inline-block align-top name-logo2"
+                class="align-top name-logo2"
                 alt=""
               />
             </a>
@@ -80,9 +80,9 @@ export class NavBar extends Component {
                   </a>
                 </li>
                 <li>
-                  <a class="nav-link" href="/#about">
+                  <Link class="nav-link" to="/userdashboard">
                     Dashboard
-                  </a>
+                  </Link>
                 </li>
                 <li>
                   <Link class="nav-link" to="/login">
