@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import "../../assets/css/header.css";
 import logo from "../../assets/img/logo.png";
 
 export class DashboardNavbar extends Component {
@@ -37,15 +36,15 @@ export class DashboardNavbar extends Component {
                           </span>
                         </div>
                         <div class="dropdown-menu dropdown-menu-right">
-                          <a href="accounts.html" class="dropdown-item">
+                          <Link to="/" class="dropdown-item">
                             <i class="fas fa-user"></i> Account
-                          </a>
-                          <a href="settings.html" class="dropdown-item">
+                          </Link>
+                          <Link to="/" class="dropdown-item">
                             <i class="fas fa-cog"></i> Setting
-                          </a>
-                          <a href="signin.html" class="dropdown-item logout">
+                          </Link>
+                          <Link to="/" class="dropdown-item logout">
                             <i class="fas fa-sign-out-alt"></i> Logout
-                          </a>
+                          </Link>
                         </div>
                       </div>
                     </div>

@@ -1,6 +1,7 @@
 /*--------------------------------------------------------------
   # Header
   --------------------------------------------------------------*/
+@import url("https://fonts.googleapis.com/css2?family=Poppins&display=swap");
 #header {
   background: #fff;
   transition: all 0.5s;
@@ -435,4 +436,112 @@ section {
 }
 .profile_log .dropdown-menu .dropdown-item.active {
   color: #4a9aef;
+}
+
+/*--------------------------------------------------------------
+  # Dashboard SideBar
+  --------------------------------------------------------------*/
+
+.sidebar {
+  background: transparent;
+  position: fixed;
+  left: 0;
+  height: 100%;
+  width: 240px;
+  top: 0;
+  z-index: 3;
+  padding: 30px;
+}
+@media only screen and (max-width: 767px) {
+  .sidebar {
+    top: auto;
+    bottom: 0;
+    width: 100%;
+    height: 50px;
+    background: #11161e;
+    padding: 0px;
+  }
+}
+
+.sidebar .menu {
+  margin-top: 75px;
+  padding-top: 50px;
+}
+.sidebar .menu ul {
+  padding: 0px !important;
+}
+.sidebar .menu li {
+  list-style: none;
+}
+@media only screen and (max-width: 767px) {
+  .sidebar .menu {
+    margin-top: 0px;
+    padding: 0px;
+  }
+}
+@media only screen and (max-width: 767px) {
+  .sidebar .menu ul {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+  }
+}
+.sidebar .menu ul li a {
+  text-decoration: none;
+  padding: 12px 0px;
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+  border-radius: 0px;
+  font-weight: 500;
+  color: #8691b4;
+  font-size: 16px;
+  font-family: "Poppins", sans-serif;
+}
+@media only screen and (max-width: 767px) {
+  .sidebar .menu ul li a {
+    color: #fff;
+    opacity: 0.75;
+  }
+}
+.sidebar .menu ul li a:hover,
+.sidebar .menu ul li a:focus,
+.sidebar .menu ul li a:active {
+  color: #66a6ff;
+}
+@media only screen and (max-width: 767px) {
+  .sidebar .menu ul li a:hover,
+  .sidebar .menu ul li a:focus,
+  .sidebar .menu ul li a.active {
+    color: #fff;
+    opacity: 1;
+  }
+}
+.sidebar .menu ul li a.active i {
+  color: #66a6ff;
+}
+@media only screen and (max-width: 767px) {
+  .sidebar .menu ul li a.active i {
+    color: #fff;
+    opacity: 1;
+  }
+}
+.sidebar .menu ul li a.active .nav-text {
+  color: #66a6ff;
+}
+@media only screen and (max-width: 767px) {
+  .sidebar .menu ul li a.active .nav-text {
+    color: #fff;
+  }
+}
+.sidebar .menu ul li a i {
+  font-size: 24px;
+}
+.sidebar .menu ul li a .nav-text {
+  margin-left: 10px;
+}
+@media only screen and (max-width: 575px) {
+  .sidebar .menu ul li a .nav-text {
+    display: none;
+  }
 }

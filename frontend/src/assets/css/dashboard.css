@@ -1,0 +1,13 @@
+/*--------------------------------------------------------------
+  # Dashboard Styling
+  --------------------------------------------------------------*/
+.main-wrapper {
+  transition: all 0.25s ease-in;
+  overflow: hidden;
+  position: relative;
+  z-index: 1;
+  margin-top: 70px;
+  padding-top: 90px;
+  background-color: #ecf0f1;
+  height: 95vh;
+}
