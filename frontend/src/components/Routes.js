@@ -3,7 +3,7 @@ import { Router, Route } from "react-router-dom";
 import { createBrowserHistory } from "history";
 import Home from "./Homepage/Home";
 import Login from "./Login/Login";
-import UserDashboard from "./Dashboard/User/UserDashboard";
+import DigitalWallet from "./Dashboard/User/DigitalWallet";
 import DocumentType from "./Verification/DocumentType";
 import DocumentFiles from "./Verification/DocumentFiles";
 
@@ -17,7 +17,7 @@ export class Routes extends Component {
         <Route path="/documentfiles" component={DocumentFiles} />
         <Route path="/login" component={Login} />
         <Route path="/signup" component={Login} />
-        <Route path="/userdashboard" component={UserDashboard} />
+        <Route path="/wallet" component={DigitalWallet} />
       </Router>
     );
   }
