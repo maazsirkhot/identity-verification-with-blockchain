@@ -80,7 +80,7 @@ export class NavBar extends Component {
                   </a>
                 </li>
                 <li>
-                  <Link class="nav-link" to="/userdashboard">
+                  <Link class="nav-link" to="/wallet">
                     Dashboard
                   </Link>
                 </li>
