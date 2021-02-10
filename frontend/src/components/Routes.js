@@ -4,6 +4,7 @@ import { createBrowserHistory } from "history";
 import Home from "./Homepage/Home";
 import Login from "./Login/Login";
 import DigitalWallet from "./Dashboard/User/DigitalWallet";
+import InformationRequests from "./Dashboard/User/InformationRequests";
 import DocumentType from "./Verification/DocumentType";
 import DocumentFiles from "./Verification/DocumentFiles";
 
@@ -17,7 +18,8 @@ export class Routes extends Component {
         <Route path="/documentfiles" component={DocumentFiles} />
         <Route path="/login" component={Login} />
         <Route path="/signup" component={Login} />
-        <Route path="/wallet" component={DigitalWallet} />
+        <Route path="/user/wallet" component={DigitalWallet} />
+        <Route path="/user/requests" component={InformationRequests} />
       </Router>
     );
   }
