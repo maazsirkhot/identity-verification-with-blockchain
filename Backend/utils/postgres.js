@@ -5,10 +5,12 @@ const connection = {
   host: config.DATABASE.POSTGRES.HOST,
   dialect: config.DATABASE.POSTGRES.DIALECT,
   port: config.DATABASE.POSTGRES.PORT,
-  database: config.DATABASE.POSTGRES.DATABASE,
-  user: config.DATABASE.POSTGRES.USER,
-  password: config.DATABASE.POSTGRES.PASSWORD,
-  max: 100, // up to 100 connections
+  pool: {
+    max: 100,
+    min: 0,
+    idle: 10000,
+  },
+  logging: false,
 };
 
 const sequelize = new Sequelize(
