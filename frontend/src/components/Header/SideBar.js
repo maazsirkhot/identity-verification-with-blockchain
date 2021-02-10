@@ -16,7 +16,7 @@ export class SideBar extends Component {
               </NavLink>
             </li>
             <li>
-              <NavLink to="/wallet" activeClassName="active">
+              <NavLink to="/user/wallet" activeClassName="active">
                 <span>
                   <i class="fas fa-id-card"></i>
                 </span>
@@ -24,7 +24,7 @@ export class SideBar extends Component {
               </NavLink>
             </li>
             <li>
-              <NavLink to="/login" activeClassName="active">
+              <NavLink to="/user/requests" activeClassName="active">
                 <span>
                   <i class="fas fa-envelope-open-text"></i>
                 </span>

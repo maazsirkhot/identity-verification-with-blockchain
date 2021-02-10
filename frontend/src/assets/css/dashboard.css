@@ -125,7 +125,7 @@
 }
 
 /**--------------------------------------------------
-DIGITAL WALLER
+DIGITAL WALLET
 -----------------------------------------------------**/
 .digitalid-card {
   background: #fff;
@@ -169,6 +169,73 @@ DIGITAL WALLER
 }
 @media only screen and (max-width: 500px) {
   .digitalid-info img {
+    display: none;
+  }
+}
+
+/**--------------------------------------------------
+USER INFORMATION REQUESTS
+-----------------------------------------------------**/
+.request-item {
+  background: #fff;
+  border-radius: 15px;
+  margin-bottom: 30px;
+  padding: 20px;
+  box-shadow: 0px 10px 20px rgba(55, 55, 89, 0.08);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.request-info h5 {
+  font-weight: 600;
+  font-size: 18px;
+}
+.request-info p {
+  font-size: 14px;
+}
+
+.request-info .request-date {
+  display: none;
+}
+
+.request-date {
+  color: #777777;
+  font-size: 13px;
+}
+
+.request-status {
+  padding: 0px !important;
+  border: none;
+  display: table;
+  table-layout: fixed;
+  margin: 0;
+}
+
+.request-status > [class*="col-"] {
+  display: table-cell;
+  float: none;
+  table-layout: fixed;
+  vertical-align: middle;
+}
+
+.request-status h4 {
+  font-size: 14px;
+  margin: 0 !important;
+}
+
+.bg-light-dark {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+@media only screen and (max-width: 1000px) {
+  .request-date {
+    display: none;
+  }
+  .request-info .request-date {
+    display: inline-block;
+  }
+  .request-status .header {
     display: none;
   }
 }
