@@ -3,6 +3,7 @@ import AOS from "aos";
 import Routes from "./components/Routes";
 import "./assets/css/custom.css";
 import "./assets/css/aos.css";
+import "./assets/css/venobox.min.css";
 
 AOS.init();
 
