@@ -1,16 +1,17 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
 const morgan = require('morgan');
 const morganBody = require('morgan-body');
 const cors = require('cors');
 const fs = require('fs');
 const path = require('path');
-// const multer = require('multer');
+const multer = require('multer');
 
 const config = require('./bin/config');
 const constants = require('./utils/constants');
-// const textract = require('./awstextract/textract');
-// const upload = multer({ dest: './images' });
+const textract = require('./awstextract/textract');
+const upload = multer({ dest: './images' });
 
 // Database Connections
 require('./src/models/postgres/index');
@@ -40,6 +41,14 @@ app.use((req, res, next) => {
   res.setHeader('Cache-Control', 'no-cache');
   next();
 });
+mongoose
+  .connect(config.DATABASE.MONGO.CONN_URL, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    poolSize: 100,
+  })
+  .then(() => console.log('MongoDB Connected'))
+  .catch((err) => console.log(err));
 
 app.use(express.json());
 app.use(bodyParser.json());
@@ -48,15 +57,19 @@ app.use(cors({ origin: '*', credentials: false }));
 
 app.get('/ping', (req, res) => res.status(200).send());
 
-// API to use Amazon Textract
-// app.post('/fetchUserDetailsFromId', upload.single('document'), (req, res) => {
-//   textract.fetchUserDetailsFromId(req, res);
-// });
+//API to use Amazon Textract
+app.post('/fetchUserDetailsFromId', upload.single('document'), (req, res) => {
+  textract.fetchUserDetailsFromId(req, res);
+});
 
-// // API to test
-// app.get('/test', (req, res) => {
-//   textract.getRelevantText(req, res);
-// });
+app.get('/getUserDetails', (req, res) => {
+  textract.getUserDetails(req, res);
+});
+
+//API to test
+app.post('/test', upload.single('document'), (req, res) => {
+  textract.storeImagesinS3(req, res);
+});
 
 // eslint-disable-next-line no-unused-vars
 app.use((err, req, res, next) => {

@@ -2,13 +2,53 @@ const express = require('express');
 const AWS = require('aws-sdk');
 
 const fs = require('fs');
-AWS.config.loadFromPath('./awstextract/awsconfig.json');
+const userField = require('../src/models/mongoDB/userFields');
+
+// storeImagesinS3 = (req,res) => {
+    
+//     const fileContent = fs.readFileSync(req.file.path);
+//     const s3 = new AWS.S3({
+//         accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+//         secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+//         region: process.env.AWS_REGION
+//     });
+
+//     const params = {
+//         Bucket: "identity-verification-1",
+//         ACL: 'public-read',
+//         Key: 'cat.jpg', // File name you want to save as in S3
+//         Body: fileContent
+//     };
+
+//     const params2 = {
+//         Bucket: "identity-verification",
+//         Key: 'cat.jpg', // File name you want to save as in S3
+//         Body: fileContent
+//     };
+
+//     s3.upload(params, function(err, data) {
+//         if (err) {
+//             throw err;
+//         }
+//         console.log(`File uploaded successfully. ${data.Location}`);
+//     });
+
+//     // s3.createBucket(params, function(err, data) {
+//     //     if (err) console.log(err);
+//     //     else console.log('Bucket Created Successfully', data.Location);
+//     //     // s3.upload(params2, function(err, data) {
+//     //     //     if (err) {
+//     //     //         throw err;
+//     //     //     }
+//     //     //     console.log(`File uploaded successfully. ${data.Location}`);
+//     //     // });
+//     // });
+    
+// }
 
 //this will parse the data from AWS textract and return relevant data
 getRelevantText = (data) => {
-    //let rawdata = fs.readFileSync('./json2.json');
-    //let data = JSON.parse(rawdata);
-
+    
     var blocks = data["Blocks"];
     var wordsjson = {};
     var keyJson = [];
@@ -21,23 +61,26 @@ getRelevantText = (data) => {
         if(BlockType == "LINE" && innerdata.Text 
             && innerdata.Text.substring(0,2) == "FN"){
                 var d = {};
-                d["key"] = "First Name";
-                d["value"] = innerdata.Text.substring(2);
+                d["field_id"] = "First Name";
+                d["field_name"] = "First Name";
+                d["field_value"] = innerdata.Text.substring(2);
                 output.push(d);
             }
         if(BlockType == "LINE" && innerdata.Text 
             && innerdata.Text.substring(0,2) == "LN"){
                 var d = {};
-                d["key"] = "Last Name";
-                d["value"] = innerdata.Text.substring(2);
+                d["field_id"] = "Last Name";
+                d["field_name"] = "Last Name";
+                d["field_value"] = innerdata.Text.substring(2);
                 output.push(d);
             }
         
         if(BlockType == "LINE" && innerdata.Text 
             && innerdata.Text.substring(0,3) == "DOB"){
                 var d = {};
-                d["key"] = "DOB";
-                d["value"] = innerdata.Text.substring(4);
+                d["field_id"] = "Date of Birth";
+                d["field_name"] = "Date of Birth";
+                d["field_value"] = innerdata.Text.substring(4);
                 output.push(d);
             }
         
@@ -76,12 +119,6 @@ getRelevantText = (data) => {
             }
         }
     });
-    // console.log(wordsjson);
-    // console.log(keyJson);
-    // console.log(valueJson);
-
-    // forming the output data
-    
     
     keyJson.forEach(function(key) {
         var keyword = "";
@@ -93,7 +130,8 @@ getRelevantText = (data) => {
         childs.forEach(function(c) {
             keyword+= wordsjson[c] + " ";
         });
-        innerout["key"] = keyword;
+        innerout["field_id"] = keyword;
+        innerout["field_name"] = keyword;
 
         var values = key.value;
         values.forEach(function(v) {
@@ -106,21 +144,17 @@ getRelevantText = (data) => {
                 }
             });
         });
-        innerout["value"] = valueword;
+        innerout["field_value"] = valueword;
         output.push(innerout);
     });
-    console.log(output);
+    return output;
 }
 
 // calling textract API
 var textract = new AWS.Textract();
 fetchUserDetailsFromId = (req,res) => {
-    console.log(req.file);
 
-    // fs.rename(req.file.path, './images/doc.jpg', (err)=>{ 
-    //     console.log(err); 
-    // }); 
-
+    console.log(req);
     var bitmap = fs.readFileSync(req.file.path);
     // convert binary data to base64 encoded string
     var img =  new Buffer(bitmap).toString('base64');
@@ -139,15 +173,53 @@ fetchUserDetailsFromId = (req,res) => {
           /* more items */
         ]
       };
+
     textract.analyzeDocument(params, function (err, data) {
-        if (err) console.log(err, err.stack); // an error occurred
+        if (err) {
+            console.log(err, err.stack); 
+            res.status(500).send("Internal server error");
+        }// an error occurred
         else{
-            console.log(data);
-            getRelevantText(data);
-        }           // successful response
+            //console.log(data);
+            try{
+                dataField = getRelevantText(data);
+            }catch(e){
+                console.log(e);
+                res.status(500).send("Unable to fetch text from ID");
+            }
+            console.log(dataField);
+            userData = new userField({
+                userId: req.body.user_id,
+                dataField: dataField
+            });
+
+            userData.save(function(err,data){
+                if(err) {
+                    console.log(err);
+                    res.status(500).send("Unable to store data in database");
+                }
+                console.log("Data Inserted Sucessfully");
+                res.status(200).send(data);
+            });
+        }   // successful response
     });
-    res.status(200).send();
+    
+}
+
+getUserDetails = (req,res) => {
+    console.log(req);
+    const userId = req.query.userId;
+    userField.find({userId: userId},(err,data)=>{
+        console.log(data);
+        if(err) {
+            console.log(err);
+            res.status(500).send("Unable to fetch data from database");
+        }
+        res.status(200).send(data);
+    });
 }
 
 exports.fetchUserDetailsFromId = fetchUserDetailsFromId;
 exports.getRelevantText = getRelevantText;
+exports.getUserDetails = getUserDetails;
+//exports.storeImagesinS3 = storeImagesinS3;
