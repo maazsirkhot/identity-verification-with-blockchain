@@ -13,5 +13,10 @@ module.exports = {
     UNPROCESSABLE_ENTITY_STATUS: 422,
     INTERNAL_SERVER_ERROR_STATUS: 500,
   },
-  MESSAGES: { },
+  MESSAGES: {
+    SERVER_ERROR: 'Error Occurred with the server. Please try again!',
+    INVALID_PARAMETERS_ERROR: 'Error occurred due to one or more invalid parameters. Please refer API design',
+    USER_CREATED: 'User created successfully. Please try logging into account',
+    LOGIN_SUCCESSFUL: 'Login has been successful. Please find your token in the data',
+  },
 };

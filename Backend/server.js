@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const morganBody = require('morgan-body');
+const createError = require('http-errors');
 const cors = require('cors');
 const fs = require('fs');
 const path = require('path');
@@ -58,11 +59,18 @@ app.get('/ping', (req, res) => res.status(200).send());
 //   textract.getRelevantText(req, res);
 // });
 
+// Routes
+require('./src/routes/auth/index')(app);
+
+app.use((req, res, next) => {
+  next(createError(404));
+});
+
 // eslint-disable-next-line no-unused-vars
 app.use((err, req, res, next) => {
-  console.error(err.stack);
+  // console.error(err.stack);
   res.status(constants.STATUS_CODE.INTERNAL_SERVER_ERROR_STATUS);
-  res.render('error', { error: err });
+  res.send({ error: err });
 });
 
 app.listen(config.PORT, () => {
