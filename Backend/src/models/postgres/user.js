@@ -1,4 +1,7 @@
+/* eslint-disable no-param-reassign */
+/* eslint-disable no-unused-vars */
 const { Sequelize } = require('sequelize');
+const encrypt = require('../../helpers/passwordEncryption');
 
 module.exports = (sequelize, DataTypes) => {
   const User = sequelize.define('User', {
@@ -11,6 +14,7 @@ module.exports = (sequelize, DataTypes) => {
     username: {
       type: DataTypes.STRING,
       allowNull: false,
+      unique: true,
     },
     email: {
       type: DataTypes.STRING,
@@ -45,6 +49,11 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     tableName: 'users',
     underscored: true,
+  });
+
+  User.beforeCreate(async (user, options) => {
+    const hashedPassword = await encrypt.createHash(user.password);
+    user.password = hashedPassword;
   });
 
   User.sync({
