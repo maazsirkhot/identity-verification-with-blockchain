@@ -18,5 +18,8 @@ module.exports = {
     INVALID_PARAMETERS_ERROR: 'Error occurred due to one or more invalid parameters. Please refer API design',
     USER_CREATED: 'User created successfully. Please try logging into account',
     LOGIN_SUCCESSFUL: 'Login has been successful. Please find your token in the data',
+    USER_DETAILS: "Retreived User Details Sucessfully",
+    USER_NOT_EXIST: "No such user exists. Please try with a different User Id",
+    USER_SAVE_ERROR: "Error in storing data. Please try again!"
   },
 };

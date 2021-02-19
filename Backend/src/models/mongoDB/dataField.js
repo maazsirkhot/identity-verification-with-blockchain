@@ -10,17 +10,13 @@ const dataFieldSchema = new mongoose.Schema(
       parameters: [String],
       method: {
         type: String,
-      },
-      required: true,
+      }
     },
-    verificationEntities: [
-      {
-        id: {
-          type: mongoose.Types.ObjectId,
-          required: true,
-        },
-      },
-    ],
+    verificationEntities: {
+      /* Need to change this to Object Id when idtype collection will be ready"*/
+      type: [String],
+      required: true
+    },
     verificationMethod: {
       type: String,
     },
@@ -48,4 +44,4 @@ const dataFieldSchema = new mongoose.Schema(
   },
 );
 
-export default mongoose.model('dataField', dataFieldSchema);
+module.exports = dataField = mongoose.model('dataField', dataFieldSchema);
