@@ -48,5 +48,5 @@ module.exports = {
       console.log(error);
       throw new Error(`Error Occurred in DAO Layers: ${error}`);
     }
-  }
+  },
 };
