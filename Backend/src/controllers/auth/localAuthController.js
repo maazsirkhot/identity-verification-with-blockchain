@@ -9,7 +9,8 @@ module.exports = {
         username: req.body.username,
         email: req.body.email,
         password: req.body.password,
-        isClient: req.body.isClient,
+        type: req.body.type,
+        isLocalAuth: true,
       };
       const data = await localAuthService.createUserService(user);
       if (!data) {
@@ -40,7 +41,6 @@ module.exports = {
         password: req.body.password,
       };
       const result = await localAuthService.loginUserService(data);
-      console.log('hello');
       console.log(result);
       if (!result) {
         return res.status(constants.STATUS_CODE.BAD_REQUEST_ERROR_STATUS).send({

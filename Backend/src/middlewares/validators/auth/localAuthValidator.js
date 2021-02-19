@@ -7,7 +7,7 @@ module.exports = {
       email: Joi.string().email().required(),
       username: Joi.string().required(),
       password: Joi.string().min(8).required(),
-      isClient: Joi.string().valid('T', 'F'),
+      type: Joi.string().valid('user', 'client', 'verifier'),
     });
 
     validators.validateRequestBody(req, next, schema);
