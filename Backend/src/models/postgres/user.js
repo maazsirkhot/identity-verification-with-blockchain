@@ -14,6 +14,7 @@ module.exports = (sequelize, DataTypes) => {
     username: {
       type: DataTypes.STRING,
       allowNull: false,
+      defaultValue: Sequelize.UUIDV4,
       unique: true,
     },
     email: {
@@ -22,7 +23,6 @@ module.exports = (sequelize, DataTypes) => {
     },
     password: {
       type: DataTypes.STRING,
-      allowNull: false,
     },
     profilePicUrl: {
       type: DataTypes.STRING,
@@ -32,9 +32,8 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       defaultValue: true,
     },
-    isClient: {
-      type: DataTypes.BOOLEAN,
-      allowNull: false,
+    type: {
+      type: DataTypes.ENUM('user', 'client', 'verifier'),
     },
     isVerified: {
       type: DataTypes.BOOLEAN,
@@ -46,14 +45,19 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       defaultValue: Sequelize.UUIDV4,
     },
+    isLocalAuth: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+    },
+    oauthId: {
+      type: DataTypes.STRING,
+    },
+    token: {
+      type: DataTypes.STRING,
+    },
   }, {
     tableName: 'users',
     underscored: true,
-  });
-
-  User.beforeCreate(async (user, options) => {
-    const hashedPassword = await encrypt.createHash(user.password);
-    user.password = hashedPassword;
   });
 
   User.sync({

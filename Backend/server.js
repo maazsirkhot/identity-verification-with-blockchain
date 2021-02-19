@@ -6,6 +6,9 @@ const createError = require('http-errors');
 const cors = require('cors');
 const fs = require('fs');
 const path = require('path');
+// const multer = require('multer');
+const passport = require('passport');
+
 const config = require('./bin/config');
 const constants = require('./utils/constants');
 
@@ -42,6 +45,9 @@ app.use(express.json());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors({ origin: '*', credentials: false }));
+app.use(passport.initialize());
+app.use(passport.session());
+require('./src/middlewares/passportConfig');
 
 app.get('/ping', (req, res) => res.status(200).send());
 

@@ -19,4 +19,9 @@ module.exports = {
       DIALECT: process.env.DB_POSTGRES_DIALECT,
     },
   },
+  GOOGLE_OAUTH2: {
+    CLIENT_ID: process.env.GOOGLE_OAUTH_CLIENTID,
+    CLIENT_SECRET: process.env.GOOGLE_OAUTH_CLIENTSECRET,
+    CALLBACK_URL: process.env.GOOGLE_OAUTH_CALLBACKURL,
+  },
 };
