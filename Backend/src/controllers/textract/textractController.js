@@ -11,7 +11,10 @@ module.exports = {
   // eslint-disable-next-line consistent-return
   fetchUserDetailsFromId: async (req, res) => {
     try {
-      const bitmap = fs.readFileSync(req.file.path);
+      // eslint-disable-next-line no-unused-vars
+      // remove this eslint comment when S3 is implemented
+      const [front, back] = req.files;
+      const bitmap = fs.readFileSync(front.path);
       // eslint-disable-next-line new-cap
       const img = new Buffer.from(bitmap).toString('base64');
       const params = {

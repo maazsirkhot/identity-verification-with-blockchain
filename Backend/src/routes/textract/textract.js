@@ -8,7 +8,7 @@ const textractController = require('../../controllers/textract/textractControlle
 /* Will integrate this in next Push */
 /* const validator = require('../../validators/textract/textractValidator'); */
 
-router.post('/getUserDetails', upload.single('document'), textractController.fetchUserDetailsFromId);
+router.post('/getUserDetails', upload.array('documents'), textractController.fetchUserDetailsFromId);
 router.get('/getUserDetailsfromDB', textractController.getUserDetails);
 router.post('/createEntryInDataFields', textractController.createEntryInDataFields);
 
