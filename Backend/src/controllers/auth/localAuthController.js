@@ -37,23 +37,15 @@ module.exports = {
   login: async (req, res) => {
     try {
       const data = {
-        username: req.body.username,
+        email: req.body.email,
         password: req.body.password,
       };
       const result = await localAuthService.loginUserService(data);
       console.log(result);
       if (!result) {
-        return res.status(constants.STATUS_CODE.BAD_REQUEST_ERROR_STATUS).send({
-          message: constants.MESSAGES.INVALID_PARAMETERS_ERROR,
-          data: result,
-          dataAvailable: false,
-        });
+        return res.status(constants.STATUS_CODE.BAD_REQUEST_ERROR_STATUS).send(result);
       }
-      return res.status(constants.STATUS_CODE.SUCCESS_STATUS).send({
-        message: constants.MESSAGES.LOGIN_SUCCESSFUL,
-        data: result,
-        dataAvailable: true,
-      });
+      return res.status(constants.STATUS_CODE.SUCCESS_STATUS).send(result);
     } catch (error) {
       return res
         .status(constants.STATUS_CODE.INTERNAL_SERVER_ERROR_STATUS)

@@ -22,5 +22,7 @@ module.exports = {
     USER_NOT_EXIST: 'No such user exists. Please try with a different User Id',
     USER_SAVE_ERROR: 'Error in storing data. Please try again!',
     DATAFIELDS_CREATED: 'Data sucessfully created in DataFields Collection',
+    USER_CREDENTIALS_INVALID: 'Invalid credentials! Please provide valid credentials',
+    USER_TOKEN_NOT_GENERATED: 'The access token could not be generated. Please try again!',
   },
 };
