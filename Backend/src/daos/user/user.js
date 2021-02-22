@@ -22,6 +22,18 @@ module.exports = {
       throw new Error(`Error Occurred in DAO Layers: ${error}`);
     }
   },
+  findUserByEmail: async (email) => {
+    try {
+      return await db.User.findAll({
+        where: {
+          [Op.and]: [{ email }, { isActive: true }],
+        },
+      });
+    } catch (error) {
+      // console.log(error);
+      throw new Error(`Error Occurred in DAO Layers: ${error}`);
+    }
+  },
   findUserByOauthId: async (oauthId) => {
     try {
       return await db.User.findAll({
