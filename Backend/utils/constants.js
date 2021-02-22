@@ -25,5 +25,6 @@ module.exports = {
     USER_CREDENTIALS_INVALID: 'Invalid credentials! Please provide valid credentials',
     USER_TOKEN_NOT_GENERATED: 'The access token could not be generated. Please try again!',
     S3_STORE_ERROR: 'Failed to store Image in S3 bucket',
+    IDTYPE_CREATED: 'Data sucessfully created in IdType Collection',
   },
 };

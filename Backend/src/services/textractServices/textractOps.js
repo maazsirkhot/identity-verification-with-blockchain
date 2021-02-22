@@ -114,8 +114,8 @@ module.exports = {
   storeFileInS3: async (file) => {
     try {
       const s3bucket = new AWS.S3({
-        accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+        accessKeyId: process.env.AWS_S3_ACCESS_KEY,
+        secretAccessKey: process.env.AWS_S3_SECRET_ACCESS_KEY,
         region: process.env.AWS_REGION,
       });
       const params = {
@@ -131,6 +131,26 @@ module.exports = {
         return data.Location;
       }
       return false;
+    } catch (error) {
+      throw new Error(`Error Occurred in DAO Layers:  ${error}`);
+    }
+  },
+  createIdType: async (data) => {
+    try {
+      return await userDetailsDao.createIdType(data);
+    } catch (error) {
+      throw new Error(`Error Occurred in DAO Layers:  ${error}`);
+    }
+  },
+  getObjectIdFromIdType: async (data) => {
+    try {
+      const ids = await userDetailsDao.getObjectIds(data);
+      const arr = [];
+      _.forEach(ids, (val, i) => {
+        arr.push(val._id);
+      });
+      console.log(arr);
+      return arr;
     } catch (error) {
       throw new Error(`Error Occurred in DAO Layers:  ${error}`);
     }

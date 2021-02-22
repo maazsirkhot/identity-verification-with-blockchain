@@ -1,4 +1,5 @@
 const dataField = require('../../models/mongoDB/dataField');
+const idType = require('../../models/mongoDB/idType');
 const userFields = require('../../models/mongoDB/userFields');
 
 module.exports = {
@@ -28,6 +29,20 @@ module.exports = {
   findUserDetails: async (userId) => {
     try {
       return await userFields.find({ userId });
+    } catch (error) {
+      throw new Error(`Error Occurred in DAO Layers:  + ${error}`);
+    }
+  },
+  createIdType: async (data) => {
+    try {
+      return await data.save();
+    } catch (error) {
+      throw new Error(`Error Occurred in DAO Layers:  + ${error}`);
+    }
+  },
+  getObjectIds: async (data) => {
+    try {
+      return await idType.find({}).where('shortName').in(data).select('name');
     } catch (error) {
       throw new Error(`Error Occurred in DAO Layers:  + ${error}`);
     }
