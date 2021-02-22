@@ -11,8 +11,6 @@ const passport = require('passport');
 
 const config = require('./bin/config');
 const constants = require('./utils/constants');
-// const textract = require('./awstextract/textract');
-// const upload = multer({ dest: './images' });
 
 // Database Connections
 require('./src/models/postgres/index');
@@ -53,18 +51,9 @@ require('./src/middlewares/passportConfig');
 
 app.get('/ping', (req, res) => res.status(200).send());
 
-// API to use Amazon Textract
-// app.post('/fetchUserDetailsFromId', upload.single('document'), (req, res) => {
-//   textract.fetchUserDetailsFromId(req, res);
-// });
-
-// // API to test
-// app.get('/test', (req, res) => {
-//   textract.getRelevantText(req, res);
-// });
-
 // Routes
 require('./src/routes/auth/index')(app);
+require('./src/routes/textract/index')(app);
 
 app.use((req, res, next) => {
   next(createError(404));
@@ -72,7 +61,7 @@ app.use((req, res, next) => {
 
 // eslint-disable-next-line no-unused-vars
 app.use((err, req, res, next) => {
-  // console.error(err.stack);
+  console.error(err.stack);
   res.status(constants.STATUS_CODE.INTERNAL_SERVER_ERROR_STATUS);
   res.send({ error: err });
 });

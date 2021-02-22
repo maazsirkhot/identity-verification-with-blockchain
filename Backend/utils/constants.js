@@ -18,5 +18,13 @@ module.exports = {
     INVALID_PARAMETERS_ERROR: 'Error occurred due to one or more invalid parameters. Please refer API design',
     USER_CREATED: 'User created successfully. Please try logging into account',
     LOGIN_SUCCESSFUL: 'Login has been successful. Please find your token in the data',
+    USER_DETAILS: 'Retreived User Details Sucessfully',
+    USER_NOT_EXIST: 'No such user exists. Please try with a different User Id',
+    USER_SAVE_ERROR: 'Error in storing data. Please try again!',
+    DATAFIELDS_CREATED: 'Data sucessfully created in DataFields Collection',
+    USER_CREDENTIALS_INVALID: 'Invalid credentials! Please provide valid credentials',
+    USER_TOKEN_NOT_GENERATED: 'The access token could not be generated. Please try again!',
+    S3_STORE_ERROR: 'Failed to store Image in S3 bucket',
+    IDTYPE_CREATED: 'Data sucessfully created in IdType Collection',
   },
 };

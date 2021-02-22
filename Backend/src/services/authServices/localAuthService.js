@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken');
 const userDao = require('../../daos/user/user');
 const utilFunctions = require('../../helpers/utilFunctions');
 const passwordEncryption = require('../../helpers/passwordEncryption');
+const constants = require('../../../utils/constants');
 
 module.exports = {
   createUserService: async (user) => {
@@ -22,7 +23,7 @@ module.exports = {
       return await userDao.createUser(user);
     } catch (error) {
       // console.log(error);
-      throw new Error('Error Occurred in Service Layers: createUserService');
+      throw new Error(`Error Occurred in Service Layers: ${error}`);
     }
   },
   loginUserService: async (data) => {
@@ -30,13 +31,21 @@ module.exports = {
       const result = await userDao.findUserByUsername(data.username);
       console.log(result[0].dataValues);
       if (result.length === 0) {
-        return false;
+        return {
+          message: constants.MESSAGES.USER_NOT_EXIST,
+          dataAvailable: false,
+        };
       }
       const check = await passwordEncryption.compareHash(
         data.password,
         result[0].password,
       );
-      if (!check) return false;
+      if (!check) {
+        return {
+          message: constants.MESSAGES.USER_CREDENTIALS_INVALID,
+          dataAvailable: false,
+        };
+      }
       const token = jwt.sign(
         {
           username: result[0].dataValues.username,
@@ -50,13 +59,20 @@ module.exports = {
         token,
         result[0].dataValues.email,
       );
-      if (!addAccessToken) return false;
+      if (!addAccessToken) {
+        return {
+          message: constants.MESSAGES.USER_TOKEN_NOT_GENERATED,
+          dataAvailable: false,
+        };
+      }
       return {
-        token,
+        message: constants.MESSAGES.LOGIN_SUCCESSFUL,
+        data: { token },
+        dataAvailable: true,
       };
     } catch (error) {
       // console.log(error);
-      throw new Error('Error Occurred in Service Layers: loginUserService');
+      throw new Error(`Error Occurred in Service Layers: ${error}`);
     }
   },
 };
