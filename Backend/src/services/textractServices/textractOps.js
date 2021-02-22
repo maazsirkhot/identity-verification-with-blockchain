@@ -1,4 +1,6 @@
 /* eslint-disable no-underscore-dangle */
+const AWS = require('aws-sdk');
+const fs = require('fs');
 const _ = require('lodash');
 const UserField = require('../../models/mongoDB/userFields');
 const userDetailsDao = require('../../daos/textract/userDetailsDao');
@@ -71,29 +73,66 @@ module.exports = {
       throw new Error(`Error Occurred in DAO Layers:  + ${error}`);
     }
   },
-  createUserDetails: async (data, userId) => {
+  createUserDetails: async (data, userId, frontLink, backLink, keyValuePair) => {
     try {
+      data.push({
+        field_id: keyValuePair['Front Page'],
+        field_name: 'Front Page',
+        field_value: frontLink,
+      });
+      if (backLink != null) {
+        data.push({
+          field_id: keyValuePair['Back Page'],
+          field_name: 'Back Page',
+          field_value: backLink,
+        });
+      }
+      console.log(data);
       const userData = new UserField({
         userId,
         dataField: data,
       });
       return await userDetailsDao.createUserDetails(userData);
     } catch (error) {
-      throw new Error(`Error Occurred in DAO Layers:  + ${error}`);
+      throw new Error(`Error Occurred in DAO Layers:  ${error}`);
     }
   },
   createDataFields: async (data) => {
     try {
       return await userDetailsDao.createDataFields(data);
     } catch (error) {
-      throw new Error(`Error Occurred in DAO Layers:  + ${error}`);
+      throw new Error(`Error Occurred in DAO Layers:  ${error}`);
     }
   },
   findUserDetails: async (userId) => {
     try {
       return await userDetailsDao.findUserDetails(userId);
     } catch (error) {
-      throw new Error(`Error Occurred in DAO Layers:  + ${error}`);
+      throw new Error(`Error Occurred in DAO Layers:  ${error}`);
+    }
+  },
+  storeFileInS3: async (file) => {
+    try {
+      const s3bucket = new AWS.S3({
+        accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+        region: process.env.AWS_REGION,
+      });
+      const params = {
+        Bucket: process.env.AWS_BUCKET_NAME,
+        Key: file.originalname,
+        Body: fs.createReadStream(file.path),
+        ContentType: file.mimetype,
+        ACL: 'public-read',
+      };
+      const data = await s3bucket.upload(params).promise();
+      // console.log(data);
+      if (data) {
+        return data.Location;
+      }
+      return false;
+    } catch (error) {
+      throw new Error(`Error Occurred in DAO Layers:  ${error}`);
     }
   },
 };

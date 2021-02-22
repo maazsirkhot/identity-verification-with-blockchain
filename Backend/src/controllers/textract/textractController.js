@@ -33,8 +33,26 @@ module.exports = {
       textract.analyzeDocument(params, async (err, data) => {
         if (err) throw err;
         const relevantText = textractService.getRelevantTextService(data, keyValuePair);
+        const frontImageLink = await textractService.storeFileInS3(front);
+        if (!frontImageLink) {
+          return res.status(constants.STATUS_CODE.BAD_REQUEST_ERROR_STATUS).send({
+            message: constants.MESSAGES.S3_STORE_ERROR,
+            dataAvailable: false,
+          });
+        }
+        let backImageLink = null;
+        if (back) {
+          backImageLink = await textractService.storeFileInS3(back);
+          if (!backImageLink) {
+            return res.status(constants.STATUS_CODE.BAD_REQUEST_ERROR_STATUS).send({
+              message: constants.MESSAGES.S3_STORE_ERROR,
+              dataAvailable: false,
+            });
+          }
+        }
         /* console.log(relevantText); */
-        const userDetails = await textractService.createUserDetails(relevantText, req.body.user_id);
+        const userDetails = await textractService.createUserDetails(relevantText,
+          req.body.user_id, frontImageLink, backImageLink, keyValuePair);
         if (!userDetails) {
           return res.status(constants.STATUS_CODE.BAD_REQUEST_ERROR_STATUS).send({
             message: constants.MESSAGES.INVALID_PARAMETERS_ERROR,
