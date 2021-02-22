@@ -11,5 +11,6 @@ const textractController = require('../../controllers/textract/textractControlle
 router.post('/getUserDetails', upload.array('documents'), textractController.fetchUserDetailsFromId);
 router.get('/getUserDetailsfromDB', textractController.getUserDetails);
 router.post('/createEntryInDataFields', textractController.createEntryInDataFields);
+router.post('/createEntryInIdType', textractController.createEntryInIdType);
 
 module.exports = router;

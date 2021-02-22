@@ -13,8 +13,7 @@ const dataFieldSchema = new mongoose.Schema(
       },
     },
     verificationEntities: {
-      /* Need to change this to Object Id when idtype collection will be ready */
-      type: [String],
+      type: [mongoose.Types.ObjectId],
       required: true,
     },
     verificationMethod: {
