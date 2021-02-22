@@ -22,5 +22,6 @@ module.exports = {
     USER_NOT_EXIST: 'No such user exists. Please try with a different User Id',
     USER_SAVE_ERROR: 'Error in storing data. Please try again!',
     DATAFIELDS_CREATED: 'Data sucessfully created in DataFields Collection',
+    S3_STORE_ERROR: 'Failed to store Image in S3 bucket',
   },
 };
