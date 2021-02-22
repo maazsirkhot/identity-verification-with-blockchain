@@ -146,6 +146,7 @@ module.exports = {
     try {
       const ids = await userDetailsDao.getObjectIds(data);
       const arr = [];
+      // eslint-disable-next-line no-unused-vars
       _.forEach(ids, (val, i) => {
         arr.push(val._id);
       });
