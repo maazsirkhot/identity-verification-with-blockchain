@@ -33,6 +33,13 @@ module.exports = {
       throw new Error(`Error Occurred in DAO Layers:  + ${error}`);
     }
   },
+  findUserDetailsByEmail: async (email) => {
+    try {
+      return await userFields.find({ userEmail: email });
+    } catch (error) {
+      throw new Error(`Error Occurred in DAO Layers:  + ${error}`);
+    }
+  },
   createIdType: async (data) => {
     try {
       return await data.save();

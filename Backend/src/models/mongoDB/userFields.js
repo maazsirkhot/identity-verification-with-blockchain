@@ -4,6 +4,11 @@ const userFieldSchema = new mongoose.Schema(
   {
     userId: {
       type: String,
+      required: true,
+    },
+    userEmail: {
+      type: String,
+      required: true,
     },
     dataField: [
       {
@@ -31,6 +36,20 @@ const userFieldSchema = new mongoose.Schema(
         permissions: {
           type: [Object],
           required: false,
+        },
+        verifierDoc: {
+          docId: {
+            type: mongoose.Types.ObjectId, // Reference to idType collection
+            required: true,
+          },
+          docName: {
+            type: String,
+            required: true,
+          },
+          docshortName: {
+            type: String,
+            required: true,
+          },
         },
       }],
   },

@@ -37,7 +37,7 @@ module.exports = {
   login: async (req, res) => {
     try {
       const data = {
-        email: req.body.email,
+        username: req.body.username,
         password: req.body.password,
       };
       const result = await localAuthService.loginUserService(data);

@@ -51,6 +51,7 @@ module.exports = {
           username: result[0].dataValues.username,
           type: result[0].dataValues.type,
           userId: result[0].dataValues.userId,
+          email: result[0].dataValues.email,
         },
         'localAuth',
         { expiresIn: 7200 },
@@ -67,7 +68,7 @@ module.exports = {
       }
       return {
         message: constants.MESSAGES.LOGIN_SUCCESSFUL,
-        data: { token },
+        data: { token, email: result[0].dataValues.email },
         dataAvailable: true,
       };
     } catch (error) {

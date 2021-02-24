@@ -53,7 +53,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
     },
     token: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(1000),
     },
   }, {
     tableName: 'users',

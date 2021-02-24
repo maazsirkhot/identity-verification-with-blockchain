@@ -14,7 +14,7 @@ const roleSchema = new mongoose.Schema(
     createdBy: {
       type: {
         type: String,
-        enum: ['System', 'User'],
+        enum: ['system', 'user'],
       },
       id: {
         type: mongoose.Types.ObjectId,
