@@ -15,6 +15,7 @@ module.exports = {
   },
 
   validateRequestParam: (req, next, schema) => {
+    console.log(req.params);
     const options = {
       abortEarly: false, // include all errors
       allowUnknown: true, // ignore unknown props

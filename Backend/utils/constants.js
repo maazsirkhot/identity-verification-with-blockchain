@@ -26,5 +26,6 @@ module.exports = {
     USER_TOKEN_NOT_GENERATED: 'The access token could not be generated. Please try again!',
     S3_STORE_ERROR: 'Failed to store Image in S3 bucket',
     IDTYPE_CREATED: 'Data sucessfully created in IdType Collection',
+    NO_DATA_AVAILABLE: 'The data requested does not exist.',
   },
 };

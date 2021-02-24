@@ -33,6 +33,10 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       defaultValue: false,
     },
+    verificationDoc: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
   }, {
     tableName: 'verification_entities',
     underscored: true,
