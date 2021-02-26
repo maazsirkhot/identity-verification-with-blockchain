@@ -2,6 +2,7 @@
 const AWS = require('aws-sdk');
 const fs = require('fs');
 const _ = require('lodash');
+const uuid = require('uuid');
 const DataField = require('../../models/mongoDB/dataField');
 const constants = require('../../../utils/constants');
 const textractService = require('../../services/textractServices/textractOps');
@@ -12,6 +13,13 @@ module.exports = {
   // eslint-disable-next-line consistent-return
   fetchUserDetailsFromId: async (req, res) => {
     try {
+      // if (!req.user) {
+      //   return res.status(constants.STATUS_CODE.BAD_REQUEST_ERROR_STATUS).send({
+      //     message: constants.MESSAGES.USER_NOT_LOGGED_IN,
+      //     dataAvailable: false,
+      //   });
+      // }
+      // eslint-disable-next-line no-unused-vars
       const [front, back] = req.files;
       const bitmap = fs.readFileSync(front.path);
       // eslint-disable-next-line new-cap
@@ -25,44 +33,19 @@ module.exports = {
         ],
       };
 
-      const keyValuePair = await textractService.getAllDataFields();
+      const keyValuePair = await textractService.getAllDataFields(req.body.idType);
       /* uncomment this when not using textraxt APIs */
       /* fs.readFile('example.json', async (err, data) => { */
       const textract = new AWS.Textract();
       textract.analyzeDocument(params, async (err, data) => {
         if (err) throw err;
         const relevantText = textractService.getRelevantTextService(data, keyValuePair);
-        const frontImageLink = await textractService.storeFileInS3(front);
-        if (!frontImageLink) {
-          return res.status(constants.STATUS_CODE.BAD_REQUEST_ERROR_STATUS).send({
-            message: constants.MESSAGES.S3_STORE_ERROR,
-            dataAvailable: false,
-          });
-        }
-        let backImageLink = null;
-        if (back) {
-          backImageLink = await textractService.storeFileInS3(back);
-          if (!backImageLink) {
-            return res.status(constants.STATUS_CODE.BAD_REQUEST_ERROR_STATUS).send({
-              message: constants.MESSAGES.S3_STORE_ERROR,
-              dataAvailable: false,
-            });
-          }
-        }
-        /* console.log(relevantText); */
-        const userDetails = await textractService.createUserDetails(relevantText,
-          req.body.user_id, frontImageLink, backImageLink, keyValuePair);
-        if (!userDetails) {
-          return res.status(constants.STATUS_CODE.BAD_REQUEST_ERROR_STATUS).send({
-            message: constants.MESSAGES.INVALID_PARAMETERS_ERROR,
-            userDetails,
-            dataAvailable: false,
-          });
-        }
+        fs.unlinkSync(front.path);
+        fs.unlinkSync(back.path);
         return res.status(constants.STATUS_CODE.SUCCESS_STATUS).send({
-          message: constants.MESSAGES.USER_DETAILS,
-          userDetails,
-          dataAvailable: !!_.isPlainObject(userDetails),
+          message: constants.MESSAGES.TEXTRACT_RETREIVE_SUCCESS,
+          relevantText,
+          dataAvailable: !!_.isPlainObject(relevantText),
         });
       });
     } catch (error) {
@@ -70,13 +53,76 @@ module.exports = {
       return res
         .status(constants.STATUS_CODE.INTERNAL_SERVER_ERROR_STATUS)
         .send({
-          message: constants.MESSAGES.SERVER_ERROR,
+          message: constants.MESSAGES.TEXTRACT_RETREIVE_FAILED,
+          error,
+        });
+    }
+  },
+  storeUserDatainDatabase: async (req, res) => {
+    try {
+      // console.log(req.user);
+      // if (!req.user) {
+      //   return res.status(constants.STATUS_CODE.BAD_REQUEST_ERROR_STATUS).send({
+      //     message: constants.MESSAGES.USER_NOT_LOGGED_IN,
+      //     dataAvailable: false,
+      //   });
+      // }
+      const userId = uuid.v4();
+      const [front, back] = req.files;
+      const frontImageLink = await textractService.storeFileInS3(front);
+      if (!frontImageLink) {
+        return res.status(constants.STATUS_CODE.BAD_REQUEST_ERROR_STATUS).send({
+          message: constants.MESSAGES.S3_FRONT_STORE_ERROR,
+          dataAvailable: false,
+        });
+      }
+      let backImageLink = null;
+      if (back) {
+        backImageLink = await textractService.storeFileInS3(back);
+        if (!backImageLink) {
+          return res.status(constants.STATUS_CODE.BAD_REQUEST_ERROR_STATUS).send({
+            message: constants.MESSAGES.S3_BACK_STORE_ERROR,
+            dataAvailable: false,
+          });
+        }
+      }
+      /* console.log(relevantText); */
+      const keyValuePair = await textractService.getAllDataFields(req.body.idType);
+      fs.unlinkSync(front.path);
+      fs.unlinkSync(back.path);
+      const validJsonData = textractService.ifValidJSON(req.body.relevantText);
+      const userDetails = await textractService.createUserDetails(validJsonData,
+        userId, frontImageLink, backImageLink, keyValuePair);
+      if (!userDetails) {
+        return res.status(constants.STATUS_CODE.BAD_REQUEST_ERROR_STATUS).send({
+          message: constants.MESSAGES.USER_DETAILS_STORE_FAILED,
+          userDetails,
+          dataAvailable: false,
+        });
+      }
+      return res.status(constants.STATUS_CODE.SUCCESS_STATUS).send({
+        message: constants.MESSAGES.USER_DETAILS_STORE_SUCCESS,
+        userDetails,
+        dataAvailable: !!_.isPlainObject(userDetails),
+      });
+    } catch (error) {
+      console.log(error);
+      return res
+        .status(constants.STATUS_CODE.INTERNAL_SERVER_ERROR_STATUS)
+        .send({
+          message: constants.MESSAGES.USER_DETAILS_STORE_FAILED,
           error,
         });
     }
   },
   getUserDetails: async (req, res) => {
     try {
+      // if (!req.user) {
+      //   return res.status(constants.STATUS_CODE.BAD_REQUEST_ERROR_STATUS).send({
+      //     message: constants.MESSAGES.USER_NOT_LOGGED_IN,
+      //     dataAvailable: false,
+      //   });
+      // }
       const userDetails = await textractService.findUserDetails(req.query.userId);
       if (userDetails.length === 0) {
         return res.status(constants.STATUS_CODE.INTERNAL_SERVER_ERROR_STATUS).send({
@@ -85,7 +131,7 @@ module.exports = {
         });
       }
       return res.status(constants.STATUS_CODE.SUCCESS_STATUS).send({
-        message: constants.MESSAGES.USER_DETAILS,
+        message: constants.MESSAGES.USER_DETAILS_GET,
         userDetails,
       });
     } catch (error) {
@@ -93,7 +139,7 @@ module.exports = {
       return res
         .status(constants.STATUS_CODE.INTERNAL_SERVER_ERROR_STATUS)
         .send({
-          message: constants.MESSAGES.SERVER_ERROR,
+          message: constants.MESSAGES.USER_DETAILS_GET_FAILED,
           error,
         });
     }
@@ -105,11 +151,11 @@ module.exports = {
       const inputData = req.body.data;
       for (let i = 0; i < inputData.length; i += 1) {
         const { verificationEntities } = inputData[i];
-        const objectIds = await textractService.getObjectIdFromIdType(verificationEntities);
+        const idTypeObjectIds = await textractService.getObjectIdFromIdType(verificationEntities);
         const data = new DataField({
           fieldName: inputData[i].fieldName,
           fieldAbstraction: inputData[i].fieldAbstraction,
-          verificationEntities: objectIds,
+          verificationEntities: idTypeObjectIds,
           verificationMethod: inputData[i].verificationMethod,
           verificationAPI: inputData[i].verificationAPI,
           isActive: true,
