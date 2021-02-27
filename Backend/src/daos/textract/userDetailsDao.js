@@ -28,7 +28,14 @@ module.exports = {
   },
   findUserDetails: async (userId) => {
     try {
-      return await userFields.find({ userId });
+      return await userFields.find({}).where({ userId });
+    } catch (error) {
+      throw new Error(`Error Occurred in DAO Layers:  + ${error}`);
+    }
+  },
+  findUserDetailsByEmail: async (email) => {
+    try {
+      return await userFields.find({ userEmail: email });
     } catch (error) {
       throw new Error(`Error Occurred in DAO Layers:  + ${error}`);
     }
@@ -40,9 +47,16 @@ module.exports = {
       throw new Error(`Error Occurred in DAO Layers:  + ${error}`);
     }
   },
-  getObjectIds: async (data) => {
+  getIdTypeObjectIds: async (data) => {
     try {
       return await idType.find({}).where('shortName').in(data).select('name');
+    } catch (error) {
+      throw new Error(`Error Occurred in DAO Layers:  + ${error}`);
+    }
+  },
+  findIdTypeByShortName: async (data) => {
+    try {
+      return await idType.findOne({}).where('shortName').equals(data);
     } catch (error) {
       throw new Error(`Error Occurred in DAO Layers:  + ${error}`);
     }

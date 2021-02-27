@@ -61,8 +61,8 @@ opts.secretOrKey = 'localAuth';
 passport.use(
   new JwtStrategy(opts, async (jwtPayload, done) => {
     try {
-      if (jwtPayload.username) {
-        const result = await userDao.findUserByUsername(jwtPayload.username);
+      if (jwtPayload.email) {
+        const result = await userDao.findUserByEmail(jwtPayload.email);
         if (result.length === 0) {
           return done(null, false);
         }
