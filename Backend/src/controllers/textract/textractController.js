@@ -13,12 +13,12 @@ module.exports = {
   // eslint-disable-next-line consistent-return
   fetchUserDetailsFromId: async (req, res) => {
     try {
-      // if (!req.user) {
-      //   return res.status(constants.STATUS_CODE.BAD_REQUEST_ERROR_STATUS).send({
-      //     message: constants.MESSAGES.USER_NOT_LOGGED_IN,
-      //     dataAvailable: false,
-      //   });
-      // }
+      if (!req.user) {
+        return res.status(constants.STATUS_CODE.BAD_REQUEST_ERROR_STATUS).send({
+          message: constants.MESSAGES.USER_NOT_LOGGED_IN,
+          dataAvailable: false,
+        });
+      }
       // eslint-disable-next-line no-unused-vars
       const [front, back] = req.files;
       const bitmap = fs.readFileSync(front.path);
@@ -60,14 +60,13 @@ module.exports = {
   },
   storeUserDatainDatabase: async (req, res) => {
     try {
-      // console.log(req.user);
-      // if (!req.user) {
-      //   return res.status(constants.STATUS_CODE.BAD_REQUEST_ERROR_STATUS).send({
-      //     message: constants.MESSAGES.USER_NOT_LOGGED_IN,
-      //     dataAvailable: false,
-      //   });
-      // }
-      const userId = uuid.v4();
+     
+      if (!req.user) {
+        return res.status(constants.STATUS_CODE.BAD_REQUEST_ERROR_STATUS).send({
+          message: constants.MESSAGES.USER_NOT_LOGGED_IN,
+          dataAvailable: false,
+        });
+      }
       const [front, back] = req.files;
       const frontImageLink = await textractService.storeFileInS3(front);
       if (!frontImageLink) {
@@ -92,7 +91,7 @@ module.exports = {
       fs.unlinkSync(back.path);
       const validJsonData = textractService.ifValidJSON(req.body.relevantText);
       const userDetails = await textractService.createUserDetails(validJsonData,
-        userId, frontImageLink, backImageLink, keyValuePair);
+        req.user, frontImageLink, backImageLink, keyValuePair);
       if (!userDetails) {
         return res.status(constants.STATUS_CODE.BAD_REQUEST_ERROR_STATUS).send({
           message: constants.MESSAGES.USER_DETAILS_STORE_FAILED,
@@ -117,13 +116,13 @@ module.exports = {
   },
   getUserDetails: async (req, res) => {
     try {
-      // if (!req.user) {
-      //   return res.status(constants.STATUS_CODE.BAD_REQUEST_ERROR_STATUS).send({
-      //     message: constants.MESSAGES.USER_NOT_LOGGED_IN,
-      //     dataAvailable: false,
-      //   });
-      // }
-      const userDetails = await textractService.findUserDetails(req.query.userId);
+      if (!req.user) {
+        return res.status(constants.STATUS_CODE.BAD_REQUEST_ERROR_STATUS).send({
+          message: constants.MESSAGES.USER_NOT_LOGGED_IN,
+          dataAvailable: false,
+        });
+      }
+      const userDetails = await textractService.findUserDetails(req.user.userId);
       if (userDetails.length === 0) {
         return res.status(constants.STATUS_CODE.INTERNAL_SERVER_ERROR_STATUS).send({
           message: constants.MESSAGES.USER_NOT_EXIST,
