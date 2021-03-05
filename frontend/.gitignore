@@ -4,6 +4,10 @@
 /node_modules
 /.pnp
 .pnp.js
+/src/assets/images
+/src/assets/vendor
+/src/assets/icons
+/src/assets/js
 
 # testing
 /coverage

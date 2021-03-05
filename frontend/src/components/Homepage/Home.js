@@ -139,7 +139,7 @@ export class Home extends Component {
                 data-aos-delay="100"
               >
                 <div class="services h-100">
-                  <h4 class="user">For Issuers</h4>
+                  <h4 class="user">For Verifier</h4>
                   <p>
                     An intuitive dashboard to issue {"&"} verify
                     cryptographically tamper-proof credentials with ease.
@@ -154,7 +154,7 @@ export class Home extends Component {
                 data-aos-delay="150"
               >
                 <div class="services h-100">
-                  <h4 class="user">For Verifiers</h4>
+                  <h4 class="user">For Clients</h4>
                   <p>
                     Frictionless on-boarding of verified users without data
                     management head aches. We will make physical ID
