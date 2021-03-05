@@ -46,7 +46,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors({ origin: '*', credentials: false }));
 app.use(passport.initialize());
 app.use(passport.session());
-require('./src/middlewares/passportConfig');
+require('./src/middlewares/passportConfig')(passport);
 
 app.get('/ping', (req, res) => res.status(200).send());
 
@@ -54,6 +54,7 @@ app.get('/ping', (req, res) => res.status(200).send());
 require('./src/routes/auth/index')(app);
 require('./src/routes/textract/index')(app);
 require('./src/routes/user/index')(app);
+require('./src/routes/system/index')(app);
 
 // app.use((req, res, next) => {
 //   next(createError(404));
