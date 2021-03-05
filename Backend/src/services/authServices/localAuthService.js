@@ -68,7 +68,13 @@ module.exports = {
       }
       return {
         message: constants.MESSAGES.LOGIN_SUCCESSFUL,
-        data: { token, email: result[0].dataValues.email },
+        data: {
+          token,
+          email: result[0].dataValues.email,
+          type: result[0].dataValues.type,
+          username: result[0].dataValues.username,
+          userId: result[0].dataValues.userId,
+        },
         dataAvailable: true,
       };
     } catch (error) {
