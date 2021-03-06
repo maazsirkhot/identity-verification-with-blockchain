@@ -63,7 +63,8 @@ export default function DocumentData({ activeTabChange }) {
           >
             <i className="fas fa-arrow-left" />
           </span>
-          <i className="fas fa-lock" /> Secure Identity Verifcation
+          <i className="fas fa-lock" />
+          Secure Identity Verifcation
         </div>
         <button
           type="button"
@@ -79,7 +80,7 @@ export default function DocumentData({ activeTabChange }) {
         <form onSubmit={onSubmit}>
           {relevantText.map((field, index) => (
             <div className="form-group">
-              <label htmlFor="exampleInputEmail1"> {field.field_name}</label>
+              <label htmlFor="exampleInputEmail1">{field.field_name}</label>
               <input
                 type="text"
                 className="form-control"

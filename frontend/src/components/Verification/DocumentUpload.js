@@ -21,7 +21,8 @@ export default function DocumentUpload() {
         data-target="#document-upload"
         type="button"
       >
-        <i className="fas fa-plus" /> <span>Add New</span>
+        <i className="fas fa-plus" />
+        <span>Add New</span>
       </button>
 
       <div

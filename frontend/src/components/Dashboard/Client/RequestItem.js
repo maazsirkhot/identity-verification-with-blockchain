@@ -7,7 +7,8 @@ export default function RequestItem() {
         <div className="request-info">
           <h5>John Doe</h5>
           <p>
-            User ID: <em> xxxx1254 </em>
+            User ID:
+            <em> xxxx1254 </em>
           </p>
           <div className="request-date">
             <strong>Request Date:</strong>

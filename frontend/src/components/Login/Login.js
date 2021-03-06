@@ -135,7 +135,7 @@ export class Login extends Component {
                 <option value="client">Client</option>
                 <option value="verifier">Verifier</option>
               </select>
-              <button type="button">Sign Up</button>
+              <button type="submit">Sign Up</button>
               <p>
                 Already have an account?{' '}
                 <span
@@ -184,7 +184,7 @@ export class Login extends Component {
                 required
               />
 
-              <button type="button">Sign In</button>
+              <button type="submit">Sign In</button>
               <p>
                 New User?{' '}
                 <span

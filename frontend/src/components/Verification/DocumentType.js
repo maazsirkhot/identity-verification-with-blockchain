@@ -31,8 +31,9 @@ export default function DocumentType({ activeTabChange }) {
             onKeyDown={activeTabChange.bind(this, '0')}
           >
             <i className="fas fa-arrow-left" />
-          </span>{' '}
-          <i className="fas fa-lock" /> Secure Identity Verifcation
+          </span>
+          <i className="fas fa-lock" />
+          Secure Identity Verifcation
         </div>
         <button
           type="button"
