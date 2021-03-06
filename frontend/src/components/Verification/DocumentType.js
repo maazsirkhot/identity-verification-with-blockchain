@@ -6,7 +6,7 @@ import passport from '../../assets/img/passport.png';
 import license from '../../assets/img/drivers-license.png';
 import identitycard from '../../assets/img/identitycard.png';
 
-export default function DocumentType(props) {
+export default function DocumentType({ activeTabChange }) {
   const type = useSelector((state) => state.uploads.documenttype);
   const dispatch = useDispatch();
 
@@ -15,26 +15,28 @@ export default function DocumentType(props) {
     if (type === '') {
       alert('Please select an identification type');
     } else {
-      props.activeTabChange(2);
+      activeTabChange(2);
     }
   }
   return (
-    <div class="tab-pane fade show active" role="tabpanel">
-      <div class="theme-modal-header">
+    <div className="tab-pane fade show active" role="tabpanel">
+      <div className="theme-modal-header">
         <div className="title">
           <img src={logo} alt="logo" width="100" />
           <br />
           <span
-            class="back-btn"
-            onClick={props.activeTabChange.bind(this, '0')}
+            aria-hidden="true"
+            className="back-btn"
+            onClick={activeTabChange.bind(this, '0')}
+            onKeyDown={activeTabChange.bind(this, '0')}
           >
-            <i class="fas fa-arrow-left"></i>
+            <i className="fas fa-arrow-left" />
           </span>{' '}
-          <i class="fas fa-lock"></i> Secure Identity Verifcation
+          <i className="fas fa-lock" /> Secure Identity Verifcation
         </div>
         <button
           type="button"
-          class="close"
+          className="close"
           data-dismiss="modal"
           aria-label="Close"
         >
@@ -42,13 +44,13 @@ export default function DocumentType(props) {
         </button>
       </div>
 
-      <div class="modal-body ">
+      <div className="modal-body ">
         <form onSubmit={onSubmit}>
           <section className="document-type">
             <div className="container">
               <p className="form-label">Please select an Identification Type</p>
-              <div class="document-type-radio-group">
-                <div class="id-radio-group">
+              <div className="document-type-radio-group">
+                <div className="id-radio-group">
                   <input
                     type="radio"
                     id="driving-license"
@@ -62,13 +64,13 @@ export default function DocumentType(props) {
                     }
                     name="document-type"
                   />
-                  <label class="radio" for="driving-license">
+                  <label className="radio" htmlFor="driving-license">
                     <img src={license} alt="" width="85" height="70" />
                     <br />
-                    Driver's License
+                    Driver&apos;s License
                   </label>
                 </div>
-                <div class="id-radio-group">
+                <div className="id-radio-group">
                   <input
                     type="radio"
                     id="passport"
@@ -82,14 +84,14 @@ export default function DocumentType(props) {
                     }
                     name="document-type"
                   />
-                  <label class="radio " for="passport">
+                  <label className="radio " htmlFor="passport">
                     <img src={passport} alt="" width="65" height="75" />
                     <br />
                     Passport
                   </label>
                 </div>
 
-                <div class="id-radio-group">
+                <div className="id-radio-group">
                   <input
                     type="radio"
                     id="identity-card"
@@ -103,7 +105,7 @@ export default function DocumentType(props) {
                       })
                     }
                   />
-                  <label class="radio" for="identity-card">
+                  <label className="radio" htmlFor="identity-card">
                     <img src={identitycard} alt="" width="85" height="70" />
                     <br />
                     Identity Card
@@ -113,7 +115,7 @@ export default function DocumentType(props) {
             </div>
           </section>
 
-          <button type="submit" class="next-btn">
+          <button type="submit" className="next-btn">
             Next
           </button>
         </form>

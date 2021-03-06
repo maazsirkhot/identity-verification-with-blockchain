@@ -1,6 +1,7 @@
 import { combineReducers } from 'redux';
 import uploadReducer from './uploadReducer';
 import { RESET_ALL_STATE } from '../actions/types';
+
 const appReducer = combineReducers({
   uploads: uploadReducer,
 });

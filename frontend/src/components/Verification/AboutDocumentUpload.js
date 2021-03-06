@@ -1,18 +1,18 @@
 import React from 'react';
 import logo from '../../assets/img/logo_v2.png';
 
-export default function AboutDocumentUpload(props) {
+export default function AboutDocumentUpload({ activeTabChange }) {
   return (
-    <div class="tab-pane fade show active document-upload-about">
-      <div class="theme-modal-header">
+    <div className="tab-pane fade show active document-upload-about">
+      <div className="theme-modal-header">
         <div className="title">
           <img src={logo} alt="logo" width="100" />
           <br />
-          <i class="fas fa-lock"></i> Secure Identity Verifcation
+          <i className="fas fa-lock" /> Secure Identity Verifcation
         </div>
         <button
           type="button"
-          class="close"
+          className="close"
           data-dismiss="modal"
           aria-label="Close"
         >
@@ -20,25 +20,26 @@ export default function AboutDocumentUpload(props) {
         </button>
       </div>
 
-      <div class="modal-body">
+      <div className="modal-body">
         <ul>
           <li>
-            <i class="fas fa-lock"></i> Verify has built a world-class identity
-            verification, that handles your data securely.
+            <i className="fas fa-lock" /> Verify has built a world-class
+            identity verification, that handles your data securely.
           </li>
           <li>
-            <i class="fas fa-shield-alt"></i>
+            <i className="fas fa-shield-alt" />
             Your information is used for verification purposes and won’t be used
             for third-party marketing.
           </li>
           <li>
-            <i class="fas fa-clock"></i> This process should take less than 5
+            <i className="fas fa-clock" /> This process should take less than 5
             minutes.
           </li>
         </ul>
         <button
-          class="next-btn"
-          onClick={props.activeTabChange.bind(this, '1')}
+          type="button"
+          className="next-btn"
+          onClick={activeTabChange.bind(this, '1')}
         >
           Get Started
         </button>

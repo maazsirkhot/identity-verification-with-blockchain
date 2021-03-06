@@ -4,7 +4,7 @@ import axios from 'axios';
 import logo from '../../assets/img/logo_v2.png';
 import { RESET_UPLOAD_STATE } from '../../actions/types';
 
-export default function DocumentData(props) {
+export default function DocumentData({ activeTabChange }) {
   const dispatch = useDispatch();
   const [relevantText, setUpdatedText] = useState(
     useSelector((state) => state.uploads.relevantText)
@@ -51,22 +51,23 @@ export default function DocumentData(props) {
       });
   }
   return (
-    <div class="tab-pane fade show active document-upload-about">
-      <div class="theme-modal-header">
+    <div className="tab-pane fade show active document-upload-about">
+      <div className="theme-modal-header">
         <div className="title">
           <img src={logo} alt="logo" width="100" />
           <br />
           <span
-            class="back-btn"
-            onClick={props.activeTabChange.bind(this, '2')}
+            aria-hidden="true"
+            className="back-btn"
+            onClick={activeTabChange.bind(this, '2')}
           >
-            <i class="fas fa-arrow-left"></i>
+            <i className="fas fa-arrow-left" />
           </span>
-          <i class="fas fa-lock"></i> Secure Identity Verifcation
+          <i className="fas fa-lock" /> Secure Identity Verifcation
         </div>
         <button
           type="button"
-          class="close"
+          className="close"
           data-dismiss="modal"
           aria-label="Close"
         >
@@ -74,24 +75,22 @@ export default function DocumentData(props) {
         </button>
       </div>
 
-      <div class="modal-body">
+      <div className="modal-body">
         <form onSubmit={onSubmit}>
-          {relevantText.map((field, index) => {
-            return (
-              <div class="form-group">
-                <label for="exampleInputEmail1"> {field.field_name}</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  value={field.field_value}
-                  id={index}
-                  key={field.field_id}
-                  onChange={onChange}
-                />
-              </div>
-            );
-          })}
-          <button class="next-btn" type="submit">
+          {relevantText.map((field, index) => (
+            <div className="form-group">
+              <label htmlFor="exampleInputEmail1"> {field.field_name}</label>
+              <input
+                type="text"
+                className="form-control"
+                value={field.field_value}
+                id={index}
+                key={field.field_id}
+                onChange={onChange}
+              />
+            </div>
+          ))}
+          <button className="next-btn" type="submit">
             Submit for verification
           </button>
         </form>

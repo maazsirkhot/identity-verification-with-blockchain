@@ -8,6 +8,8 @@
     "@testing-library/user-event": "^12.5.0",
     "aos": "^2.3.4",
     "axios": "^0.21.1",
+    "eslint": "^7.21.0",
+    "history": "^5.0.0",
     "jquery": "^3.5.1",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
@@ -23,8 +25,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "eslint-check": "eslint --print-config src/App.js | eslint-config-prettier-check"
+    "eject": "react-scripts eject"
   },
   "proxy": "http://localhost:5000",
   "eslintConfig": {
@@ -46,14 +47,14 @@
     ]
   },
   "devDependencies": {
-    "eslint": "^7.20.0",
+    "eslint-config": "^0.3.0",
     "eslint-config-airbnb": "^18.2.1",
-    "eslint-config-prettier": "^7.2.0",
+    "eslint-config-prettier": "^8.1.0",
     "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-jsx-a11y": "^6.4.1",
     "eslint-plugin-prettier": "^3.3.1",
-    "eslint-plugin-react": "^7.22.0",
-    "eslint-plugin-react-hooks": "^4.2.0",
+    "eslint-plugin-react": "^7.21.5",
+    "eslint-plugin-react-hooks": "^1.7.0",
     "prettier": "^2.2.1"
   }
 }

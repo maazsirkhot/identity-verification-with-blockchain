@@ -1,26 +1,21 @@
-import React from "react";
-import { NavLink } from "react-router-dom";
+import React from 'react';
+import { NavLink } from 'react-router-dom';
 
 export default function SideBar(navigationMenu) {
   return (
-    <div class="sidebar">
-      <div class="menu">
+    <div className="sidebar">
+      <div className="menu">
         <ul>
-          {navigationMenu.sidebar.map((menu) => {
-            return (
-              <li>
-                <NavLink
-                  to={menu.navigation}
-                  activeClassName={menu.activeClass}
-                >
-                  <span>
-                    <i class={menu.icon}></i>
-                  </span>
-                  <span class="nav-text">{menu.item}</span>
-                </NavLink>
-              </li>
-            );
-          })}
+          {navigationMenu.sidebar.map((menu) => (
+            <li>
+              <NavLink to={menu.navigation} activeClassName={menu.activeClass}>
+                <span>
+                  <i className={menu.icon} />
+                </span>
+                <span className="nav-text">{menu.item}</span>
+              </NavLink>
+            </li>
+          ))}
         </ul>
       </div>
     </div>

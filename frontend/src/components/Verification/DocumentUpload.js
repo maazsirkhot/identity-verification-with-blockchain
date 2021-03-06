@@ -1,5 +1,4 @@
-import React from 'react';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import AboutDocumentUpload from './AboutDocumentUpload';
 import DocumentType from './DocumentType';
 import DocumentPictures from './DocumentPictures';
@@ -17,23 +16,24 @@ export default function DocumentUpload() {
   return (
     <div>
       <button
-        class="custom-btn add-btn"
+        className="custom-btn add-btn"
         data-toggle="modal"
         data-target="#document-upload"
+        type="button"
       >
-        <i class="fas fa-plus"></i> <span>Add New</span>
+        <i className="fas fa-plus" /> <span>Add New</span>
       </button>
 
       <div
-        class="modal fade"
+        className="modal fade"
         id="document-upload"
-        tabindex="-1"
+        tabIndex="-1"
         role="dialog"
         aria-hidden="true"
       >
-        <div class="modal-dialog" role="document">
-          <div class="modal-content">
-            <div class="tab-content" id="myTabContent">
+        <div className="modal-dialog" role="document">
+          <div className="modal-content">
+            <div className="tab-content" id="myTabContent">
               {activeTab[activeTabId]}
             </div>
           </div>

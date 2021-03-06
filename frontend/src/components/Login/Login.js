@@ -1,38 +1,40 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
 import '../../assets/css/login.css';
 
 export class Login extends Component {
   constructor(props) {
     super(props);
     this.container = React.createRef();
+    this.state = {
+      password: '',
+      username: '',
+      newEmail: '',
+      newPassword: '',
+      newUsername: '',
+      usertype: '',
+      errorMessage: '',
+    };
   }
-  state = {
-    email: '',
-    password: '',
-    username: '',
-    newEmail: '',
-    newPassword: '',
-    newUsername: '',
-    usertype: '',
-    errorMessage: '',
-    isLogin: false,
-    toProfile: false,
-  };
+
   componentDidMount() {
-    this.props.location.pathname === '/login'
-      ? this.container.current.classList.remove('right-panel-active')
-      : this.container.current.classList.add('right-panel-active');
+    if (this.props.location.pathname === '/login') {
+      this.container.current.classList.remove('right-panel-active');
+    } else {
+      this.container.current.classList.add('right-panel-active');
+    }
   }
 
   onClick = (event) => {
     event.preventDefault();
-    event.target.name === 'signIn'
-      ? this.container.current.classList.remove('right-panel-active')
-      : this.container.current.classList.add('right-panel-active');
+    if (event.target.name === 'signIn') {
+      this.container.current.classList.remove('right-panel-active');
+    } else {
+      this.container.current.classList.add('right-panel-active');
+    }
     this.setState({ errorMessage: '' });
   };
+
   signUp = (event) => {
     event.preventDefault();
     const data = {
@@ -41,7 +43,7 @@ export class Login extends Component {
       password: this.state.newPassword,
       type: this.state.usertype,
     };
-    console.log(data);
+
     axios
       .post('/local/signup', data)
       .then((res) => {
@@ -71,11 +73,13 @@ export class Login extends Component {
   updateValue = (event) => {
     this.setState({ [event.target.name]: event.target.value });
   };
+
   handleKeyDown = (e) => {
     if (e.key === ' ') {
       e.preventDefault();
     }
   };
+
   render() {
     return (
       <div className="register">
@@ -89,13 +93,13 @@ export class Login extends Component {
               <h2>Create Account</h2>
               <div class="social-container">
                 <a href="/" class="social">
-                  <i class="fab fa-facebook-f"></i>
+                  <i class="fab fa-facebook-f" />
                 </a>
                 <a href="http://localhost:5000/google/login" class="social">
-                  <i class="fab fa-google-plus-g"></i>
+                  <i class="fab fa-google-plus-g" />
                 </a>
                 <a href="/" class="social">
-                  <i class="fab fa-linkedin-in"></i>
+                  <i class="fab fa-linkedin-in" />
                 </a>
               </div>
               <span>or use your email for registration</span>
@@ -131,12 +135,17 @@ export class Login extends Component {
                 <option value="client">Client</option>
                 <option value="verifier">Verifier</option>
               </select>
-              <button>Sign Up</button>
+              <button type="button">Sign Up</button>
               <p>
                 Already have an account?{' '}
-                <Link class="custom-link" onClick={this.onClick} name="signIn">
+                <span
+                  aria-hidden="true"
+                  class="custom-link"
+                  onClick={this.onClick}
+                  name="signIn"
+                >
                   Login here!
-                </Link>
+                </span>
               </p>
             </form>
           </div>
@@ -148,13 +157,13 @@ export class Login extends Component {
                   href="https://accounts.google.com/o/oauth2/v2/auth?response_type=code&redirect_uri=http%3A%2F%2Flocalhost%3A5000%2Fgoogle%2Flogin%2Fcallback&scope=profile%20email&client_id=503681152360-midha3uj2vl06en9sgrp6pokre4u30m2.apps.googleusercontent.com"
                   class="social"
                 >
-                  <i class="fab fa-facebook-f"></i>
+                  <i class="fab fa-facebook-f" />
                 </a>
                 <a href="/" class="social">
-                  <i class="fab fa-google-plus-g"></i>
+                  <i class="fab fa-google-plus-g" />
                 </a>
                 <a href="/" class="social">
-                  <i class="fab fa-linkedin-in"></i>
+                  <i class="fab fa-linkedin-in" />
                 </a>
               </div>
               <span>or use your account</span>
@@ -175,12 +184,16 @@ export class Login extends Component {
                 required
               />
 
-              <button>Sign In</button>
+              <button type="button">Sign In</button>
               <p>
                 New User?{' '}
-                <Link class="custom-link" onClick={this.onClick}>
+                <span
+                  aria-hidden="true"
+                  class="custom-link"
+                  onClick={this.onClick}
+                >
                   Sign up here!
-                </Link>
+                </span>
               </p>
             </form>
           </div>
@@ -192,6 +205,7 @@ export class Login extends Component {
                   To keep connected with us please login with your personal info
                 </p>
                 <button
+                  type="button"
                   class="ghost"
                   id="signIn"
                   name="signIn"
@@ -204,6 +218,7 @@ export class Login extends Component {
                 <h1>Hello, Friend!</h1>
                 <p>Enter your personal details and start the journey with us</p>
                 <button
+                  type="button"
                   class="ghost"
                   id="signUp"
                   name="signUp"

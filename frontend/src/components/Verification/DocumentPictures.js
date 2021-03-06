@@ -8,21 +8,21 @@ import {
 } from '../../actions/types';
 import logo from '../../assets/img/logo_v2.png';
 
-export default function DocumentPictures(props) {
+export default function DocumentPictures({ activeTabChange }) {
   const dispatch = useDispatch();
   const type = useSelector((state) => state.uploads.documenttype);
   const frontImage = useSelector((state) => state.uploads.frontimage);
   const backImage = useSelector((state) => state.uploads.backimage);
   function onFrontImageChange(e) {
     e.preventDefault();
-    var file = e.target.files[0];
+    const file = e.target.files[0];
     dispatch({
       type: DOCUMENT_FRONT_IMAGE,
       payload: file,
     });
 
-    var img = document.querySelector('#file-upload-area1 img');
-    var reader = new FileReader();
+    const img = document.querySelector('#file-upload-area1 img');
+    const reader = new FileReader();
     reader.onloadend = function () {
       img.src = reader.result;
     };
@@ -34,14 +34,14 @@ export default function DocumentPictures(props) {
 
   function onBackImageChange(e) {
     e.preventDefault();
-    var file = e.target.files[0];
+    const file = e.target.files[0];
     dispatch({
       type: DOCUMENT_BACK_IMAGE,
       payload: file,
     });
 
-    var img = document.querySelector('#file-upload-area2 img');
-    var reader = new FileReader();
+    const img = document.querySelector('#file-upload-area2 img');
+    const reader = new FileReader();
     reader.onloadend = function () {
       img.src = reader.result;
     };
@@ -70,12 +70,11 @@ export default function DocumentPictures(props) {
         .post('/textract/getUserDetails', formData, config)
         .then((response) => {
           if (response.status === 200) {
-            console.log('In here', response.data.relevantText);
             dispatch({
               type: TEXTRACT_TEXT,
               payload: response.data.relevantText,
             });
-            props.activeTabChange('3');
+            activeTabChange('3');
           }
         })
         .catch((err) => {
@@ -84,31 +83,33 @@ export default function DocumentPictures(props) {
     }
   }
   return (
-    <div class="tab-pane fade show active" role="tabpanel">
-      <div class="theme-modal-header">
+    <div className="tab-pane fade show active" role="tabpanel">
+      <div className="theme-modal-header">
         <div className="title">
           <img src={logo} alt="logo" width="100" />
           <br />
           <span
-            class="back-btn"
-            onClick={props.activeTabChange.bind(this, '1')}
+            aria-hidden="true"
+            className="back-btn"
+            onClick={activeTabChange.bind(this, '1')}
+            onKeyDown={activeTabChange.bind(this, '1')}
           >
-            <i class="fas fa-arrow-left"></i>
+            <i className="fas fa-arrow-left" />
           </span>
-          <i class="fas fa-lock"></i> Secure Identity Verifcation
+          <i className="fas fa-lock" /> Secure Identity Verifcation
         </div>
         <button
           type="button"
-          class="close"
+          className="close"
           data-dismiss="modal"
           aria-label="Close"
         >
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <div class="modal-body ">
+      <div className="modal-body ">
         <form onSubmit={onSubmit}>
-          <div class="form-group document-pictures">
+          <div className="form-group document-pictures">
             <input
               type="file"
               name="frontImage"
@@ -118,14 +119,15 @@ export default function DocumentPictures(props) {
               accept="image/jpeg, image/png"
             />
             <div
-              class="file-upload-area"
+              className="file-upload-area"
               id="file-upload-area1"
+              aria-hidden="true"
               onClick={() => {
                 document.getElementById('frontImage').click();
               }}
             >
               <p>Click to upload front side of the document</p>
-              <img hidden src="" alt="" class="img-fluid"></img>
+              <img hidden src="" alt="" className="img-fluid" />
             </div>
             <input
               type="file"
@@ -136,18 +138,19 @@ export default function DocumentPictures(props) {
               accept="image/jpeg, image/png"
             />
             <div
-              class="file-upload-area"
+              className="file-upload-area"
+              aria-hidden="true"
               id="file-upload-area2"
               onClick={() => {
                 document.getElementById('backImage').click();
               }}
             >
               <p>Click to upload back side of the document</p>
-              <img hidden src="" alt="" class="img-fluid"></img>
+              <img hidden src="" alt="" className="img-fluid" />
             </div>
           </div>
 
-          <button type="submit" class="next-btn">
+          <button type="submit" className="next-btn">
             Next
           </button>
         </form>

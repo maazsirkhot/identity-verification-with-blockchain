@@ -1,7 +1,8 @@
+import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
-import store from './store.js';
 import AOS from 'aos';
+import store from './store.js';
 import Routes from './components/Routes';
 import './assets/css/custom.css';
 import './assets/css/aos.css';
