@@ -15,7 +15,7 @@ module.exports = (sequelize, DataTypes) => {
     description: {
       type: DataTypes.STRING,
     },
-    dataFields: {
+    idtype: {
       type: DataTypes.ARRAY(DataTypes.STRING),
       allowNull: false,
     },
@@ -32,10 +32,6 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.BOOLEAN,
       allowNull: false,
       defaultValue: false,
-    },
-    verificationDoc: {
-      type: DataTypes.STRING,
-      allowNull: false,
     },
   }, {
     tableName: 'verification_entities',

@@ -35,6 +35,11 @@ module.exports = {
     USER_DETAILS_STORE_SUCCESS: 'User Details Stored Sucessfully',
     USER_DETAILS_GET: 'Retrieved User Details Successfully',
     USER_DETAILS_GET_FAILED: 'Failed to retreive user details',
+    INVALID_VERIFIER: 'Unauthorized access. Invalid verifier',
+    FAILED_VERIFIER_DATA: 'Failed to fetch verifier data',
+    NO_VERIFIER_DATA: 'There are no user data to verify at the moment',
+    VERIFIER_DATA_SUCCESS: 'Successfully fetched verifier data',
+    VERIFIER_DATA_FAILED: 'Error occured while fetching verifier data!',
   },
   ENV_VARIABLES: {
     AWS_S3_ACCESS_KEY: process.env.AWS_S3_ACCESS_KEY,
