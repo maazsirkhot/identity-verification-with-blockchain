@@ -6,6 +6,7 @@ const uuid = require('uuid');
 const UserField = require('../../models/mongoDB/userFields');
 const userDetailsDao = require('../../daos/textract/userDetailsDao');
 const constants = require('../../../utils/constants');
+const user = require('../../daos/user/user');
 
 module.exports = {
   getRelevantTextService: (data, keyValuePair) => {
@@ -87,7 +88,7 @@ module.exports = {
       throw new Error(`Error Occurred in DAO Layers:  + ${error}`);
     }
   },
-  createUserDetails: async (data, userId, frontLink, backLink, keyValuePair) => {
+  createUserDetails: async (data, user, frontLink, backLink, keyValuePair) => {
     try {
       data.push({
         field_id: keyValuePair['Front Page'],
@@ -105,8 +106,8 @@ module.exports = {
       }
       console.log(data);
       const userData = new UserField({
-        userId,
-        userEmail: 'sample@gmail.com',
+        userId: user.userId,
+        userEmail: user.email,
         dataField: data,
       });
       return await userDetailsDao.createUserDetails(userData);
