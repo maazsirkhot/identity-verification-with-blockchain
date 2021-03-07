@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
+import { Redirect } from 'react-router-dom';
 import axios from 'axios';
+import setAuthToken from '../../utils/setAuthToken.js';
 import '../../assets/css/login.css';
 
 export class Login extends Component {
@@ -14,6 +16,7 @@ export class Login extends Component {
       newUsername: '',
       usertype: '',
       errorMessage: '',
+      logintype: '',
     };
   }
 
@@ -47,7 +50,7 @@ export class Login extends Component {
     axios
       .post('/local/signup', data)
       .then((res) => {
-        console.log('In here', res.data);
+        console.log(res.data);
       })
       .catch((err) => {
         console.log(err);
@@ -63,10 +66,17 @@ export class Login extends Component {
     axios
       .post('/local/login', data)
       .then((res) => {
-        console.log(res.data);
+        if (res.status === 200) {
+          console.log('In here', res.data);
+
+          this.setState({ logintype: res.data.data.type });
+          localStorage.setItem('userName', res.data.data.username);
+          localStorage.setItem('token', res.data.data.token);
+          setAuthToken(localStorage.getItem('token'));
+        }
       })
       .catch((err) => {
-        console.log(err);
+        console.log(err.response.data);
       });
   };
 
@@ -81,8 +91,19 @@ export class Login extends Component {
   };
 
   render() {
+    let redirectvar = '';
+
+    if (this.state.logintype === 'user') {
+      redirectvar = <Redirect to="/user/wallet" />;
+    } else if (this.state.logintype === 'client') {
+      redirectvar = <Redirect to="/client/requests" />;
+    } else if (this.state.logintype === 'verifier') {
+      redirectvar = <Redirect to="/verifier/requests" />;
+    }
+
     return (
       <div className="register">
+        {redirectvar}
         <div
           class="registercontainer "
           id="registercontainer"
