@@ -54,6 +54,7 @@ app.get('/ping', (req, res) => res.status(200).send());
 require('./src/routes/auth/index')(app);
 require('./src/routes/textract/index')(app);
 require('./src/routes/user/index')(app);
+require('./src/routes/verifier/index')(app);
 require('./src/routes/system/index')(app);
 
 // app.use((req, res, next) => {
