@@ -1,84 +1,126 @@
-import React, { Component } from "react";
-import { Redirect } from "react-router-dom";
-import DocumentBanner from "./DocumentBanner";
-import passport from "./passport.png";
-import license from "./drivers-license.png";
-import identitycard from "./identitycard.png";
-import "./Document.css";
+import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { DOCUMENT_TYPE } from '../../actions/types';
+import logo from '../../assets/img/logo_v2.png';
+import passport from '../../assets/img/passport.png';
+import license from '../../assets/img/drivers-license.png';
+import identitycard from '../../assets/img/identitycard.png';
 
-export class DocumentType extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      redirect: false,
-    };
-  }
-  render() {
-    let redirectVar = null;
-    if (this.state.redirect) {
-      redirectVar = <Redirect to="/documentfiles" />;
+export default function DocumentType({ activeTabChange }) {
+  const type = useSelector((state) => state.uploads.documenttype);
+  const dispatch = useDispatch();
+
+  function onSubmit(e) {
+    e.preventDefault();
+    if (type === '') {
+      alert('Please select an identification type');
+    } else {
+      activeTabChange(2);
     }
-    return (
-      <div>
-        {redirectVar}
-        <DocumentBanner />
-        <form onSubmit={this.onSubmit}>
-          <section className="document-main">
-            <div className="container form-container">
-              <div class="form-group">
-                <p className="form-label">Document Country</p>
-                <select class="form-control" name="country" required>
-                  <option defaultValue value="">
-                    Please select a country
-                  </option>
-                  <option value="USA">United States of America</option>
-                </select>
-              </div>
-              <p className="form-label">Identification Type</p>
-              <div class="form-group document-type-radio-group">
-                <label>
-                  <input type="radio" name="documenttype" />
-                  <div className="radio-background">
+  }
+  return (
+    <div className="tab-pane fade show active" role="tabpanel">
+      <div className="theme-modal-header">
+        <div className="title">
+          <img src={logo} alt="logo" width="100" />
+          <br />
+          <span
+            aria-hidden="true"
+            className="back-btn"
+            onClick={activeTabChange.bind(this, '0')}
+            onKeyDown={activeTabChange.bind(this, '0')}
+          >
+            <i className="fas fa-arrow-left" />
+          </span>
+          <i className="fas fa-lock" />
+          Secure Identity Verifcation
+        </div>
+        <button
+          type="button"
+          className="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <div className="modal-body ">
+        <form onSubmit={onSubmit}>
+          <section className="document-type">
+            <div className="container">
+              <p className="form-label">Please select an Identification Type</p>
+              <div className="document-type-radio-group">
+                <div className="id-radio-group">
+                  <input
+                    type="radio"
+                    id="driving-license"
+                    value="driving-license"
+                    checked={type === 'CADL'}
+                    onChange={() =>
+                      dispatch({
+                        type: DOCUMENT_TYPE,
+                        payload: 'CADL',
+                      })
+                    }
+                    name="document-type"
+                  />
+                  <label className="radio" htmlFor="driving-license">
                     <img src={license} alt="" width="85" height="70" />
                     <br />
-                    Driver's license
-                  </div>
-                </label>
-
-                <label>
-                  <input type="radio" name="documenttype" />
-                  <div className="radio-background">
+                    Driver&apos;s License
+                  </label>
+                </div>
+                <div className="id-radio-group">
+                  <input
+                    type="radio"
+                    id="passport"
+                    value="passport"
+                    checked={type === 'PASSPORT'}
+                    onChange={() =>
+                      dispatch({
+                        type: DOCUMENT_TYPE,
+                        payload: 'PASSPORT',
+                      })
+                    }
+                    name="document-type"
+                  />
+                  <label className="radio " htmlFor="passport">
                     <img src={passport} alt="" width="65" height="75" />
                     <br />
                     Passport
-                  </div>
-                </label>
-                <label>
-                  <input type="radio" name="documenttype" />
-                  <div className="radio-background">
+                  </label>
+                </div>
+
+                <div className="id-radio-group">
+                  <input
+                    type="radio"
+                    id="identity-card"
+                    value="identity-card"
+                    name="document-type"
+                    checked={type === 'ID'}
+                    onChange={() =>
+                      dispatch({
+                        type: DOCUMENT_TYPE,
+                        payload: 'ID',
+                      })
+                    }
+                  />
+                  <label className="radio" htmlFor="identity-card">
                     <img src={identitycard} alt="" width="85" height="70" />
                     <br />
                     Identity Card
-                  </div>
-                </label>
+                  </label>
+                </div>
               </div>
             </div>
           </section>
-          <div className="container">
-            <button
-              type="submit"
-              class="submit custom-btn1"
-              onClick={() => {
-                this.setState({ redirect: true });
-              }}
-            >
-              NEXT
-            </button>
-          </div>
+
+          <button type="submit" className="next-btn">
+            Next
+          </button>
         </form>
       </div>
-    );
-  }
+    </div>
+  );
 }
-
-export default DocumentType;
