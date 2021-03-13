@@ -1,6 +1,8 @@
 import React from 'react';
 import { Router, Route } from 'react-router-dom';
 import { createBrowserHistory } from 'history';
+import ProtectedRoute from './ProtectedRoute';
+import ErrorPage from './ErrorPage';
 import Home from './Homepage/Home';
 import Login from './Login/Login';
 import DigitalWallet from './Dashboard/User/DigitalWallet';
@@ -15,10 +17,11 @@ export default function Routes() {
       <Route exact path="/" component={Home} />
       <Route path="/login" component={Login} />
       <Route path="/signup" component={Login} />
-      <Route path="/user/wallet" component={DigitalWallet} />
-      <Route path="/user/requests" component={InformationRequests} />
-      <Route path="/verifier/requests" component={ApprovalRequests} />
-      <Route path="/client/requests" component={SentRequests} />
+      <Route path="/error" component={ErrorPage} />
+      <ProtectedRoute path="/user/wallet" component={DigitalWallet} />
+      <ProtectedRoute path="/user/requests" component={InformationRequests} />
+      <ProtectedRoute path="/verifier/requests" component={ApprovalRequests} />
+      <ProtectedRoute path="/client/requests" component={SentRequests} />
     </Router>
   );
 }
