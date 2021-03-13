@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
-import axios from 'axios';
-import setAuthToken from '../../utils/setAuthToken.js';
+
+// import setAuthToken from '../../utils/setAuthToken.js';
 import '../../assets/css/login.css';
+import axiosInstance from '../../utils/axiosInstance.js';
 
 export class Login extends Component {
   constructor(props) {
@@ -47,10 +48,32 @@ export class Login extends Component {
       type: this.state.usertype,
     };
 
-    axios
+    axiosInstance()
       .post('/local/signup', data)
       .then((res) => {
-        console.log(res.data);
+        if (res.status === 200) {
+          const logindata = {
+            username: this.state.newUsername,
+            password: this.state.newPassword,
+          };
+          axiosInstance()
+            .post('/local/login', logindata)
+            .then((response) => {
+              if (response.status === 200 && response.data.dataAvailable) {
+                localStorage.setItem('userName', response.data.data.username);
+                localStorage.setItem('token', response.data.data.token);
+                localStorage.setItem('userType', response.data.data.type);
+                setTimeout(() => {
+                  this.setState({ logintype: response.data.data.type });
+                }, 1000);
+              } else {
+                alert(response.data.message);
+              }
+            })
+            .catch((err) => {
+              console.log(err.response.data);
+            });
+        }
       })
       .catch((err) => {
         console.log(err);
@@ -63,16 +86,18 @@ export class Login extends Component {
       username: this.state.username,
       password: this.state.password,
     };
-    axios
+    axiosInstance()
       .post('/local/login', data)
       .then((res) => {
-        if (res.status === 200) {
-          console.log('In here', res.data);
-
-          this.setState({ logintype: res.data.data.type });
+        if (res.status === 200 && res.data.dataAvailable) {
           localStorage.setItem('userName', res.data.data.username);
           localStorage.setItem('token', res.data.data.token);
-          setAuthToken(localStorage.getItem('token'));
+          localStorage.setItem('userType', res.data.data.type);
+          setTimeout(() => {
+            this.setState({ logintype: res.data.data.type });
+          }, 1000);
+        } else {
+          alert(res.data.message);
         }
       })
       .catch((err) => {

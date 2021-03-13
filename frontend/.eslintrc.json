@@ -20,6 +20,9 @@
     "react/jsx-curly-newline": "off",
     "react/jsx-one-expression-per-line": "off",
     "dot-notation": "off",
+    "react/jsx-indent": "off",
+    "consistent-return": "warn",
+    "react/jsx-props-no-spreading": "off",
     "jsx-a11y/label-has-associated-control": [
       "error",
       {
