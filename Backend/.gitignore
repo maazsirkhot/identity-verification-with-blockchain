@@ -14,3 +14,6 @@ node_modules/
 !logs/
 logs/*
 !logs/about.md
+
+# Snippet Test files
+test.js

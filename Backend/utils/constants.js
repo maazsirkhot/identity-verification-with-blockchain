@@ -42,6 +42,9 @@ module.exports = {
     NO_VERIFIER_DATA: 'There are no user data to verify at the moment',
     VERIFIER_DATA_SUCCESS: 'Successfully fetched verifier data',
     VERIFIER_DATA_FAILED: 'Error occured while fetching verifier data!',
+    PERMISSION_CREATED: 'Data sucessfully created in PERMISSION Collection',
+    PERMISSION_FETCHED: 'PERMISSION fetched successfully from the PERMISSION Collection',
+    PERMISSION_UPDATED: 'PERMISSION updated successfully in the PERMISSION Collection',
   },
   ENV_VARIABLES: {
     AWS_S3_ACCESS_KEY: process.env.AWS_S3_ACCESS_KEY,
