@@ -37,6 +37,11 @@ const userFieldSchema = new mongoose.Schema(
           type: [Object],
           required: false,
         },
+        status: {
+          type: String,
+          enum: ['ACCEPTED', 'REJECTED', 'PENDING'],
+          default: 'PENDING',
+        },
         verifierDoc: {
           docId: {
             type: mongoose.Types.ObjectId, // Reference to idType collection
@@ -52,7 +57,11 @@ const userFieldSchema = new mongoose.Schema(
           },
         },
       }],
+
   },
+  {
+    timestamps: { createdAt: true, updatedAt: true }
+  }
 );
 const userFields = mongoose.model('userFields', userFieldSchema);
 module.exports = userFields;

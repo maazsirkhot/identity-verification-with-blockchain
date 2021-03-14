@@ -9,7 +9,7 @@ module.exports = {
       _.each(verifierData, (currentData) => {
         userAllDataFields = currentData.dataField;
         updatedUserAllDataFields = _.remove(userAllDataFields, (currentObject) => {
-          return _.includes(idType, currentObject.verifierDoc.docId.toString());
+          return _.includes(idType, currentObject.verifierDoc.docshortName);
         });
         currentData.dataField = updatedUserAllDataFields;
       });
