@@ -26,4 +26,11 @@ module.exports = {
       throw new Error(`Error Occurred in Service Layers: ${error}`);
     }
   },
+  updateUserData: async (userDetails) => {
+    try {
+      return await verifier.updateUserData(userDetails);
+    } catch (error) {
+      throw new Error(`Error Occurred in Service Layers: ${error}`);
+    }
+  },
 };

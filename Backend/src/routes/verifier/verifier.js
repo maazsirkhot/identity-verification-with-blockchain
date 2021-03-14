@@ -9,4 +9,8 @@ router.get('/getVerifierData', passport.authenticate(['jwt'], {
     session: false,
   }), verifierController.getVerifierData);
 
+router.post('/updateUserData', passport.authenticate(['jwt'], {
+    session: false,
+  }), verifierController.updateUserDataByVerifier);
+
 module.exports = router;
