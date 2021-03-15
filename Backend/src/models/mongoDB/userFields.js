@@ -10,6 +10,21 @@ const userFieldSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    verifierApproval: {
+      status: {
+        type: String,
+        enum: ['APPROVED', 'REJECTED', 'PENDING'],
+        default: 'PENDING',
+      },
+      comments: {
+        type: String,
+        default: null,
+      },
+      verifiedBy: {
+        type: String,
+        default: null,
+      },
+    },
     dataField: [
       {
         field_id: {
@@ -36,11 +51,6 @@ const userFieldSchema = new mongoose.Schema(
         permissions: {
           type: [Object],
           required: false,
-        },
-        status: {
-          type: String,
-          enum: ['ACCEPTED', 'REJECTED', 'PENDING'],
-          default: 'PENDING',
         },
         verifierDoc: {
           docId: {

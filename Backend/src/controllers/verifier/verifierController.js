@@ -63,7 +63,7 @@ module.exports = {
         }); 
       }
       const userDetails = req.body.userDetails;
-      const updatedUserData = await verifierService.updateUserData(userDetails);
+      const updatedUserData = await verifierService.updateUserData(userDetails, req.user.userId);
       if (!updatedUserData) {
         return res.status(constants.STATUS_CODE.BAD_REQUEST_ERROR_STATUS).send({
           message: constants.MESSAGES.FAILED_USER_UPDATE,
