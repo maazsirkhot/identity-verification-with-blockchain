@@ -9,7 +9,7 @@ module.exports = {
       _.each(verifierData, (currentData) => {
         userAllDataFields = currentData.dataField;
         updatedUserAllDataFields = _.remove(userAllDataFields, (currentObject) => {
-          return _.includes(idType, currentObject.verifierDoc.docId.toString());
+          return _.includes(idType, currentObject.verifierDoc.docshortName);
         });
         currentData.dataField = updatedUserAllDataFields;
       });
@@ -22,6 +22,14 @@ module.exports = {
     try {
       const verifierData = await verificationEntity.findVerifierById(verifierId);
       return verifierData.idtype;
+    } catch (error) {
+      throw new Error(`Error Occurred in Service Layers: ${error}`);
+    }
+  },
+  updateUserData: async (userDetails, verifierId) => {
+    try {
+      userDetails.verifierApproval.verifiedBy = verifierId;
+      return await verifier.updateUserData(userDetails);
     } catch (error) {
       throw new Error(`Error Occurred in Service Layers: ${error}`);
     }

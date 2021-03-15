@@ -47,4 +47,42 @@ module.exports = {
       });
     }
   },
+  updateUserDataByVerifier: async(req, res) => {
+    /* integrate with blockchain */
+    try{
+      if (!req.user) {
+        return res.status(constants.STATUS_CODE.BAD_REQUEST_ERROR_STATUS).send({
+          message: constants.MESSAGES.USER_NOT_LOGGED_IN,
+          dataAvailable: false,
+       });
+      }
+      if (req.user.type && req.user.type != 'verifier') {
+        return res.status(constants.STATUS_CODE.BAD_REQUEST_ERROR_STATUS).send({
+          message: constants.MESSAGES.INVALID_VERIFIER,
+          dataAvailable: false,
+        }); 
+      }
+      const userDetails = req.body.userDetails;
+      const updatedUserData = await verifierService.updateUserData(userDetails, req.user.userId);
+      if (!updatedUserData) {
+        return res.status(constants.STATUS_CODE.BAD_REQUEST_ERROR_STATUS).send({
+          message: constants.MESSAGES.FAILED_USER_UPDATE,
+          dataAvailable: false,
+        });
+      }
+      return res.status(constants.STATUS_CODE.SUCCESS_STATUS).send({
+        message: constants.MESSAGES.UPDATE_USER_DATA_SUCCESS,
+        updatedUserData,
+        dataAvailable: !!_.isPlainObject(updatedUserData),
+      });
+    } catch (error) {
+      console.log(error);
+      return res
+        .status(constants.STATUS_CODE.INTERNAL_SERVER_ERROR_STATUS)
+        .send({
+          message: constants.MESSAGES.FAILED_USER_UPDATE,
+          error,
+      });
+    }
+  },
 }

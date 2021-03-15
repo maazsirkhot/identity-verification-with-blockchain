@@ -45,6 +45,9 @@ module.exports = {
     PERMISSION_CREATED: 'Data sucessfully created in PERMISSION Collection',
     PERMISSION_FETCHED: 'PERMISSION fetched successfully from the PERMISSION Collection',
     PERMISSION_UPDATED: 'PERMISSION updated successfully in the PERMISSION Collection',
+    FAILED_USER_UPDATE: 'Failed to update User Data',
+    NO_USER_DATA: 'No user data found to update',
+    UPDATE_USER_DATA_SUCCESS: 'Update User Data Successfully',
   },
   ENV_VARIABLES: {
     AWS_S3_ACCESS_KEY: process.env.AWS_S3_ACCESS_KEY,
