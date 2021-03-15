@@ -5,16 +5,11 @@ const permissionSchema = new mongoose.Schema(
     permissionName: {
       type: String,
       required: true,
-      unique: true,
     },
     dataField: {
-      id: {
-        type: mongoose.Types.ObjectId,
-        required: true,
-      },
-      fieldName: {
+      parameters: [String],
+      method: {
         type: String,
-        required: true,
       },
     },
     isActive: {
@@ -28,4 +23,4 @@ const permissionSchema = new mongoose.Schema(
   },
 );
 
-module.exports = mongoose.model('permission', permissionSchema);
+export default mongoose.model('permission', permissionSchema);
