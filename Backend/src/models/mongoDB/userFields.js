@@ -10,21 +10,6 @@ const userFieldSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    verifierApproval: {
-      status: {
-        type: String,
-        enum: ['APPROVED', 'REJECTED', 'PENDING'],
-        default: 'PENDING',
-      },
-      comments: {
-        type: String,
-        default: null,
-      },
-      verifiedBy: {
-        type: String,
-        default: null,
-      },
-    },
     dataField: [
       {
         field_id: {
@@ -67,11 +52,7 @@ const userFieldSchema = new mongoose.Schema(
           },
         },
       }],
-
   },
-  {
-    timestamps: { createdAt: true, updatedAt: true }
-  }
 );
 const userFields = mongoose.model('userFields', userFieldSchema);
 module.exports = userFields;
