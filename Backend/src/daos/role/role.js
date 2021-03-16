@@ -3,14 +3,14 @@ const Role = require('../../models/mongoDB/role');
 const utilFunctions = require('../../helpers/utilFunctions');
 
 module.exports = {
-  getPermissions: async (options) => {
+  getRole: async (options) => {
     try {
       return Role.find(options);
     } catch (error) {
       throw new Error(`Error Occurred in DAO Layers: ${error}`);
     }
   },
-  createPermission: async (role) => {
+  createRole: async (role) => {
     try {
       if (
         !_.isPlainObject(role)
@@ -31,7 +31,7 @@ module.exports = {
       throw new Error(`Error Occurred in DAO Layers: ${error}`);
     }
   },
-  updatePermission: async (options, updatedFields) => {
+  updateRole: async (options, updatedFields) => {
     try {
       if (!_.isPlainObject(updatedFields) || !_.isPlainObject(options)) {
         throw new Error('Parameters format is invalid.');
