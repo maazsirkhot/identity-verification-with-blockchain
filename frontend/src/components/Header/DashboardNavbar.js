@@ -3,6 +3,10 @@ import { Link } from 'react-router-dom';
 import logo from '../../assets/img/logo.png';
 
 export default function DashboardNavbar() {
+  function logout() {
+    localStorage.removeItem('username');
+    localStorage.removeItem('token');
+  }
   return (
     <div>
       <header className="fixed-top dashboard-header">
@@ -29,7 +33,9 @@ export default function DashboardNavbar() {
                         <span className="thumb">
                           <i className="fas fa-user" />
                         </span>
-                        <span className="name">Hetal Shah</span>
+                        <span className="name">
+                          {localStorage.getItem('userName')}
+                        </span>
                         <span className="arrow">
                           <i className="la la-angle-down" />
                         </span>
@@ -41,7 +47,11 @@ export default function DashboardNavbar() {
                         <Link to="/" class="dropdown-item">
                           <i className="fas fa-cog" /> Setting
                         </Link>
-                        <Link to="/" class="dropdown-item logout">
+                        <Link
+                          to="/"
+                          onClick={logout}
+                          class="dropdown-item logout"
+                        >
                           <i className="fas fa-sign-out-alt" /> Logout
                         </Link>
                       </div>
