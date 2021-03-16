@@ -8,6 +8,7 @@ import Login from './Login/Login';
 import DigitalWallet from './Dashboard/User/DigitalWallet';
 import InformationRequests from './Dashboard/User/InformationRequests';
 import ApprovalRequests from './Dashboard/Verifier/ApprovalRequests';
+import ApprovalRequestInfo from './Dashboard/Verifier/ApprovalRequestInfo';
 import SentRequests from './Dashboard/Client/SentRequests';
 
 export default function Routes() {
@@ -21,6 +22,10 @@ export default function Routes() {
       <ProtectedRoute path="/user/wallet" component={DigitalWallet} />
       <ProtectedRoute path="/user/requests" component={InformationRequests} />
       <ProtectedRoute path="/verifier/requests" component={ApprovalRequests} />
+      <ProtectedRoute
+        path="/verifier/requestinfo/:id"
+        component={ApprovalRequestInfo}
+      />
       <ProtectedRoute path="/client/requests" component={SentRequests} />
     </Router>
   );

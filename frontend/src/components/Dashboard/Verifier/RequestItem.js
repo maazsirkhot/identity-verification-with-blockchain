@@ -1,6 +1,42 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { Link } from 'react-router-dom';
+import { CURRENT_APPROVAL_ITEM } from '../../../actions/types';
 
 export default function RequestItems({ userdata }) {
+  const id = userdata.userId;
+  const dispatch = useDispatch();
+  const monthNames = [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
+  ];
+
+  const [date, setDate] = useState(' ');
+
+  useEffect(() => {
+    const currentdate = new Date(userdata.createdAt);
+    setDate(
+      `${currentdate.getDate()} ${
+        monthNames[currentdate.getMonth()]
+      }, ${currentdate.getFullYear()}`
+    );
+  });
+  function onClick() {
+    dispatch({
+      type: CURRENT_APPROVAL_ITEM,
+      payload: userdata,
+    });
+  }
   return (
     <div className="col-xl-12 col-lg-12 col-md-12">
       <div className="request-item">
@@ -9,15 +45,19 @@ export default function RequestItems({ userdata }) {
 
           <div className="request-date">
             <strong>Request Date:</strong>
-            <p> 9th February, 2021</p>
+            <p>{date}</p>
           </div>
         </div>
         <div className="request-date">
           <strong>Request Date:</strong>
-          <p> 9th February, 2021</p>
+          <p>{date}</p>
         </div>
 
-        <button type="button" className="btn-more-info request-status">
+        <Link
+          to={`/verifier/requestinfo/${id}`}
+          className="btn-more-info request-status"
+          onClick={onClick}
+        >
           <div className="col-xs-2 col-md-4 col-2 text-center pt-2 pb-2 bg-light-dark">
             <i class="fas fa-info" />
           </div>
@@ -27,7 +67,7 @@ export default function RequestItems({ userdata }) {
           >
             <h4>More Info</h4>
           </div>
-        </button>
+        </Link>
       </div>
     </div>
   );

@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-// import axios from 'axios';
 import axiosInstance from '../../../utils/axiosInstance';
 import NavBar from '../../Header/DashboardNavbar';
 import SideBar from '../../Header/SideBar';
@@ -17,22 +16,9 @@ export class ApprovalRequests extends Component {
   }
 
   componentDidMount() {
-    console.log('In here 123', localStorage.getItem('token'));
-    // axios
-    //   .get('/verifier/fetch/getVerifierData')
-    //   .then((res) => {
-    //     console.log(res.data);
-    //     this.setState({
-    //       verifierrequests: res.data.verifierData,
-    //     });
-    //   })
-    //   .catch((err) => {
-    //     console.log(err.response);
-    //   });
     axiosInstance()
       .get('/verifier/fetch/getVerifierData')
       .then((res) => {
-        console.log(res.data);
         this.setState({
           verifierrequests: res.data.verifierData,
         });
