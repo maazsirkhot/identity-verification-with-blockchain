@@ -19,6 +19,12 @@ export default function RequestItems({ userdata }) {
   ];
 
   const [date, setDate] = useState(' ');
+  let statusClassName = 'bg-danger';
+  if (userdata.verifierApproval.status === 'APPROVED') {
+    statusClassName = 'bg-success';
+  } else if (userdata.verifierApproval.status === 'PENDING') {
+    statusClassName = 'bg-warning';
+  }
 
   useEffect(() => {
     const currentdate = new Date(userdata.createdAt);
@@ -34,7 +40,13 @@ export default function RequestItems({ userdata }) {
       <div className="request-item">
         <div className="request-info">
           <h5>{userdata.userEmail}</h5>
-
+          <div style={{ fontSize: '14px' }}>
+            <strong>Status:{'  '}</strong>
+            <span class={`badge text-light ${statusClassName}`}>
+              {userdata.verifierApproval.status}
+            </span>
+          </div>
+          <br />
           <div className="request-date">
             <strong>Request Date:</strong>
             <p>{date}</p>

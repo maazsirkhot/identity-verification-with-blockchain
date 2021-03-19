@@ -245,6 +245,20 @@ INFORMATION REQUESTS
     display: none;
   }
 }
+@media only screen and (max-width: 500px) {
+  .request-info h5 {
+    font-size: 14px;
+  }
+  .request-info .request-date {
+    font-size: 12px !important;
+  }
+  .request-info p {
+    font-size: 12px !important;
+  }
+  .request-info div {
+    font-size: 12px !important;
+  }
+}
 .btn-more-info {
   background-color: #5469d4;
   color: white;
