@@ -1,6 +1,6 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import axios from 'axios';
+import axiosInstance from '../../utils/axiosInstance.js';
 import {
   DOCUMENT_FRONT_IMAGE,
   DOCUMENT_BACK_IMAGE,
@@ -66,7 +66,7 @@ export default function DocumentPictures({ activeTabChange }) {
           'content-type': 'multipart/form-data',
         },
       };
-      axios
+      axiosInstance()
         .post('/textract/getUserDetails', formData, config)
         .then((response) => {
           if (response.status === 200) {
@@ -78,6 +78,7 @@ export default function DocumentPictures({ activeTabChange }) {
           }
         })
         .catch((err) => {
+          console.log(err);
           alert(err.response.data.message);
         });
     }
@@ -96,8 +97,7 @@ export default function DocumentPictures({ activeTabChange }) {
           >
             <i className="fas fa-arrow-left" />
           </span>
-          <i className="fas fa-lock" />
-          Secure Identity Verifcation
+          <i className="fas fa-lock" /> Secure Identity Verifcation
         </div>
         <button
           type="button"

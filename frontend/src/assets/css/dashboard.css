@@ -252,17 +252,18 @@ INFORMATION REQUESTS
 /**--------------------------------------------------
 DOCUMENT UPLOAD
 -----------------------------------------------------**/
-.modal-backdrop {
-  z-index: -1;
-}
 
+.modal-backdrop.fade.in {
+  opacity: 1;
+  background-color: rgba(0, 0, 0, 0.5);
+}
 #document-upload .modal-body {
   padding: 20px 50px 50px;
 }
 
 .modal-dialog {
   max-width: 600px;
-  margin: 10% auto;
+  margin: 5% auto;
 }
 .modal-dialog .modal-content {
   border: 1px solid #edeef1;
@@ -434,12 +435,23 @@ APPROVAL REQUESTS INFO
 
 .approval-request-info {
   display: grid;
-  grid-template-columns: 2fr 1fr;
+  grid-template-columns: 1fr 1.5fr;
   grid-gap: 1em !important;
 }
 
-.approval-request-info .sub-grid {
-  display: grid;
-  grid-template-rows: 1fr 1fr;
-  grid-gap: 1em !important;
+.approval-request-info .custom-btn2 {
+  margin-top: 20px;
+  font-size: 14px;
+  width: 100px;
+  color: #fff;
+  border-radius: 20px;
+  border: none;
+  outline: none;
+}
+
+.custom-btn2.bg-approve {
+  background-color: #948cf3;
+}
+.custom-btn2.bg-decline {
+  background-color: #eb6e53;
 }
