@@ -9,7 +9,7 @@ module.exports = {
       attributes,
       (attribute) => _.has(obj, attribute)
         && obj[attribute] !== null
-        && typeof (obj[attribute]) === 'undefined',
+        && typeof (obj[attribute]) !== 'undefined',
     );
   },
   validateArrayOfObjects: (array, attributes) => {
