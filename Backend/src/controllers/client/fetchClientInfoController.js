@@ -1,11 +1,15 @@
 const constants = require('../../../utils/constants');
-const fetchInfoService = require('../../services/userServices/fetchInfoService');
+const fetchClientInfoService = require('../../services/clientServices/fetchClientInfoService');
 
 module.exports = {
-  userDataFields: async (req, res) => {
+  searchUser: async (req, res) => {
     try {
-      console.log(req.user);
-      const result = await fetchInfoService.userDataFieldsService(req.params.email);
+      const options = {
+        limit: req.query.limit,
+        pageNumber: req.query.pageNumber,
+      };
+
+      const result = await fetchClientInfoService.searchUserService(req.query.user, 'user', options);
 
       if (!result) {
         return res.status(constants.STATUS_CODE.BAD_REQUEST_ERROR_STATUS).send({

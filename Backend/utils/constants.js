@@ -51,6 +51,7 @@ module.exports = {
     FAILED_USER_UPDATE: 'Failed to update User Data',
     NO_USER_DATA: 'No user data found to update',
     UPDATE_USER_DATA_SUCCESS: 'Update User Data Successfully',
+    DATA_REQUEST_CREATED: 'Data Request has been created successfully',
   },
   ENV_VARIABLES: {
     AWS_S3_ACCESS_KEY: process.env.AWS_S3_ACCESS_KEY,
