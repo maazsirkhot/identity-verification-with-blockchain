@@ -1,11 +1,17 @@
 const constants = require('../../../utils/constants');
-const fetchInfoService = require('../../services/userServices/fetchInfoService');
+const roleManagementService = require('../../services/userServices/roleManagementService');
 
 module.exports = {
-  userDataFields: async (req, res) => {
+  getRolesForUser: async (req, res) => {
     try {
-      console.log(req.user);
-      const result = await fetchInfoService.userDataFieldsService(req.params.email);
+      const createdBy = {
+        type: req.user.type,
+        id: req.user.id,
+      };
+      const result = await roleManagementService.getRolesForUserService(
+        createdBy,
+        req.query.option,
+      );
 
       if (!result) {
         return res.status(constants.STATUS_CODE.BAD_REQUEST_ERROR_STATUS).send({

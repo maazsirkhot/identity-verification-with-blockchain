@@ -56,6 +56,7 @@ require('./src/routes/textract/index')(app);
 require('./src/routes/user/index')(app);
 require('./src/routes/verifier/index')(app);
 require('./src/routes/system/index')(app);
+require('./src/routes/client/index')(app);
 
 // app.use((req, res, next) => {
 //   next(createError(404));
