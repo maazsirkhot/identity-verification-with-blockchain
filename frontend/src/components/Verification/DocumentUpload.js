@@ -26,11 +26,12 @@ export default function DocumentUpload() {
       </button>
 
       <div
-        className="modal fade"
+        className="modal modal-backdrop fade in"
         id="document-upload"
         tabIndex="-1"
         role="dialog"
         aria-hidden="true"
+        data-backdrop="false"
       >
         <div className="modal-dialog" role="document">
           <div className="modal-content">

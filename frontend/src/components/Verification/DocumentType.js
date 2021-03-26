@@ -32,8 +32,7 @@ export default function DocumentType({ activeTabChange }) {
           >
             <i className="fas fa-arrow-left" />
           </span>
-          <i className="fas fa-lock" />
-          Secure Identity Verifcation
+          <i className="fas fa-lock" /> Secure Identity Verifcation
         </div>
         <button
           type="button"
