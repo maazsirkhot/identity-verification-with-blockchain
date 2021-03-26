@@ -1,7 +1,7 @@
 /*--------------------------------------------------------------
   # Header
   --------------------------------------------------------------*/
-@import url("https://fonts.googleapis.com/css2?family=Poppins&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
 #header {
   background: #fff;
   transition: all 0.5s;
@@ -115,7 +115,7 @@
 }
 
 .main-nav .drop-down > a:after {
-  content: "\f107";
+  content: '\f107';
   font-family: FontAwesome;
   padding-left: 10px;
 }
@@ -136,7 +136,7 @@
 }
 
 .main-nav .drop-down .drop-down > a:after {
-  content: "\f105";
+  content: '\f105';
   position: absolute;
   right: 15px;
 }
@@ -177,7 +177,7 @@
 }
 
 .mobile-nav .drop-down > a:after {
-  content: "\f078";
+  content: '\f078';
   font-family: FontAwesome;
   padding-left: 10px;
   position: absolute;
@@ -249,7 +249,7 @@ section {
 #mysidemenu .profile h2 {
   text-align: center;
   font-weight: 600;
-  font-family: "Poppins", sans-serif;
+  font-family: 'Poppins', sans-serif;
   color: #040b14;
 }
 #mysidemenu .profile .social-links a {
@@ -333,6 +333,9 @@ section {
   align-items: center;
   justify-content: space-between;
   padding: 15px 0px;
+}
+.dashboard-navbar .mobile-logo {
+  display: none !important;
 }
 
 .profile_log {
@@ -497,7 +500,7 @@ section {
   font-weight: 500;
   color: #8691b4;
   font-size: 16px;
-  font-family: "Poppins", sans-serif;
+  font-family: 'Poppins', sans-serif;
 }
 @media only screen and (max-width: 767px) {
   .sidebar .menu ul li a {

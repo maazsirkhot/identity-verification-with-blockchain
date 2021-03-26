@@ -9,6 +9,7 @@ import DigitalWallet from './Dashboard/User/DigitalWallet';
 import InformationRequests from './Dashboard/User/InformationRequests';
 import ApprovalRequests from './Dashboard/Verifier/ApprovalRequests';
 import SentRequests from './Dashboard/Client/SentRequests';
+import UserSearch from './Dashboard/Client/UserSearch';
 
 export default function Routes() {
   const history = createBrowserHistory();
@@ -21,8 +22,8 @@ export default function Routes() {
       <ProtectedRoute path="/user/wallet" component={DigitalWallet} />
       <ProtectedRoute path="/user/requests" component={InformationRequests} />
       <ProtectedRoute path="/verifier/requests" component={ApprovalRequests} />
-
       <ProtectedRoute path="/client/requests" component={SentRequests} />
+      <ProtectedRoute path="/client/search" component={UserSearch} />
     </BrowserRouter>
   );
 }
