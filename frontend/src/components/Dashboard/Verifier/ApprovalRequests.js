@@ -3,6 +3,7 @@ import axiosInstance from '../../../utils/axiosInstance';
 import NavBar from '../../Header/DashboardNavbar';
 import SideBar from '../../Header/SideBar';
 import RequestItem from './RequestItem';
+import Search from '../../Search';
 import { issuer } from '../../../utils/sidebarConfig';
 import '../../../assets/css/header.css';
 import '../../../assets/css/dashboard.css';
@@ -35,15 +36,27 @@ export class ApprovalRequests extends Component {
         <SideBar sidebar={issuer.sidebar} />
         <div className="sub-wrapper">
           <div className="container">
+            <Search />
+
             <div className="col-xl-12 col-lg-12">
               <div className="card">
                 <div className="card-body">
                   <br />
-                  {this.state.verifierrequests.length > 0
-                    ? this.state.verifierrequests.map((data) => (
-                        <RequestItem userdata={data} />
-                      ))
-                    : 'No new requests'}
+
+                  {this.state.verifierrequests.length > 0 ? (
+                    <table
+                      style={{ width: '100%' }}
+                      class="mb-0 table-responsive-sm"
+                    >
+                      <tbody>
+                        {this.state.verifierrequests.map((data) => (
+                          <RequestItem userdata={data} />
+                        ))}
+                      </tbody>
+                    </table>
+                  ) : (
+                    'No new requests'
+                  )}
                 </div>
               </div>
             </div>

@@ -36,29 +36,27 @@ export default function RequestItems({ userdata }) {
   });
 
   return (
-    <div className="col-xl-12 col-lg-12 col-md-12">
-      <div className="request-item">
-        <div className="request-info">
-          <h5>{userdata.userEmail}</h5>
-          <div style={{ fontSize: '14px' }}>
-            <strong>Status:{'  '}</strong>
-            <span class={`badge text-light ${statusClassName}`}>
-              {userdata.verifierApproval.status}
-            </span>
-          </div>
-          <br />
-          <div className="request-date">
-            <strong>Request Date:</strong>
-            <p>{date}</p>
-          </div>
+    <tr className="request-item">
+      <td className="request-info">
+        <h5>{userdata.userEmail}</h5>
+        <div style={{ fontSize: '14px' }}>
+          <strong>Status:{'  '}</strong>
+          <span class={`badge text-light ${statusClassName}`}>
+            {userdata.verifierApproval.status}
+          </span>
         </div>
+        <br />
         <div className="request-date">
           <strong>Request Date:</strong>
           <p>{date}</p>
         </div>
+      </td>
+      <td className="request-date">
+        <strong>Request Date:</strong>
+        <p>{date}</p>
+      </td>
 
-        <RequestInfo approvaldata={userdata} uniqueID={userdata.userId} />
-      </div>
-    </div>
+      <RequestInfo approvaldata={userdata} uniqueID={userdata.userId} />
+    </tr>
   );
 }

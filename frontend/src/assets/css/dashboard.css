@@ -125,7 +125,203 @@
     padding: 20px 30px;
   }
 }
+.dashboard-search {
+  display: flex;
+  overflow: hidden;
+}
+.dashboard-search .inner-form {
+  width: 100%;
+}
+.dashboard-search .search-filter-btn {
+  min-width: 100px;
+  height: 70px;
+  margin-left: 5px;
+  margin-bottom: 5px;
+  background-color: transparent;
+  color: #274685;
+  border: 1px solid #274685;
+  border-radius: 3px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  text-transform: uppercase;
+}
+.dashboard-search .inner-form .input-field {
+  position: relative;
+}
 
+.dashboard-search .inner-form .input-field input {
+  height: 100%;
+  border: 0;
+  background: #fff;
+  display: block;
+  width: 100%;
+  padding: 10px 32px 10px 70px;
+  font-size: 18px;
+  color: #666;
+  border-radius: 3px;
+  height: 70px;
+  color: #555;
+}
+.dashboard-search .inner-form .input-field input.placeholder {
+  color: #999;
+  font-size: 18px;
+}
+
+.dashboard-search .inner-form .input-field input:-moz-placeholder {
+  color: #999;
+  font-size: 18px;
+}
+
+.dashboard-search .inner-form .input-field input::-webkit-input-placeholder {
+  color: #999;
+  font-size: 18px;
+}
+
+.dashboard-search .inner-form .input-field input:hover,
+.dashboard-search .inner-form .input-field input:focus {
+  box-shadow: none;
+  outline: 0;
+}
+
+.dashboard-search .inner-form .input-field .btn-search {
+  min-width: 100px;
+  height: 40px;
+  padding: 0 15px;
+  background: #e45c27;
+  white-space: nowrap;
+  border-radius: 3px;
+  font-size: 14px;
+  color: #fff;
+  transition: all 0.2s ease-out, color 0.2s ease-out;
+  border: 0;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.dashboard-search .inner-form .input-field .btn-search:hover {
+  background: #d7501b;
+}
+
+.dashboard-search .inner-form .input-field .btn-delete {
+  min-width: 100px;
+  height: 40px;
+  padding: 0 15px;
+  background: transparent;
+  white-space: nowrap;
+  border-radius: 3px;
+  font-size: 14px;
+  color: #fff;
+  transition: all 0.2s ease-out, color 0.2s ease-out;
+  border: 0;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.dashboard-search .inner-form .input-field .btn-delete:hover {
+  color: #fff;
+}
+
+.dashboard-search .inner-form .basic-search {
+  margin-bottom: 5px;
+  box-shadow: 0px 1px 10px 0px rgba(0, 0, 0, 0.15);
+}
+
+.dashboard-search .inner-form .basic-search .input-field {
+  width: 100%;
+}
+
+.dashboard-search .inner-form .basic-search .input-field input {
+  padding: 10px 80px 10px 40px;
+}
+
+.dashboard-search .inner-form .basic-search .input-field .icon-wrap {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-align: center;
+  align-items: center;
+  width: 60px;
+  height: 100%;
+}
+
+.dashboard-search .inner-form .basic-search .input-field .icon-wrap svg {
+  width: 34px;
+  height: 34px;
+  fill: #ccc;
+}
+.dashboard-search .inner-form .advance-search {
+  background: #000;
+  border-radius: 3px;
+  box-shadow: 0px 8px 20px 0px rgba(0, 0, 0, 0.15);
+  height: 0;
+  transition: all 0.5s ease;
+}
+.dashboard-search .inner-form .show-search {
+  height: auto !important;
+  transform: scaleY(1) !important;
+  padding: 10px 40px;
+}
+.dashboard-search .inner-form .advance-search label {
+  font-size: 12px;
+  color: #999;
+}
+
+.dashboard-search .inner-form .advance-search .row {
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+  -ms-flex-align: center;
+  align-items: center;
+  padding: 10px;
+}
+.dashboard-search .inner-form .advance-search .input-field.group-btn {
+  width: 100%;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-pack: justify;
+  justify-content: flex-end;
+  -ms-flex-align: center;
+  align-items: center;
+  margin-top: 5px;
+}
+
+.dashboard-search .inner-form .advance-search .input-select {
+  flex: 1;
+}
+.dashboard-search .inner-form .advance-search .input-select select,
+.dashboard-search .inner-form .advance-search .input-select input {
+  width: 97%;
+  background: transparent;
+  border: 0;
+  border-bottom: 2px solid #ccc;
+  height: 100%;
+  color: #fff;
+  font-size: 14px;
+  border-radius: 0px;
+  min-width: 200px;
+}
+
+input[type='date']::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  filter: invert(1);
+}
+
+.dashboard-search .inner-form .advance-search .input-select select:focus,
+.dashboard-search
+  .inner-form
+  .advance-search
+  .input-select
+  select.form-control:focus {
+  background: #000;
+  outline: none !important;
+  outline-width: 0 !important;
+  box-shadow: none;
+  -moz-box-shadow: none;
+  -webkit-box-shadow: none;
+}
 /**--------------------------------------------------
 DIGITAL WALLET
 -----------------------------------------------------**/
@@ -157,15 +353,15 @@ DIGITAL WALLET
   padding: 10px 20px;
   border-radius: 5px;
 }
-.success {
+.digitalid-status.success {
   background-color: #10d876;
   color: #fff;
 }
-.reject {
+.digitalid-status.reject {
   background-color: #ff7473;
   color: #fff;
 }
-.pending {
+.digitalid-status.pending {
   background-color: #ffc107;
   color: #fff;
 }
@@ -187,6 +383,10 @@ INFORMATION REQUESTS
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+
+.request-info {
+  width: 45%;
 }
 
 .request-info h5 {
@@ -235,6 +435,9 @@ INFORMATION REQUESTS
 }
 
 @media only screen and (max-width: 1000px) {
+  .request-info {
+    width: 70% !important;
+  }
   .request-date {
     display: none;
   }

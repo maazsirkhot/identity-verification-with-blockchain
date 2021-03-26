@@ -42,8 +42,6 @@ export default function RequestInfo({ approvaldata, uniqueID }) {
     approvalClassName = 'bg-warning';
   }
 
-  console.log('Key', uniqueID);
-
   function getDate() {
     const currentdate = new Date(approvaldata.createdAt);
     return `${currentdate.getDate()} ${
