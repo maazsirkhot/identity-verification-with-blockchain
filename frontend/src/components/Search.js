@@ -3,12 +3,17 @@ import DateRangePicker from 'react-bootstrap-daterangepicker';
 import 'bootstrap-daterangepicker/daterangepicker.css';
 import filtericon from '../assets/img/filter-icon.png';
 
-export default function Search() {
+export default function Search({ displayFilter, handleClick }) {
+  const [searchText, setSearchText] = useState('');
   function dateChange(event, picker) {
     console.log('Start Date', picker.startDate.format());
   }
   const [toggleClassName, setToggleClassValue] = useState('');
   const [toggleState, setToggleState] = useState(false);
+
+  function onChange(event) {
+    setSearchText(event.target.value);
+  }
   function toggleClass() {
     if (!toggleState) {
       setToggleClassValue('show-search');
@@ -18,6 +23,11 @@ export default function Search() {
       setToggleClassValue('');
     }
   }
+  function onKeyPressHandler(event) {
+    if (event.key === 'Enter') {
+      handleClick(searchText);
+    }
+  }
 
   return (
     <div style={{ margin: '10px 15px' }}>
@@ -25,8 +35,21 @@ export default function Search() {
         <div class="inner-form">
           <div class="basic-search">
             <div class="input-field">
-              <input id="search" type="text" placeholder="Search by User" />
-              <div class="icon-wrap">
+              <input
+                id="search"
+                type="text"
+                placeholder="Search by User"
+                value={searchText}
+                onChange={onChange}
+                onKeyPress={onKeyPressHandler}
+              />
+              <div
+                class="icon-wrap"
+                aria-hidden
+                onClick={() => {
+                  handleClick(searchText);
+                }}
+              >
                 <svg
                   version="1.1"
                   xmlns="http://www.w3.org/2000/svg"
@@ -67,21 +90,27 @@ export default function Search() {
             </div>
           </div>
         </div>
-        <button
-          type="button"
-          className="search-filter-btn"
-          onClick={toggleClass}
-        >
-          Filter
-          <img
-            src={filtericon}
-            width="20"
-            height="20"
-            alt=""
-            style={{ float: 'right' }}
-          />
-        </button>
+        {displayFilter ? (
+          <button
+            type="button"
+            className="search-filter-btn"
+            onClick={toggleClass}
+          >
+            Filter
+            <img
+              src={filtericon}
+              width="20"
+              height="20"
+              alt=""
+              style={{ float: 'right' }}
+            />
+          </button>
+        ) : null}
       </form>
     </div>
   );
 }
+
+Search.defaultProps = {
+  displayFilter: true,
+};

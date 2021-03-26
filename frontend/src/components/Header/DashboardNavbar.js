@@ -19,7 +19,6 @@ export default function DashboardNavbar() {
                     <img
                       src={logo}
                       width="120"
-                      height="50"
                       className="d-inline-block align-top"
                       alt=""
                     />

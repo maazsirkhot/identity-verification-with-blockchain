@@ -245,6 +245,9 @@
   width: 60px;
   height: 100%;
 }
+.dashboard-search .inner-form .basic-search .input-field .icon-wrap:hover {
+  cursor: pointer;
+}
 
 .dashboard-search .inner-form .basic-search .input-field .icon-wrap svg {
   width: 34px;
@@ -322,6 +325,29 @@ input[type='date']::-webkit-calendar-picker-indicator {
   -moz-box-shadow: none;
   -webkit-box-shadow: none;
 }
+
+.pagination {
+  justify-content: flex-end;
+}
+
+.pagination p {
+  padding-top: 5px;
+  font-weight: 600;
+}
+
+.pagination h4 {
+  color: black;
+  float: left;
+  font-weight: 600;
+  padding: 0px 16px;
+  text-decoration: none;
+}
+
+.pagination h4:hover:not(.active) {
+  background-color: #ddd;
+  cursor: pointer;
+}
+
 /**--------------------------------------------------
 DIGITAL WALLET
 -----------------------------------------------------**/
@@ -414,6 +440,7 @@ INFORMATION REQUESTS
   margin: 0;
 }
 .request-status:hover {
+  cursor: pointer;
   text-decoration: none;
   color: white;
 }
