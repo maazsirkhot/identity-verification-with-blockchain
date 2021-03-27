@@ -9,13 +9,18 @@ const permissionSchema = new mongoose.Schema(
     },
     dataField: {
       id: {
-        type: mongoose.Types.ObjectId,
+        type: String,
         required: true,
       },
       fieldName: {
         type: String,
         required: true,
       },
+      isAbstracted: { // From System
+        type: String,
+        required: true,
+      },
+      abstractionParams: [], // From System
     },
     isActive: {
       type: Boolean,

@@ -12,4 +12,11 @@ module.exports = {
       throw new Error(`Error Occurred in DAO Layers: ${error}`);
     }
   },
+  getRequest: async (options) => {
+    try {
+      return DataRequest.find(options);
+    } catch (error) {
+      throw new Error(`Error Occurred in DAO Layers: ${error}`);
+    }
+  },
 };

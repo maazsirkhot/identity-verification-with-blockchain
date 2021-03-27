@@ -11,4 +11,11 @@ module.exports = {
 
     validators.validateQueryParam(req, next, schema);
   },
+  fetchPost: (req, res, next) => {
+    const schema = Joi.object({
+      dataRequestId: Joi.string().required(),
+    });
+
+    validators.validateRequestParam(req, next, schema);
+  },
 };
