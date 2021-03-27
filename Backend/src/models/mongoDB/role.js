@@ -17,7 +17,7 @@ const roleSchema = new mongoose.Schema(
         enum: ['system', 'user'],
       },
       id: {
-        type: mongoose.Types.ObjectId,
+        type: String,
         required: true,
       },
     },
@@ -27,7 +27,7 @@ const roleSchema = new mongoose.Schema(
     },
     permissions: [{
       id: {
-        type: mongoose.Types.ObjectId,
+        type: String,
         required: true,
       },
       /**

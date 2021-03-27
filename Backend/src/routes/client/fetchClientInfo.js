@@ -12,4 +12,11 @@ router.get(
   fetchClientInfoController.searchUser,
 );
 
+router.get(
+  '/post/:dataRequestId',
+  validator.fetchPost,
+  passport.authenticate(['jwt'], { session: false }),
+  fetchClientInfoController.fetchPost,
+);
+
 module.exports = router;
