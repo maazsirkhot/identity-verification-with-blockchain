@@ -7,6 +7,7 @@ module.exports = {
       console.log(req.user);
       return res.status(constants.STATUS_CODE.SUCCESS_STATUS).send(req.user);
     } catch (error) {
+      console.log(error);
       return res
         .status(constants.STATUS_CODE.INTERNAL_SERVER_ERROR_STATUS)
         .send({

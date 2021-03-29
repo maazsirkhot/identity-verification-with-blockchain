@@ -67,7 +67,7 @@ export const verifier = {
     {
       item: 'Search',
       icon: 'fas fa-search',
-      navigation: '/Signup',
+      navigation: '/client/search',
       activeClass: 'active',
     },
 

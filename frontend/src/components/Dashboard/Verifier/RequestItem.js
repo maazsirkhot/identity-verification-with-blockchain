@@ -1,11 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { Link } from 'react-router-dom';
-import { CURRENT_APPROVAL_ITEM } from '../../../actions/types';
+
+import RequestInfo from './RequestInfo';
 
 export default function RequestItems({ userdata }) {
-  const id = userdata.userId;
-  const dispatch = useDispatch();
   const monthNames = [
     'January',
     'February',
@@ -22,6 +19,12 @@ export default function RequestItems({ userdata }) {
   ];
 
   const [date, setDate] = useState(' ');
+  let statusClassName = 'bg-danger';
+  if (userdata.verifierApproval.status === 'APPROVED') {
+    statusClassName = 'bg-success';
+  } else if (userdata.verifierApproval.status === 'PENDING') {
+    statusClassName = 'bg-warning';
+  }
 
   useEffect(() => {
     const currentdate = new Date(userdata.createdAt);
@@ -31,44 +34,29 @@ export default function RequestItems({ userdata }) {
       }, ${currentdate.getFullYear()}`
     );
   });
-  function onClick() {
-    dispatch({
-      type: CURRENT_APPROVAL_ITEM,
-      payload: userdata,
-    });
-  }
-  return (
-    <div className="col-xl-12 col-lg-12 col-md-12">
-      <div className="request-item">
-        <div className="request-info">
-          <h5>{userdata.userEmail}</h5>
 
-          <div className="request-date">
-            <strong>Request Date:</strong>
-            <p>{date}</p>
-          </div>
+  return (
+    <tr className="request-item">
+      <td className="request-info">
+        <h5>{userdata.userEmail}</h5>
+        <div style={{ fontSize: '14px' }}>
+          <strong>Status:{'  '}</strong>
+          <span class={`badge text-light ${statusClassName}`}>
+            {userdata.verifierApproval.status}
+          </span>
         </div>
+        <br />
         <div className="request-date">
           <strong>Request Date:</strong>
           <p>{date}</p>
         </div>
+      </td>
+      <td className="request-date">
+        <strong>Request Date:</strong>
+        <p>{date}</p>
+      </td>
 
-        <Link
-          to={`/verifier/requestinfo/${id}`}
-          className="btn-more-info request-status"
-          onClick={onClick}
-        >
-          <div className="col-xs-2 col-md-4 col-2 text-center pt-2 pb-2 bg-light-dark">
-            <i class="fas fa-info" />
-          </div>
-          <div
-            className="col-xs-8 col-md-10 col-5 pt-2 pb-2 text-center header"
-            style={{ minWidth: '82px' }}
-          >
-            <h4>More Info</h4>
-          </div>
-        </Link>
-      </div>
-    </div>
+      <RequestInfo approvaldata={userdata} uniqueID={userdata.userId} />
+    </tr>
   );
 }

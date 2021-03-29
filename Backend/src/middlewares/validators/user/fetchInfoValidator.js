@@ -9,4 +9,11 @@ module.exports = {
 
     validators.validateRequestParam(req, next, schema);
   },
+  dataRequests: (req, res, next) => {
+    const schema = Joi.object({
+      email: Joi.string().email().required(),
+    });
+
+    validators.validateRequestParam(req, next, schema);
+  },
 };

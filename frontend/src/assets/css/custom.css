@@ -1,7 +1,14 @@
-@import url("https://fonts.googleapis.com/css2?family=Graduate&family=Rancho&family=Roboto&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Graduate&family=Rancho&family=Roboto&display=swap');
+@import '~react-image-gallery/styles/css/image-gallery.css';
+
+.image-gallery-left-nav .image-gallery-svg,
+.image-gallery-right-nav .image-gallery-svg {
+  height: 60px !important;
+  width: 60px !important;
+}
 
 body {
-  font-family: "Roboto", sans-serif;
+  font-family: 'Roboto', sans-serif;
 }
 section {
   overflow: hidden;
@@ -16,7 +23,7 @@ section {
   border: 2px solid #fff;
   background: none;
   color: #fff;
-  font-family: "Graduate", cursive;
+  font-family: 'Graduate', cursive;
   font-size: 30px;
 }
 
@@ -216,7 +223,7 @@ section {
 }
 
 .about .video-box {
-  background: url("../img/about-img.png") center center no-repeat;
+  background: url('../img/about-img.png') center center no-repeat;
   background-size: contain;
   min-height: 300px;
 }
@@ -235,7 +242,7 @@ section {
 }
 
 .about .play-btn::after {
-  content: "";
+  content: '';
   position: absolute;
   left: 50%;
   top: 50%;
@@ -250,7 +257,7 @@ section {
 }
 
 .about .play-btn::before {
-  content: "";
+  content: '';
   position: absolute;
   width: 120px;
   height: 120px;
@@ -278,7 +285,7 @@ section {
 }
 
 .about .play-btn:hover::before {
-  content: "";
+  content: '';
   position: absolute;
   left: 50%;
   top: 50%;
@@ -444,7 +451,7 @@ section {
   padding: 10px 12px;
 }
 
-.contact .php-email-form button[type="submit"] {
+.contact .php-email-form button[type='submit'] {
   background: #4eb5f1;
   border: 0;
   padding: 10px 24px;
@@ -489,13 +496,13 @@ section {
   text-align: left;
 }
 
-#footer .footer-newsletter form input[type="email"] {
+#footer .footer-newsletter form input[type='email'] {
   border: 0;
   padding: 4px 4px;
   width: calc(100% - 100px);
 }
 
-#footer .footer-newsletter form input[type="submit"] {
+#footer .footer-newsletter form input[type='submit'] {
   position: absolute;
   top: 0;
   right: 0;

@@ -14,7 +14,7 @@ module.exports = {
     try {
       if (
         !_.isPlainObject(role)
-        || utilFunctions.validateAttributesInObject(role, ['roleName', 'createdBy', 'isActive', 'isDefault', 'permissions'])
+        || !utilFunctions.validateAttributesInObject(role, ['roleName', 'createdBy', 'isActive', 'isDefault', 'permissions'])
       ) {
         throw new Error('Parameters format is invalid.');
       }

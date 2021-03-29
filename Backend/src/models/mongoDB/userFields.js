@@ -70,8 +70,8 @@ const userFieldSchema = new mongoose.Schema(
 
   },
   {
-    timestamps: { createdAt: true, updatedAt: true }
-  }
+    timestamps: { createdAt: true, updatedAt: true },
+  },
 );
 const userFields = mongoose.model('userFields', userFieldSchema);
 module.exports = userFields;

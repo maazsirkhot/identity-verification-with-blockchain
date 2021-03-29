@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
-
-// import setAuthToken from '../../utils/setAuthToken.js';
 import '../../assets/css/login.css';
 import axiosInstance from '../../utils/axiosInstance.js';
 

@@ -1,5 +1,6 @@
 const { Op } = require('sequelize');
 const db = require('../../models/postgres/index');
+const utilFunctions = require('../../helpers/utilFunctions');
 
 module.exports = {
   createUser: async (user) => {
@@ -56,6 +57,69 @@ module.exports = {
           },
         },
       );
+    } catch (error) {
+      console.log(error);
+      throw new Error(`Error Occurred in DAO Layers: ${error}`);
+    }
+  },
+  searchUser: async (searchString, userType, options) => {
+    try {
+      if (!utilFunctions.validateAttributesInObject(options, ['offset', 'limit'])) {
+        throw new Error('Error Occurred in DAO Layers: Pagination options not provided');
+      }
+      const count = db.User.count({
+        attributes: ['userId', 'username', 'email', 'profilePicUrl'],
+        where: {
+          [Op.and]: [
+            { isActive: true },
+            { type: userType },
+            {
+              [Op.or]: [
+                {
+                  username: {
+                    [Op.like]: `%${searchString}%`,
+                  },
+                },
+                {
+                  email: {
+                    [Op.like]: `%${searchString}%`,
+                  },
+                },
+              ],
+            },
+          ],
+        },
+      });
+      const result = await db.User.findAll({
+        attributes: ['userId', 'username', 'email', 'profilePicUrl'],
+        limit: options.limit,
+        offset: options.offset,
+        where: {
+          [Op.and]: [
+            { isActive: true },
+            { type: userType },
+            {
+              [Op.or]: [
+                {
+                  username: {
+                    [Op.like]: `%${searchString}%`,
+                  },
+                },
+                {
+                  email: {
+                    [Op.like]: `%${searchString}%`,
+                  },
+                },
+              ],
+            },
+          ],
+        },
+      });
+
+      return {
+        count,
+        result,
+      };
     } catch (error) {
       console.log(error);
       throw new Error(`Error Occurred in DAO Layers: ${error}`);

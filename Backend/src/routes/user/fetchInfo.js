@@ -14,4 +14,13 @@ router.get(
   fetchInfoController.userDataFields,
 );
 
+// router.get(
+//   '/requests/:email',
+//   validator.dataRequests,
+//   passport.authorize(['jwt'], {
+//     session: false,
+//   }),
+//   fetchInfoController.dataRequests,
+// );
+
 module.exports = router;

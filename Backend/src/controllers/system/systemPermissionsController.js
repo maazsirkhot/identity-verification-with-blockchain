@@ -29,6 +29,7 @@ module.exports = {
 
       return res.status(constants.STATUS_CODE.SUCCESS_STATUS).send(result);
     } catch (error) {
+      console.log(error);
       return res
         .status(constants.STATUS_CODE.INTERNAL_SERVER_ERROR_STATUS)
         .send({
@@ -57,6 +58,7 @@ module.exports = {
 
       return res.status(constants.STATUS_CODE.SUCCESS_STATUS).send(result);
     } catch (error) {
+      console.log(error);
       return res
         .status(constants.STATUS_CODE.INTERNAL_SERVER_ERROR_STATUS)
         .send({
@@ -91,6 +93,7 @@ module.exports = {
 
       return res.status(constants.STATUS_CODE.SUCCESS_STATUS).send(result);
     } catch (error) {
+      console.log(error);
       return res
         .status(constants.STATUS_CODE.INTERNAL_SERVER_ERROR_STATUS)
         .send({
@@ -124,6 +127,7 @@ module.exports = {
 
       return res.status(constants.STATUS_CODE.SUCCESS_STATUS).send(result);
     } catch (error) {
+      console.log(error);
       return res
         .status(constants.STATUS_CODE.INTERNAL_SERVER_ERROR_STATUS)
         .send({
