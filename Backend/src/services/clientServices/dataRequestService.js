@@ -6,7 +6,7 @@ const roleDao = require('../../daos/role/role');
 const permissionDao = require('../../daos/permission/permission');
 
 module.exports = {
-  newUserService: async (user, creator, fieldsRequested) => {
+  newUserService: async (creator, user, fieldsRequested) => {
     try {
       if (
         !utilFunctions.validateAttributesInObject(user, [
@@ -56,7 +56,7 @@ module.exports = {
         return false;
       }
 
-      const data = await dataRequestDao.getRequest({ creator: { userId: clientId } });
+      const data = await dataRequestDao.getRequest({ "creator.userId" : clientId });
 
       if (data.length === 0) {
         return {

@@ -13,8 +13,7 @@ router.post(
 );
 
 router.get(
-  '/:clientId',
-  validator.fetchRequests,
+  '/',
   passport.authenticate(['jwt'], { session: false }),
   dataRequestsController.fetchRequests,
 );

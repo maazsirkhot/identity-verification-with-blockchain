@@ -44,7 +44,7 @@ module.exports = {
   },
   fetchRequests: async (req, res) => {
     try {
-      const result = await dataRequestService.fetchRequestsService(req.params.clientId);
+      const result = await dataRequestService.fetchRequestsService(req.user.userId);
 
       if (!result) {
         return res.status(constants.STATUS_CODE.BAD_REQUEST_ERROR_STATUS).send({

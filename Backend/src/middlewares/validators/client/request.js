@@ -10,13 +10,6 @@ module.exports = {
 
     validators.validateRequestBody(req, next, schema);
   },
-  fetchRequests: (req, res, next) => {
-    const schema = Joi.object({
-      clientId: Joi.object().required(),
-    });
-
-    validators.validateRequestParam(req, next, schema);
-  },
   requestRole: (req, res, next) => {
     const schema = Joi.object({
       user: Joi.object().required(),
