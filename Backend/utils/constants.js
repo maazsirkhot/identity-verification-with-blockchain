@@ -54,6 +54,7 @@ module.exports = {
     DATA_REQUEST_CREATED: 'Data Request has been created successfully',
     DATA_REQUESTS_FETCHED: 'Data Requests have been fetched successfully',
     POST_FETCHED: 'Post fetched for the provided details',
+    INVALID_CLIENT_USER: 'Unauthorized access. Not a valid client user'
   },
   ENV_VARIABLES: {
     AWS_S3_ACCESS_KEY: process.env.AWS_S3_ACCESS_KEY,

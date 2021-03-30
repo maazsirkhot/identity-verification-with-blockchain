@@ -4,6 +4,12 @@ const dataRequestService = require('../../services/clientServices/dataRequestSer
 module.exports = {
   newRequest: async (req, res) => {
     try {
+      if(req.user.type != 'client'){
+        return res.status(constants.STATUS_CODE.BAD_REQUEST_ERROR_STATUS).send({
+          message: constants.MESSAGES.INVALID_CLIENT_USER,
+          dataAvailable: false,
+        });
+      }
       const creator = {
         userId: req.user.userId,
         username: req.user.username,
