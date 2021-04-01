@@ -68,7 +68,7 @@ module.exports = {
       return {
         dataAvailable: true,
         data,
-        message: constants.MESSAGES.DATA_REQUEST_CREATED,
+        message: constants.MESSAGES.DATA_REQUESTS_FETCHED,
       };
     } catch (error) {
       throw new Error(`Error Occurred in Service Layers: ${error}`);
