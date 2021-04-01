@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axiosInstance from '../../../utils/axiosInstance';
 
-export default function NewRequest({ uniqueID, userDetails, infoFields }) {
+export default function NewCustomRequests() {
   const [fieldsRequested, setFields] = useState([
     {
       fieldId: null,
@@ -10,6 +10,19 @@ export default function NewRequest({ uniqueID, userDetails, infoFields }) {
       abstractionParams: [],
     },
   ]);
+
+  const [infoFields, setInfoFields] = useState([]);
+
+  useEffect(() => {
+    axiosInstance()
+      .get('/system/infoFields')
+      .then((res) => {
+        setInfoFields(res.data.data);
+      })
+      .catch((err) => {
+        console.log('Caught in error', err);
+      });
+  }, []);
 
   function handleChange(i, event) {
     const values = [...fieldsRequested];
@@ -58,55 +71,26 @@ export default function NewRequest({ uniqueID, userDetails, infoFields }) {
       },
     ]);
     window.$('#infoField-0').prop('selectedIndex', 0);
-    window.$(`#new-request${uniqueID}`).modal('toggle');
+    window.$('#custom-requests').modal('toggle');
   }
 
   function onSubmit(e) {
     e.preventDefault();
-    const data = {
-      user: {
-        userId: userDetails.userId,
-        username: userDetails.username,
-        email: userDetails.email,
-      },
-      fieldsRequested,
-    };
-
-    axiosInstance()
-      .post('/client/request', data)
-      .then((res) => {
-        if (res.status === 201 && res.data.dataAvailable) {
-          alert(res.data.message);
-          reset();
-        }
-      })
-      .catch((err) => {
-        console.log('Caught in error', err);
-        alert('Something went wrong, please try again later!');
-      });
   }
-
   return (
     <div>
       <button
-        type="button"
-        className="btn-more-info request-status"
+        className="custom-btn add-btn"
         data-toggle="modal"
-        data-target={`#new-request${uniqueID}`}
+        data-target="#custom-requests"
+        type="button"
       >
-        <div className="col-1 text-center pt-2 pb-2 bg-light-dark">
-          <i class="fas fa-user-plus" />
-        </div>
-        <div
-          className="col-15 pt-2 pb-2 text-center header"
-          style={{ minWidth: '82px' }}
-        >
-          <h4>New Request</h4>
-        </div>
+        <i className="fas fa-plus" />
+        <span>Add New</span>
       </button>
       <div
         className="modal modal-backdrop fade in"
-        id={`new-request${uniqueID}`}
+        id="custom-requests"
         role="dialog"
         aria-hidden="true"
         data-backdrop="false"
@@ -128,22 +112,21 @@ export default function NewRequest({ uniqueID, userDetails, infoFields }) {
             </div>
             <div className="card-body ">
               <form onSubmit={onSubmit}>
-                Send to: <strong> {userDetails.username} </strong>
-                <br />
-                <br />
                 <div class="form-group">
-                  <label htmlFor="selectCustomRequest">
-                    <strong>Select a custom request</strong>
+                  <label htmlFor="request-name">
+                    <strong>Custom Request Name</strong>
                   </label>
-                  <select class="form-control">
-                    <option>Custom Request</option>
-                  </select>
+                  <input
+                    type="text"
+                    class="form-control"
+                    placeholder="Enter a name"
+                    required
+                  />
                 </div>
-                <h4 className="or-break">OR</h4>
-                <br />
                 <strong>Information Needed:</strong>
                 <br />
                 <br />
+
                 {fieldsRequested.map((field, idx) => (
                   <div class="form-row mb-2">
                     <div key={`infoField-${idx}`} class="col">
@@ -201,19 +184,12 @@ export default function NewRequest({ uniqueID, userDetails, infoFields }) {
                   </div>
                 ))}
                 <br />
-                <div class="form-group">
-                  <textarea
-                    class="form-control"
-                    rows="3"
-                    placeholder="Comments"
-                  />
-                </div>
                 <button
                   type="submit"
                   class="btn custom-btn3 bg-approve"
                   style={{ marginRight: '20px' }}
                 >
-                  Send
+                  Save
                 </button>
                 <button
                   type="button"

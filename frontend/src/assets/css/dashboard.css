@@ -68,6 +68,20 @@
 .custom-btn:focus {
   outline: 0 !important;
 }
+.custom-btn3 {
+  font-size: 14px;
+  min-width: 150px;
+  color: #fff;
+  border-radius: 30px;
+  border: none;
+  outline: none;
+}
+.bg-approve {
+  background-color: #948cf3;
+}
+.bg-decline {
+  background-color: #eb6e53;
+}
 .add-btn {
   background: #66a6ff;
   color: #fff;
@@ -693,9 +707,29 @@ APPROVAL REQUESTS INFO
   outline: none;
 }
 
-.custom-btn2.bg-approve {
-  background-color: #948cf3;
+/**--------------------------------------------------
+NEW INFORMATION REQUESTS
+-----------------------------------------------------**/
+
+.or-break {
+  text-align: center;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  text-transform: capitalize;
+  font-size: 18px;
+  color: #aab7b8;
+  line-height: 2;
+  margin-top: 5px;
 }
-.custom-btn2.bg-decline {
-  background-color: #eb6e53;
+.or-break:before,
+.or-break:after {
+  height: 1.5px;
+  display: inline-block;
+  width: 100px;
+  background: #e5e7e9;
+  border-right: 1px white;
+  content: '';
+  margin-left: 10px;
+  padding: 1px;
+  margin-right: 10px;
 }
