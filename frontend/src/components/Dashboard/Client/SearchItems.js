@@ -1,7 +1,7 @@
 import React from 'react';
 import NewRequest from './NewRequest';
 
-export default function SearchItems({ userDetails }) {
+export default function SearchItems({ userDetails, infoFields }) {
   return (
     <div className="col-xl-12 col-lg-12 col-md-12">
       <div className="request-item">
@@ -12,7 +12,11 @@ export default function SearchItems({ userDetails }) {
             <em> {userDetails.email} </em>
           </p>
         </div>
-        <NewRequest uniqueID={userDetails.userId} userDetails={userDetails} />
+        <NewRequest
+          uniqueID={userDetails.userId}
+          userDetails={userDetails}
+          infoFields={infoFields}
+        />
       </div>
     </div>
   );

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axiosInstance from '../../../utils/axiosInstance';
 import DashboardNavbar from '../../Header/DashboardNavbar';
 import SideBar from '../../Header/SideBar';
@@ -12,7 +12,20 @@ export default function UserSearch() {
   const [userDetails, setUserDetails] = useState([]);
   const [pageNumber, setPageNumber] = useState(1);
   const [searchText, setSearchText] = useState('');
+  const [infoFields, setInfoFields] = useState([]);
   const limit = 5;
+
+  useEffect(() => {
+    axiosInstance()
+      .get('/system/infoFields')
+      .then((res) => {
+        setInfoFields(res.data.data);
+      })
+      .catch((err) => {
+        console.log('Caught in error', err);
+      });
+  }, []);
+
   function handleClick(value) {
     const params = {
       user: value,
@@ -62,7 +75,7 @@ export default function UserSearch() {
         setPageNumber(pageNumber + 1);
       })
       .catch((err) => {
-        console.log('Caught in error', err);
+        console.log('Caught in error', err.response.data);
       });
   }
   return (
@@ -88,7 +101,11 @@ export default function UserSearch() {
                   <div className="card-body">
                     <br />
                     {userDetails.map((details) => (
-                      <SearchItems userDetails={details} key={details.userId} />
+                      <SearchItems
+                        userDetails={details}
+                        key={details.userId}
+                        infoFields={infoFields}
+                      />
                     ))}
                   </div>
                 </div>
