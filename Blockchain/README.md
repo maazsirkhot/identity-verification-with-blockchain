@@ -10,5 +10,5 @@ ALl paths relative to main folder
    kubectl get pvc
    kubectl get pv
 
-3. Apply tests to check if example1/example2 containers access the shared volume
+3. Apply tests to check if example1/example2 pods access the shared volume
    kubectl apply -f Blockchain/minikube/storage/tests
