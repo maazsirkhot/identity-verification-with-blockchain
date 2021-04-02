@@ -124,7 +124,7 @@ module.exports = {
       throw new Error(`Error Occurred in Service Layers: ${error}`);
     }
   },
-  searchRequestService: async (user, type, options) => {
+  searchRequestService: async (user, options, creatorId) => {
     try {
       if (!user || !utilFunctions.validateAttributesInObject(options, ['pageNumber', 'limit'])) {
         return false;
@@ -133,7 +133,7 @@ module.exports = {
       options.offset = options.limit * (options.pageNumber);
       _.omit(options, ['pageNumber']);
 
-      const data = await dataRequestDao.searchRequest(user, options);
+      const data = await dataRequestDao.searchRequest(user, options, creatorId);
 
       if (data.length === 0) {
         return {
@@ -153,7 +153,7 @@ module.exports = {
         data: data.result,
         total: data.count,
         numberOfPages: data.numberOfPages,
-        message: constants.MESSAGES.USER_DETAILS_GET,
+        message: constants.MESSAGES.DATA_REQUESTS_FETCHED,
       };
     } catch (error) {
       throw new Error(`Error Occurred in Service Layers: ${error}`);

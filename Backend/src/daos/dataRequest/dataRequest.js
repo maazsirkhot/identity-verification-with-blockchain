@@ -20,7 +20,7 @@ module.exports = {
       throw new Error(`Error Occurred in DAO Layers: ${error}`);
     }
   },
-  searchRequest: async(user, options) => {
+  searchRequest: async(user, options, creatorId) => {
     try {
       if (!utilFunctions.validateAttributesInObject(options, ['offset', 'limit'])) {
         throw new Error('Error Occurred in DAO Layers: Pagination options not provided');
@@ -28,21 +28,37 @@ module.exports = {
 
       const count = await DataRequest.find(
         {
-          $or: 
+          $and:
           [
-            { "user.username":  { $regex: user }}, 
-            { "user.email": {$regex: user}}
-          ] 
+            {
+              $or: 
+              [
+                { "user.username":  { $regex: user }}, 
+                { "user.email": {$regex: user}}
+              ] 
+            },
+            {
+              "creator.userId": creatorId
+            }
+          ]
         }
       ).count();
       
       const result = await DataRequest.find(
         {
-          $or: 
+          $and:
           [
-            { "user.username":  { $regex: user }}, 
-            { "user.email": {$regex: user}}
-          ] 
+            {
+              $or: 
+              [
+                { "user.username":  { $regex: user }}, 
+                { "user.email": {$regex: user}}
+              ] 
+            },
+            {
+              "creator.userId": creatorId
+            }
+          ]
         }
       )
       .sort({ createdAt : "desc" })
