@@ -28,13 +28,9 @@ module.exports = {
       throw new Error(`Error Occurred in DAO Layers: ${error}`);
     }
   },
-  updateCustomRequest: async (creatorUserId, customRequestObjectId, customReqDetails) => {
+  updateCustomRequest: async (options, customReqDetails) => {
     try{
-      return await CustomRequest.replaceOne( 
-        {
-          _id: mongoose.Types.ObjectId(customRequestObjectId),
-        }, customReqDetails,
-      );
+      return await CustomRequest.findOneAndUpdate(options, customReqDetails, { new:true });
     } catch (error) {
       throw new Error(`Error Occurred in DAO Layers: ${error}`);
     }

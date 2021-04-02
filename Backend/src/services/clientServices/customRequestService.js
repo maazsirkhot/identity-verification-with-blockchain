@@ -104,7 +104,26 @@ module.exports = {
         return false;
       }
 
-      const data = await customRequestDao.updateCustomRequest(creatorUserId, customRequestObjectId, customReqDetails);
+      const data = await customRequestDao.updateCustomRequest({ "_id": customRequestObjectId, "creator.userId" : creatorUserId }, customReqDetails);
+      if(!data){
+        return {
+          dataAvailable: false,
+          data: [],
+        };
+      }
+      
+      if (data.length === 0) {
+        return {
+          dataAvailable: false,
+          data: [],
+        };
+      }
+
+      return {
+        dataAvailable: true,
+        data,
+        message: constants.MESSAGES.CUSTOM_REQUEST_FETCHED,
+      };
     } catch (error) {
       throw new Error(`Error Occurred in Service Layers: ${error}`);
     }
