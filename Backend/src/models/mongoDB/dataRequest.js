@@ -52,6 +52,10 @@ const dataRequestSchema = new mongoose.Schema(
       default: 'pending',
       required: true,
     },
+    comment: {
+      type: String,
+      default: null,
+    },
   },
   {
     timestamps: true,

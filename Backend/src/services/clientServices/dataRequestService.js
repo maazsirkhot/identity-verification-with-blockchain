@@ -124,4 +124,39 @@ module.exports = {
       throw new Error(`Error Occurred in Service Layers: ${error}`);
     }
   },
+  searchRequestService: async (user, type, options) => {
+    try {
+      if (!user || !utilFunctions.validateAttributesInObject(options, ['pageNumber', 'limit'])) {
+        return false;
+      }
+
+      options.offset = options.limit * (options.pageNumber);
+      _.omit(options, ['pageNumber']);
+
+      const data = await dataRequestDao.searchRequest(user, options);
+
+      if (data.length === 0) {
+        return {
+          dataAvailable: false,
+          data: [],
+        };
+      }
+      if (data.result.length === 0) {
+        return {
+          dataAvailable: false,
+          data: [],
+        };
+      }
+
+      return {
+        dataAvailable: true,
+        data: data.result,
+        total: data.count,
+        numberOfPages: data.numberOfPages,
+        message: constants.MESSAGES.USER_DETAILS_GET,
+      };
+    } catch (error) {
+      throw new Error(`Error Occurred in Service Layers: ${error}`);
+    }
+  },
 };

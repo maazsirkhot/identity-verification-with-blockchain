@@ -116,4 +116,36 @@ module.exports = {
         });
     }
   },
+  searchRequests: async (req, res) => {
+    try{
+      const options = {
+        limit: req.query.limit,
+        pageNumber: req.query.pageNumber-1,
+      };
+      const user = req.query.user;
+      const result = await dataRequestService.searchRequestService(user, 'user', options);
+      if (!result) {
+        return res.status(constants.STATUS_CODE.BAD_REQUEST_ERROR_STATUS).send({
+          message: constants.MESSAGES.INVALID_PARAMETERS_ERROR,
+          dataAvailable: false,
+        });
+      }
+
+      if (!result.dataAvailable) {
+        return res.status(constants.STATUS_CODE.SUCCESS_STATUS).send({
+          message: constants.MESSAGES.NO_DATA_AVAILABLE,
+          dataAvailable: result.dataAvailable,
+        });
+      }
+      return res.status(constants.STATUS_CODE.SUCCESS_STATUS).send(result);
+    } catch (error) {
+      console.log(error);
+      return res
+        .status(constants.STATUS_CODE.INTERNAL_SERVER_ERROR_STATUS)
+        .send({
+          message: constants.MESSAGES.SERVER_ERROR,
+          error,
+        });
+    }
+  },
 };

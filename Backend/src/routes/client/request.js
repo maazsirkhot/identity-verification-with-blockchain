@@ -25,4 +25,11 @@ router.post(
   dataRequestsController.requestRole,
 );
 
+router.get(
+  '/searchrequest',
+  validator.searchrequest,
+  passport.authenticate(['jwt'], { session: false }),
+  dataRequestsController.searchRequests,
+);
+
 module.exports = router;
