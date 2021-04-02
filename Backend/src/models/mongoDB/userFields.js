@@ -25,6 +25,15 @@ const userFieldSchema = new mongoose.Schema(
         default: null,
       },
     },
+    docImage: {
+      front: {
+        type: String,
+        required: true,
+      },
+      back: {
+        type: String,
+      }
+    },
     dataField: [
       {
         field_id: {
