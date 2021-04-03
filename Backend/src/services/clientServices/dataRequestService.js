@@ -6,7 +6,7 @@ const roleDao = require('../../daos/role/role');
 const permissionDao = require('../../daos/permission/permission');
 
 module.exports = {
-  newUserService: async (creator, user, fieldsRequested) => {
+  newUserService: async (creator, user, fieldsRequested, comment) => {
     try {
       if (
         !utilFunctions.validateAttributesInObject(user, [
@@ -32,6 +32,7 @@ module.exports = {
         user,
         creator,
         fieldsRequested,
+        comment,
       });
 
       if (data.length === 0) {

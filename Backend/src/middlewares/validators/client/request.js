@@ -6,6 +6,7 @@ module.exports = {
     const schema = Joi.object({
       user: Joi.object().required(),
       fieldsRequested: Joi.array().required(), // Check out dataRequest model in MongoDB
+      comment: Joi.string().optional(),
     });
 
     validators.validateRequestBody(req, next, schema);

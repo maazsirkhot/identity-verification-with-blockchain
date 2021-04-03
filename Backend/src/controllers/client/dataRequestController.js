@@ -21,8 +21,9 @@ module.exports = {
         email: req.body.user.email,
       };
       const { fieldsRequested } = req.body;
+      const comment = req.body.comment;
 
-      const result = await dataRequestService.newUserService(creator, user, fieldsRequested);
+      const result = await dataRequestService.newUserService(creator, user, fieldsRequested, comment);
 
       if (!result) {
         return res.status(constants.STATUS_CODE.BAD_REQUEST_ERROR_STATUS).send({
