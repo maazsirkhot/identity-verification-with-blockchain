@@ -115,10 +115,14 @@ module.exports = {
           ],
         },
       });
-
+      numberOfPages = parseInt(count/limit);
+      if(count%limit != 0){
+        numberOfPages+=1;
+      }
       return {
         count,
         result,
+        numberOfPages,
       };
     } catch (error) {
       console.log(error);

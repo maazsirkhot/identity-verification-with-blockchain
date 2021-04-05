@@ -27,6 +27,7 @@ module.exports = {
         dataAvailable: true,
         data: data.result,
         total: data.count,
+        numberOfPages: data.numberOfPages,
         message: constants.MESSAGES.USER_DETAILS_GET,
       };
     } catch (error) {
