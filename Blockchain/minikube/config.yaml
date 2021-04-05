@@ -62,12 +62,6 @@ organizations:
     peers:
       - peer0-verify
       - peer1-verify
-  oracle:
-    mspid: oracle
-    cryptopath: peerOrganizations/oracle/users/Admin@oracle/msp
-    peers:
-      - peer0-oracle
-      - peer1-oracle
 
 orderers:
   _default:
