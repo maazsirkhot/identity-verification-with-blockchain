@@ -59,6 +59,7 @@ module.exports = {
     CUSTOM_REQUEST_FETCHED: 'Custom Requests have been fetched successfully',
     CUSTOM_REQUEST_UPDATED: 'Custom Requests have been updated successfully',
     CUSTOM_REQUEST_SAME_NAME: 'Custom Request with the same name exists. Please use a different name.',
+    USER_EXISTS: 'User with this username or email already exists',
   },
   ENV_VARIABLES: {
     AWS_S3_ACCESS_KEY: process.env.AWS_S3_ACCESS_KEY,

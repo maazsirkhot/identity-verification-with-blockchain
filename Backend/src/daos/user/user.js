@@ -129,4 +129,16 @@ module.exports = {
       throw new Error(`Error Occurred in DAO Layers: ${error}`);
     }
   },
+  checkIfUserExists: async (username, email) => {
+    return await db.User.findAll({
+      where: {
+        [Op.or]: [
+          {
+            username,
+            email,
+          },
+        ],
+      },
+    });
+  },
 };
