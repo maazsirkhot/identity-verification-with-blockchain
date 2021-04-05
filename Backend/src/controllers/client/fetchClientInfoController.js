@@ -19,7 +19,7 @@ module.exports = {
       }
 
       if (!result.dataAvailable) {
-        return res.status(constants.STATUS_CODE.NO_CONTENT_STATUS).send({
+        return res.status(constants.STATUS_CODE.BAD_REQUEST_ERROR_STATUS).send({
           message: constants.MESSAGES.NO_DATA_AVAILABLE,
           dataAvailable: result.dataAvailable,
         });
@@ -47,7 +47,7 @@ module.exports = {
       }
 
       if (!result.dataAvailable) {
-        return res.status(constants.STATUS_CODE.NO_CONTENT_STATUS).send({
+        return res.status(constants.STATUS_CODE.BAD_REQUEST_ERROR_STATUS).send({
           message: constants.MESSAGES.NO_DATA_AVAILABLE,
           dataAvailable: result.dataAvailable,
         });
