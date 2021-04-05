@@ -21,6 +21,14 @@ module.exports = {
         return false;
       }
 
+      const dataExists = await customRequestDao.getCustomRequestByName({ "name": name, "creator.userId" : creator.userId });
+      if(dataExists !== null){
+        return {
+          dataAvailable: false,
+          data: [],
+          message: constants.MESSAGES.CUSTOM_REQUEST_SAME_NAME,
+        };
+      }
       const data = await customRequestDao.createCustomRequest({
         creator,
         name,
@@ -122,7 +130,7 @@ module.exports = {
       return {
         dataAvailable: true,
         data,
-        message: constants.MESSAGES.CUSTOM_REQUEST_FETCHED,
+        message: constants.MESSAGES.CUSTOM_REQUEST_UPDATED,
       };
     } catch (error) {
       throw new Error(`Error Occurred in Service Layers: ${error}`);

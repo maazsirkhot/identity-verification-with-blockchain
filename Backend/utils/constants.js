@@ -57,7 +57,8 @@ module.exports = {
     INVALID_CLIENT_USER: 'Unauthorized access. Not a valid client user',
     CUSTOM_REQUEST_CREATED: 'Custom Request has been created successfully',
     CUSTOM_REQUEST_FETCHED: 'Custom Requests have been fetched successfully',
-    CUSTOM_REQUEST_FETCHED: 'Custom Requests have been updated successfully',
+    CUSTOM_REQUEST_UPDATED: 'Custom Requests have been updated successfully',
+    CUSTOM_REQUEST_SAME_NAME: 'Custom Request with the same name exists. Please use a different name.',
   },
   ENV_VARIABLES: {
     AWS_S3_ACCESS_KEY: process.env.AWS_S3_ACCESS_KEY,
