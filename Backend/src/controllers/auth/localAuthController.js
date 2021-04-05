@@ -53,6 +53,9 @@ module.exports = {
       if (!result) {
         return res.status(constants.STATUS_CODE.BAD_REQUEST_ERROR_STATUS).send(result);
       }
+      if (!result.dataAvailable) {
+        return res.status(constants.STATUS_CODE.BAD_REQUEST_ERROR_STATUS).send(result);
+      }
       return res.status(constants.STATUS_CODE.SUCCESS_STATUS).send(result);
     } catch (error) {
       console.log(error);
