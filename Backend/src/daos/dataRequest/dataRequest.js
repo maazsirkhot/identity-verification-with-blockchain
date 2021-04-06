@@ -25,45 +25,55 @@ module.exports = {
       if (!utilFunctions.validateAttributesInObject(options, ['offset', 'limit'])) {
         throw new Error('Error Occurred in DAO Layers: Pagination options not provided');
       }
-
-      const count = await DataRequest.find(
-        {
-          $and:
-          [
-            {
-              $or: 
-              [
-                { "user.username":  { $regex: user }}, 
-                { "user.email": {$regex: user}}
-              ] 
-            },
-            {
-              "creator.userId": creatorId
-            }
-          ]
-        }
-      ).count();
-      
-      const result = await DataRequest.find(
-        {
-          $and:
-          [
-            {
-              $or: 
-              [
-                { "user.username":  { $regex: user }}, 
-                { "user.email": {$regex: user}}
-              ] 
-            },
-            {
-              "creator.userId": creatorId
-            }
-          ]
-        }
-      )
-      .sort({ createdAt : "desc" })
-      .limit(parseInt(options.limit))
-      .skip(options.limit * options.pageNumber);
+      user = user.trim();
+      let count = 0;
+      let result = null;
+      if (user === "") {
+        count = await DataRequest.find().count();
+        result = await DataRequest.find()
+          .sort({ createdAt : "desc" })
+          .limit(parseInt(options.limit))
+          .skip(options.limit * options.pageNumber);;
+      } else {
+        count = await DataRequest.find(
+          {
+            $and:
+            [
+              {
+                $or: 
+                [
+                  { "user.username":  { $regex: user }}, 
+                  { "user.email": {$regex: user}}
+                ] 
+              },
+              {
+                "creator.userId": creatorId
+              }
+            ]
+          }
+        ).count();
+        
+        result = await DataRequest.find(
+          {
+            $and:
+            [
+              {
+                $or: 
+                [
+                  { "user.username":  { $regex: user }}, 
+                  { "user.email": {$regex: user}}
+                ] 
+              },
+              {
+                "creator.userId": creatorId
+              }
+            ]
+          }
+        )
+        .sort({ createdAt : "desc" })
+        .limit(parseInt(options.limit))
+        .skip(options.limit * options.pageNumber);
+      }
 
       let numberOfPages = parseInt(count/options.limit);
       if (count%options.limit != 0){

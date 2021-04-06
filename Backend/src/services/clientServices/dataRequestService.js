@@ -127,7 +127,7 @@ module.exports = {
   },
   searchRequestService: async (user, options, creatorId) => {
     try {
-      if (!user || !utilFunctions.validateAttributesInObject(options, ['pageNumber', 'limit'])) {
+      if (!utilFunctions.validateAttributesInObject(options, ['pageNumber', 'limit'])) {
         return false;
       }
 

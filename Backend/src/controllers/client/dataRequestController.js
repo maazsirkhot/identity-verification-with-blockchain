@@ -123,7 +123,9 @@ module.exports = {
         limit: req.query.limit,
         pageNumber: req.query.pageNumber-1,
       };
-      const user = req.query.user;
+      let user = "";
+      if (req.query.user)
+        user = req.query.user;
       const result = await dataRequestService.searchRequestService(user, options, req.user.userId);
       if (!result) {
         return res.status(constants.STATUS_CODE.BAD_REQUEST_ERROR_STATUS).send({
