@@ -9,9 +9,10 @@ const dataFieldSchema = new mongoose.Schema(
     fieldAbstraction: {
       parameters: [String],
       method: {
-        type: [String],
+        type: String,
       },
     },
+    abstractionTypes: [String],
     verificationEntities: {
       type: [String],
       required: true,
