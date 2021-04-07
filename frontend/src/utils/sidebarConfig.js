@@ -66,7 +66,7 @@ export const verifier = {
     },
     {
       item: 'Custom Requests',
-      icon: 'fas fa-envelope-open-text',
+      icon: 'fas fa-mail-bulk',
       navigation: '/client/customrequests',
       activeClass: 'active',
     },

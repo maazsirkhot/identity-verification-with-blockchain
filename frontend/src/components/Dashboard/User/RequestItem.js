@@ -1,4 +1,5 @@
 import React from 'react';
+import RequestInfo from './RequestInfo';
 
 export default function RequestItem() {
   return (
@@ -17,14 +18,7 @@ export default function RequestItem() {
           <p> 9th February, 2021</p>
         </div>
 
-        <div className="btn-success request-status">
-          <div className="col-xs-4 col-md-4 text-center pt-2 pb-2 bg-light-dark">
-            <i className="fas fa-check" />
-          </div>
-          <div className="col-xs-8 col-md-8 pt-2 pb-2 text-center header">
-            <h4>Approved</h4>
-          </div>
-        </div>
+        <RequestInfo />
       </div>
     </div>
   );

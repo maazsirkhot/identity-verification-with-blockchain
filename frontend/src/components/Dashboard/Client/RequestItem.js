@@ -17,6 +17,8 @@ export default function RequestItem({ requestDetails }) {
   ];
 
   const [date, setDate] = useState(' ');
+  const [statusClass, setStatusClass] = useState('reject');
+  const [statusIcon, setStatusIcon] = useState('fas fa-user-times');
   useEffect(() => {
     const currentdate = new Date(requestDetails.createdAt);
     setDate(
@@ -24,6 +26,13 @@ export default function RequestItem({ requestDetails }) {
         monthNames[currentdate.getMonth()]
       }, ${currentdate.getFullYear()}`
     );
+    if (requestDetails.status === 'pending') {
+      setStatusClass('pending');
+      setStatusIcon('fas fa-history');
+    } else if (requestDetails.status === 'approved') {
+      setStatusClass('success');
+      setStatusIcon('fas fa-check');
+    }
   });
 
   return (
@@ -45,9 +54,9 @@ export default function RequestItem({ requestDetails }) {
           <p> {date}</p>
         </div>
 
-        <div className="btn-success request-status">
+        <div className={`digitalid-status request-status ${statusClass}`}>
           <div className="col-xs-4 col-md-4 text-center pt-2 pb-2 bg-light-dark">
-            <i className="fas fa-check" />
+            <i className={statusIcon} />
           </div>
           <div className="col-xs-8 col-md-8 pt-2 pb-2 text-center header">
             <h4>{requestDetails.status}</h4>

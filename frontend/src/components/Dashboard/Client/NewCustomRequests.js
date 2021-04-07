@@ -5,11 +5,13 @@ export default function NewCustomRequests() {
   const [fieldsRequested, setFields] = useState([
     {
       fieldId: null,
-      fieldName: null,
-      isAbstracted: null,
+      fieldName: '',
+      isAbstracted: '',
       abstractionParams: [],
     },
   ]);
+
+  const [customrequestname, setRequestName] = useState('');
 
   const [infoFields, setInfoFields] = useState([]);
 
@@ -46,8 +48,8 @@ export default function NewCustomRequests() {
     const values = [...fieldsRequested];
     values.push({
       fieldId: null,
-      fieldName: null,
-      isAbstracted: null,
+      fieldName: '',
+      isAbstracted: '',
       abstractionParams: [],
     });
     setFields(values);
@@ -65,17 +67,35 @@ export default function NewCustomRequests() {
     setFields([
       {
         fieldId: null,
-        fieldName: null,
-        isAbstracted: null,
+        fieldName: '',
+        isAbstracted: '',
         abstractionParams: [],
       },
     ]);
-    window.$('#infoField-0').prop('selectedIndex', 0);
+    setRequestName(' ');
     window.$('#custom-requests').modal('toggle');
+    setTimeout(() => window.location.reload(), 500);
   }
 
   function onSubmit(e) {
     e.preventDefault();
+
+    const data = {
+      fieldsAdded: fieldsRequested,
+      name: customrequestname,
+    };
+    axiosInstance()
+      .post('/client/customRequest', data)
+      .then((res) => {
+        if (res.status === 201 && res.data.dataAvailable) {
+          alert(res.data.message);
+          reset();
+        }
+      })
+      .catch((err) => {
+        console.log('Caught in error', err);
+        alert('Something went wrong, please try again later!');
+      });
   }
   return (
     <div>
@@ -99,7 +119,7 @@ export default function NewCustomRequests() {
           <div className="modal-content">
             <div className="theme-modal-header">
               <div className="title">
-                <strong>NEW REQUEST</strong>
+                <strong>CUSTOM REQUEST</strong>
               </div>
               <button
                 type="button"
@@ -120,6 +140,8 @@ export default function NewCustomRequests() {
                     type="text"
                     class="form-control"
                     placeholder="Enter a name"
+                    value={customrequestname}
+                    onChange={(event) => setRequestName(event.target.value)}
                     required
                   />
                 </div>
@@ -132,6 +154,7 @@ export default function NewCustomRequests() {
                     <div key={`infoField-${idx}`} class="col">
                       <select
                         class="form-control"
+                        value={field.fieldName}
                         onChange={(e) => handleChange(idx, e)}
                         required
                         id={`infoField-${idx}`}
@@ -160,7 +183,7 @@ export default function NewCustomRequests() {
                         <option defaultValue value="">
                           Information Level
                         </option>
-                        {field.fieldName !== null
+                        {field.fieldName !== ''
                           ? getMethodName(field.fieldName)
                           : null}
                       </select>

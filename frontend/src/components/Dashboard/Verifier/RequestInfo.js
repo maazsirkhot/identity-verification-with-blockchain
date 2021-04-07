@@ -28,12 +28,12 @@ export default function RequestInfo({ approvaldata, uniqueID }) {
 
   images = [
     {
-      original: approvaldata.dataField[size - 2].field_value,
-      thumbnail: approvaldata.dataField[size - 2].field_value,
+      original: approvaldata.docImage.front,
+      thumbnail: approvaldata.docImage.front,
     },
     {
-      original: approvaldata.dataField[size - 1].field_value,
-      thumbnail: approvaldata.dataField[size - 1].field_value,
+      original: approvaldata.docImage.back,
+      thumbnail: approvaldata.docImage.back,
     },
   ];
   if (approvaldata.verifierApproval.status === 'APPROVED') {
@@ -48,6 +48,7 @@ export default function RequestInfo({ approvaldata, uniqueID }) {
       monthNames[currentdate.getMonth()]
     }, ${currentdate.getFullYear()}`;
   }
+
   return (
     <div>
       <button

@@ -11,9 +11,6 @@ export default function Search({ displayFilter, handleClick }) {
   const [toggleClassName, setToggleClassValue] = useState('');
   const [toggleState, setToggleState] = useState(false);
 
-  function onChange(event) {
-    setSearchText(event.target.value);
-  }
   function toggleClass() {
     if (!toggleState) {
       setToggleClassValue('show-search');
@@ -40,7 +37,7 @@ export default function Search({ displayFilter, handleClick }) {
                 type="text"
                 placeholder="Search by User"
                 value={searchText}
-                onChange={onChange}
+                onChange={(event) => setSearchText(event.target.value)}
                 onKeyPress={onKeyPressHandler}
               />
               <div
