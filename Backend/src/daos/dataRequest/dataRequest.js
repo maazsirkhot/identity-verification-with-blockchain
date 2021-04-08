@@ -1,3 +1,4 @@
+const { options } = require('joi');
 const utilFunctions = require('../../helpers/utilFunctions');
 const DataRequest = require('../../models/mongoDB/dataRequest');
 
@@ -19,4 +20,74 @@ module.exports = {
       throw new Error(`Error Occurred in DAO Layers: ${error}`);
     }
   },
+  searchRequest: async(user, options, creatorId) => {
+    try {
+      if (!utilFunctions.validateAttributesInObject(options, ['offset', 'limit'])) {
+        throw new Error('Error Occurred in DAO Layers: Pagination options not provided');
+      }
+      user = user.trim();
+      let count = 0;
+      let result = null;
+      if (user === "") {
+        count = await DataRequest.find().count();
+        result = await DataRequest.find()
+          .sort({ createdAt : "desc" })
+          .limit(parseInt(options.limit))
+          .skip(options.limit * options.pageNumber);;
+      } else {
+        count = await DataRequest.find(
+          {
+            $and:
+            [
+              {
+                $or: 
+                [
+                  { "user.username":  { $regex: user }}, 
+                  { "user.email": {$regex: user}}
+                ] 
+              },
+              {
+                "creator.userId": creatorId
+              }
+            ]
+          }
+        ).count();
+        
+        result = await DataRequest.find(
+          {
+            $and:
+            [
+              {
+                $or: 
+                [
+                  { "user.username":  { $regex: user }}, 
+                  { "user.email": {$regex: user}}
+                ] 
+              },
+              {
+                "creator.userId": creatorId
+              }
+            ]
+          }
+        )
+        .sort({ createdAt : "desc" })
+        .limit(parseInt(options.limit))
+        .skip(options.limit * options.pageNumber);
+      }
+
+      let numberOfPages = parseInt(count/options.limit);
+      if (count%options.limit != 0){
+        numberOfPages += 1;
+      }
+
+      return {
+        count,
+        result,
+        numberOfPages,
+      };
+    } catch (error) {
+      console.log(error);
+      throw new Error(`Error Occurred in DAO Layers: ${error}`);
+    }
+  }
 };

@@ -20,10 +20,17 @@ module.exports = {
           dataAvailable: false,
         });
       }
+      if(!data.dataAvailable){
+        return res.status(data.status).send({
+          message: data.message,
+          data: [],
+          dataAvailable: false,
+        });
+      }
       return res.status(constants.STATUS_CODE.SUCCESS_STATUS).send({
         message: constants.MESSAGES.USER_CREATED,
-        data,
-        dataAvailable: !!_.isPlainObject(data),
+        data: data.data,
+        dataAvailable: !!_.isPlainObject(data.data),
       });
     } catch (error) {
       console.log(error);
@@ -44,6 +51,9 @@ module.exports = {
       const result = await localAuthService.loginUserService(data);
       console.log(result);
       if (!result) {
+        return res.status(constants.STATUS_CODE.BAD_REQUEST_ERROR_STATUS).send(result);
+      }
+      if (!result.dataAvailable) {
         return res.status(constants.STATUS_CODE.BAD_REQUEST_ERROR_STATUS).send(result);
       }
       return res.status(constants.STATUS_CODE.SUCCESS_STATUS).send(result);

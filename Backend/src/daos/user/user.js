@@ -115,14 +115,30 @@ module.exports = {
           ],
         },
       });
-
+      numberOfPages = parseInt(count/limit);
+      if(count%limit != 0){
+        numberOfPages+=1;
+      }
       return {
         count,
         result,
+        numberOfPages,
       };
     } catch (error) {
       console.log(error);
       throw new Error(`Error Occurred in DAO Layers: ${error}`);
     }
+  },
+  checkIfUserExists: async (username, email) => {
+    return await db.User.findAll({
+      where: {
+        [Op.or]: [
+          {
+            username,
+            email,
+          },
+        ],
+      },
+    });
   },
 };

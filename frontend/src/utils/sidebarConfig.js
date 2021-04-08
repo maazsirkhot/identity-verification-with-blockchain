@@ -65,6 +65,12 @@ export const verifier = {
       activeClass: 'active',
     },
     {
+      item: 'Custom Requests',
+      icon: 'fas fa-mail-bulk',
+      navigation: '/client/customrequests',
+      activeClass: 'active',
+    },
+    {
       item: 'Search',
       icon: 'fas fa-search',
       navigation: '/client/search',

@@ -1,8 +1,8 @@
 const constants = require('../../../utils/constants');
-const dataRequestService = require('../../services/clientServices/dataRequestService');
+const customRequestService = require('../../services/clientServices/customRequestService');
 
 module.exports = {
-  newRequest: async (req, res) => {
+  newCustomRequest: async (req, res) => {
     try {
       if(req.user.type != 'client'){
         return res.status(constants.STATUS_CODE.BAD_REQUEST_ERROR_STATUS).send({
@@ -15,15 +15,10 @@ module.exports = {
         username: req.user.username,
         email: req.user.email,
       };
-      const user = {
-        userId: req.body.user.userId,
-        username: req.body.user.username,
-        email: req.body.user.email,
-      };
-      const { fieldsRequested } = req.body;
-      const comment = req.body.comment;
+      const { fieldsAdded } = req.body;
+      const name = req.body.name;
 
-      const result = await dataRequestService.newUserService(creator, user, fieldsRequested, comment);
+      const result = await customRequestService.newUserService(creator, name, fieldsAdded);
 
       if (!result) {
         return res.status(constants.STATUS_CODE.BAD_REQUEST_ERROR_STATUS).send({
@@ -34,7 +29,7 @@ module.exports = {
 
       if (!result.dataAvailable) {
         return res.status(constants.STATUS_CODE.BAD_REQUEST_ERROR_STATUS).send({
-          message: constants.MESSAGES.NO_DATA_AVAILABLE,
+          message: result.message?result.message:constants.MESSAGES.NO_DATA_AVAILABLE,
           dataAvailable: result.dataAvailable,
         });
       }
@@ -49,9 +44,9 @@ module.exports = {
         });
     }
   },
-  fetchRequests: async (req, res) => {
+  fetchCustomRequests: async (req, res) => {
     try {
-      const result = await dataRequestService.fetchRequestsService(req.user.userId);
+      const result = await customRequestService.fetchCustomRequestsService(req.user.userId);
 
       if (!result) {
         return res.status(constants.STATUS_CODE.BAD_REQUEST_ERROR_STATUS).send({
@@ -77,21 +72,10 @@ module.exports = {
         });
     }
   },
-  requestRole: async (req, res) => {
+  fetchCustomRequestsByName: async (req, res) => {
     try {
-      const creator = {
-        userId: req.user.userId,
-        username: req.user.username,
-        email: req.user.email,
-      };
-      const user = {
-        userId: req.body.user.userId,
-        username: req.body.user.username,
-        email: req.body.user.email,
-      };
-      const { roleRequested } = req.body;
-
-      const result = await dataRequestService.requestRoleService(creator, user, roleRequested);
+      const name = req.params.customRequestName;
+      const result = await customRequestService.fetchCustomRequestsByNameService(name, req.user.userId);
 
       if (!result) {
         return res.status(constants.STATUS_CODE.BAD_REQUEST_ERROR_STATUS).send({
@@ -117,16 +101,20 @@ module.exports = {
         });
     }
   },
-  searchRequests: async (req, res) => {
+  updateCustomRequest: async (req, res) => {
     try{
-      const options = {
-        limit: req.query.limit,
-        pageNumber: req.query.pageNumber-1,
-      };
-      let user = "";
-      if (req.query.user)
-        user = req.query.user;
-      const result = await dataRequestService.searchRequestService(user, options, req.user.userId);
+      if(req.user.type != 'client'){
+        return res.status(constants.STATUS_CODE.BAD_REQUEST_ERROR_STATUS).send({
+          message: constants.MESSAGES.INVALID_CLIENT_USER,
+          dataAvailable: false,
+        });
+      }
+      
+      const creatorUserId = req.user.userId;
+      const customRequestObjectId = req.params.customRequestObjectId;
+      const customReqDetails = req.body;
+
+      const result = await customRequestService.updateCustomRequestService(creatorUserId, customRequestObjectId, customReqDetails);
       if (!result) {
         return res.status(constants.STATUS_CODE.BAD_REQUEST_ERROR_STATUS).send({
           message: constants.MESSAGES.INVALID_PARAMETERS_ERROR,
@@ -140,7 +128,7 @@ module.exports = {
           dataAvailable: result.dataAvailable,
         });
       }
-      return res.status(constants.STATUS_CODE.SUCCESS_STATUS).send(result);
+      return res.status(constants.STATUS_CODE.CREATED_SUCCESSFULLY_STATUS).send(result);
     } catch (error) {
       console.log(error);
       return res

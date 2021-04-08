@@ -12,6 +12,7 @@ const dataFieldSchema = new mongoose.Schema(
         type: String,
       },
     },
+    abstractionTypes: [String],
     verificationEntities: {
       type: [String],
       required: true,

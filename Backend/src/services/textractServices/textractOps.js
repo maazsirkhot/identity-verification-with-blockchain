@@ -109,6 +109,10 @@ module.exports = {
         userId: user.userId,
         userEmail: user.email,
         dataField: data,
+        docImage: {
+          front: frontLink,
+          back: backLink
+        }
       });
       return await userDetailsDao.createUserDetails(userData);
     } catch (error) {

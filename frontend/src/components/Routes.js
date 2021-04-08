@@ -10,6 +10,7 @@ import InformationRequests from './Dashboard/User/InformationRequests';
 import ApprovalRequests from './Dashboard/Verifier/ApprovalRequests';
 import SentRequests from './Dashboard/Client/SentRequests';
 import UserSearch from './Dashboard/Client/UserSearch';
+import CustomRequests from './Dashboard/Client/CustomRequests';
 
 export default function Routes() {
   const history = createBrowserHistory();
@@ -24,6 +25,10 @@ export default function Routes() {
       <ProtectedRoute path="/verifier/requests" component={ApprovalRequests} />
       <ProtectedRoute path="/client/requests" component={SentRequests} />
       <ProtectedRoute path="/client/search" component={UserSearch} />
+      <ProtectedRoute
+        path="/client/customrequests"
+        component={CustomRequests}
+      />
     </BrowserRouter>
   );
 }

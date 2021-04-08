@@ -9,7 +9,12 @@ module.exports = {
         pageNumber: req.query.pageNumber,
       };
 
-      const result = await fetchClientInfoService.searchUserService(req.query.user, 'user', options);
+      console.log('Options \n\n', options);
+      const result = await fetchClientInfoService.searchUserService(
+        req.query.user,
+        'user',
+        options
+      );
 
       if (!result) {
         return res.status(constants.STATUS_CODE.BAD_REQUEST_ERROR_STATUS).send({
@@ -19,7 +24,7 @@ module.exports = {
       }
 
       if (!result.dataAvailable) {
-        return res.status(constants.STATUS_CODE.NO_CONTENT_STATUS).send({
+        return res.status(constants.STATUS_CODE.BAD_REQUEST_ERROR_STATUS).send({
           message: constants.MESSAGES.NO_DATA_AVAILABLE,
           dataAvailable: result.dataAvailable,
         });
@@ -37,7 +42,9 @@ module.exports = {
   },
   fetchPost: async (req, res) => {
     try {
-      const result = await fetchClientInfoService.fetchPostService(req.params.dataRequestId);
+      const result = await fetchClientInfoService.fetchPostService(
+        req.params.dataRequestId
+      );
 
       if (!result) {
         return res.status(constants.STATUS_CODE.BAD_REQUEST_ERROR_STATUS).send({
@@ -47,7 +54,7 @@ module.exports = {
       }
 
       if (!result.dataAvailable) {
-        return res.status(constants.STATUS_CODE.NO_CONTENT_STATUS).send({
+        return res.status(constants.STATUS_CODE.BAD_REQUEST_ERROR_STATUS).send({
           message: constants.MESSAGES.NO_DATA_AVAILABLE,
           dataAvailable: result.dataAvailable,
         });

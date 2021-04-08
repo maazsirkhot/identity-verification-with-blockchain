@@ -6,16 +6,10 @@ module.exports = {
     const schema = Joi.object({
       user: Joi.object().required(),
       fieldsRequested: Joi.array().required(), // Check out dataRequest model in MongoDB
+      comment: Joi.string().optional(),
     });
 
     validators.validateRequestBody(req, next, schema);
-  },
-  fetchRequests: (req, res, next) => {
-    const schema = Joi.object({
-      clientId: Joi.object().required(),
-    });
-
-    validators.validateRequestParam(req, next, schema);
   },
   requestRole: (req, res, next) => {
     const schema = Joi.object({
@@ -24,5 +18,14 @@ module.exports = {
     });
 
     validators.validateRequestBody(req, next, schema);
+  },
+  searchrequest: (req, res, next) => {
+    const schema = Joi.object({
+      
+      limit: Joi.number().required(),
+      pageNumber: Joi.number().required(),
+    });
+
+    validators.validateQueryParam(req, next, schema);
   },
 };

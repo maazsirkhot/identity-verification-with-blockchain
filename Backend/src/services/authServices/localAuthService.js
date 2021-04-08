@@ -16,13 +16,33 @@ module.exports = {
         'isLocalAuth',
       ];
       if (!utilFunctions.validateAttributesInObject(user, reqAttributes)) {
-        return false;
+        return {
+          status: constants.STATUS_CODE.BAD_REQUEST_ERROR_STATUS,
+          dataAvailable: false,
+          data: [],
+          message: constants.MESSAGES.INVALID_PARAMETERS_ERROR
+        };
+      }
+      const dataExists = await userDao.checkIfUserExists(user.username, user.email);
+      if(dataExists.length != 0){
+        return {
+          status: constants.STATUS_CODE.BAD_REQUEST_ERROR_STATUS,
+          dataAvailable: false,
+          data: [],
+          message: constants.MESSAGES.USER_EXISTS
+        };
       }
       const hashedPassword = await passwordEncryption.createHash(user.password);
       user.password = hashedPassword;
-      return await userDao.createUser(user);
+      const userData = await userDao.createUser(user);
+      return {
+        status: constants.STATUS_CODE.SUCCESS_STATUS,
+        dataAvailable: true,
+        data: userData,
+        message: constants.MESSAGES.USER_CREATED
+      };
     } catch (error) {
-      // console.log(error);
+      //console.log(error);
       throw new Error(`Error Occurred in Service Layers: ${error}`);
     }
   },

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axiosInstance from '../../../utils/axiosInstance';
 import DashboardNavbar from '../../Header/DashboardNavbar';
 import SideBar from '../../Header/SideBar';
@@ -12,7 +12,20 @@ export default function UserSearch() {
   const [userDetails, setUserDetails] = useState([]);
   const [pageNumber, setPageNumber] = useState(1);
   const [searchText, setSearchText] = useState('');
+  const [infoFields, setInfoFields] = useState([]);
   const limit = 5;
+
+  useEffect(() => {
+    axiosInstance()
+      .get('/system/infoFields')
+      .then((res) => {
+        setInfoFields(res.data.data);
+      })
+      .catch((err) => {
+        console.log('Caught in error', err);
+      });
+  }, []);
+
   function handleClick(value) {
     const params = {
       user: value,
@@ -24,6 +37,7 @@ export default function UserSearch() {
       .get('/client/fetch/searchuser', { params })
       .then((res) => {
         setUserDetails(res.data.data);
+        console.log(res);
       })
       .catch((err) => {
         console.log('Caught in error', err);
@@ -62,7 +76,7 @@ export default function UserSearch() {
         setPageNumber(pageNumber + 1);
       })
       .catch((err) => {
-        console.log('Caught in error', err);
+        console.log('Caught in error', err.response.data);
       });
   }
   return (
@@ -72,7 +86,7 @@ export default function UserSearch() {
       <div className="sub-wrapper">
         <div className="container">
           <Search displayFilter={false} handleClick={handleClick} />
-          {userDetails.length > 0 ? (
+          {searchText !== '' ? (
             <>
               <div class="pagination">
                 <h4 aria-hidden onClick={prevPage}>
@@ -87,9 +101,15 @@ export default function UserSearch() {
                 <div className="card">
                   <div className="card-body">
                     <br />
-                    {userDetails.map((details) => (
-                      <SearchItems userDetails={details} key={details.userId} />
-                    ))}
+                    {userDetails.length > 0
+                      ? userDetails.map((details) => (
+                          <SearchItems
+                            userDetails={details}
+                            key={details.userId}
+                            infoFields={infoFields}
+                          />
+                        ))
+                      : 'No such user exists'}
                   </div>
                 </div>
               </div>

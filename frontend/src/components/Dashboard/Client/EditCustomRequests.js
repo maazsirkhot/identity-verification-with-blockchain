@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axiosInstance from '../../../utils/axiosInstance';
 
-export default function NewRequest({ uniqueID, userDetails, infoFields }) {
+export default function EditCustomRequests({ customrequest }) {
   const [fieldsRequested, setFields] = useState([
     {
       fieldId: null,
@@ -11,30 +11,22 @@ export default function NewRequest({ uniqueID, userDetails, infoFields }) {
     },
   ]);
 
-  const [customRequests, setCustomRequests] = useState([]);
+  const [customrequestname, setRequestName] = useState('');
 
-  const [selectedRequest, setSelectedRequest] = useState('');
-  const [comment, setComment] = useState('');
+  const [infoFields, setInfoFields] = useState([]);
   function onLoad() {
     axiosInstance()
-      .get('/client/customRequest')
+      .get('/system/infoFields')
       .then((res) => {
-        setCustomRequests(res.data.data);
+        setInfoFields(res.data.data);
       })
       .catch((err) => {
         console.log('Caught in error', err);
       });
-  }
-
-  function onSelectedRequestChange(event) {
-    setSelectedRequest(event.target.value);
-
+    setRequestName(customrequest.name);
     const values = [];
-    const selected = customRequests.filter(
-      (request) => request._id === event.target.value
-    );
 
-    selected[0].fieldsAdded.map((field) =>
+    customrequest.fieldsAdded.map((field) =>
       values.push({
         fieldId: field.fieldId,
         fieldName: field.fieldName,
@@ -61,7 +53,11 @@ export default function NewRequest({ uniqueID, userDetails, infoFields }) {
     const method = infoFields
       .filter((field) => field.fieldName === fieldName)
       .map((selectedField) => selectedField.fieldAbstraction.method);
-    return method[0].map((name) => <option value={name}>{name}</option>);
+
+    if (method.length > 0 && method[0].length > 0) {
+      return method[0].map((name) => <option value={name}>{name}</option>);
+    }
+    return null;
   }
   function handleAdd() {
     const values = [...fieldsRequested];
@@ -91,24 +87,20 @@ export default function NewRequest({ uniqueID, userDetails, infoFields }) {
         abstractionParams: [],
       },
     ]);
-    window.$('#infoField-0').prop('selectedIndex', 0);
-    window.$(`#new-request${uniqueID}`).modal('toggle');
+    setRequestName(' ');
+
+    window.location.reload();
   }
 
   function onSubmit(e) {
     e.preventDefault();
-    const data = {
-      user: {
-        userId: userDetails.userId,
-        username: userDetails.username,
-        email: userDetails.email,
-      },
-      fieldsRequested,
-      comment,
-    };
 
+    const data = {
+      fieldsAdded: fieldsRequested,
+      name: customrequestname,
+    };
     axiosInstance()
-      .post('/client/request', data)
+      .post('/client/customRequest', data)
       .then((res) => {
         if (res.status === 201 && res.data.dataAvailable) {
           alert(res.data.message);
@@ -120,29 +112,20 @@ export default function NewRequest({ uniqueID, userDetails, infoFields }) {
         alert('Something went wrong, please try again later!');
       });
   }
-
   return (
     <div>
-      <button
-        type="button"
-        className="btn-more-info request-status"
+      <i
+        class="far fa-edit"
+        style={{ paddingRight: '20px' }}
         data-toggle="modal"
-        data-target={`#new-request${uniqueID}`}
+        data-target={`#editcustom-request${customrequest._id}`}
         onClick={onLoad}
-      >
-        <div className="col-1 text-center pt-2 pb-2 bg-light-dark">
-          <i class="fas fa-user-plus" />
-        </div>
-        <div
-          className="col-15 pt-2 pb-2 text-center header"
-          style={{ minWidth: '82px' }}
-        >
-          <h4>New Request</h4>
-        </div>
-      </button>
+        aria-hidden
+      />
+      <i class="far fa-trash-alt" />
       <div
         className="modal modal-backdrop fade in"
-        id={`new-request${uniqueID}`}
+        id={`editcustom-request${customrequest._id}`}
         role="dialog"
         aria-hidden="true"
         data-backdrop="false"
@@ -151,7 +134,7 @@ export default function NewRequest({ uniqueID, userDetails, infoFields }) {
           <div className="modal-content">
             <div className="theme-modal-header">
               <div className="title">
-                <strong>NEW REQUEST</strong>
+                <strong>EDIT CUSTOM REQUEST</strong>
               </div>
               <button
                 type="button"
@@ -164,39 +147,30 @@ export default function NewRequest({ uniqueID, userDetails, infoFields }) {
             </div>
             <div className="card-body ">
               <form onSubmit={onSubmit}>
-                Send to: <strong> {userDetails.username} </strong>
-                <br />
-                <br />
                 <div class="form-group">
-                  <label htmlFor="selectCustomRequest">
-                    <strong>Select a custom request</strong>
+                  <label htmlFor="request-name">
+                    <strong>Custom Request Name</strong>
                   </label>
-                  <select
+                  <input
+                    type="text"
                     class="form-control"
-                    onChange={onSelectedRequestChange}
-                    value={selectedRequest}
-                  >
-                    <option value="" defaultValue>
-                      Custom Request
-                    </option>
-                    {customRequests.length > 0 &&
-                      customRequests.map((request) => (
-                        <option value={request._id}>{request.name}</option>
-                      ))}
-                  </select>
+                    placeholder="Enter a name"
+                    value={customrequestname}
+                    onChange={(event) => setRequestName(event.target.value)}
+                    required
+                  />
                 </div>
-                <h4 className="or-break">OR</h4>
-                <br />
                 <strong>Information Needed:</strong>
                 <br />
                 <br />
+
                 {fieldsRequested.map((field, idx) => (
                   <div class="form-row mb-2">
                     <div key={`infoField-${idx}`} class="col">
                       <select
                         class="form-control"
-                        onChange={(e) => handleChange(idx, e)}
                         value={field.fieldName}
+                        onChange={(e) => handleChange(idx, e)}
                         required
                         id={`infoField-${idx}`}
                       >
@@ -248,21 +222,12 @@ export default function NewRequest({ uniqueID, userDetails, infoFields }) {
                   </div>
                 ))}
                 <br />
-                <div class="form-group">
-                  <textarea
-                    class="form-control"
-                    rows="3"
-                    placeholder="Comments"
-                    value={comment}
-                    onChange={(event) => setComment(event.target.value)}
-                  />
-                </div>
                 <button
                   type="submit"
                   class="btn custom-btn3 bg-approve"
                   style={{ marginRight: '20px' }}
                 >
-                  Send
+                  Save
                 </button>
                 <button
                   type="button"

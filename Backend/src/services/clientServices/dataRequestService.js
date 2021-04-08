@@ -6,7 +6,7 @@ const roleDao = require('../../daos/role/role');
 const permissionDao = require('../../daos/permission/permission');
 
 module.exports = {
-  newUserService: async (user, creator, fieldsRequested) => {
+  newUserService: async (creator, user, fieldsRequested, comment) => {
     try {
       if (
         !utilFunctions.validateAttributesInObject(user, [
@@ -32,6 +32,7 @@ module.exports = {
         user,
         creator,
         fieldsRequested,
+        comment,
       });
 
       if (data.length === 0) {
@@ -56,7 +57,7 @@ module.exports = {
         return false;
       }
 
-      const data = await dataRequestDao.getRequest({ creator: { userId: clientId } });
+      const data = await dataRequestDao.getRequest({ "creator.userId" : clientId });
 
       if (data.length === 0) {
         return {
@@ -68,7 +69,7 @@ module.exports = {
       return {
         dataAvailable: true,
         data,
-        message: constants.MESSAGES.DATA_REQUEST_CREATED,
+        message: constants.MESSAGES.DATA_REQUESTS_FETCHED,
       };
     } catch (error) {
       throw new Error(`Error Occurred in Service Layers: ${error}`);
@@ -119,6 +120,41 @@ module.exports = {
         dataAvailable: true,
         data,
         message: constants.MESSAGES.DATA_REQUEST_CREATED,
+      };
+    } catch (error) {
+      throw new Error(`Error Occurred in Service Layers: ${error}`);
+    }
+  },
+  searchRequestService: async (user, options, creatorId) => {
+    try {
+      if (!utilFunctions.validateAttributesInObject(options, ['pageNumber', 'limit'])) {
+        return false;
+      }
+
+      options.offset = options.limit * (options.pageNumber);
+      _.omit(options, ['pageNumber']);
+
+      const data = await dataRequestDao.searchRequest(user, options, creatorId);
+
+      if (data.length === 0) {
+        return {
+          dataAvailable: false,
+          data: [],
+        };
+      }
+      if (data.result.length === 0) {
+        return {
+          dataAvailable: false,
+          data: [],
+        };
+      }
+
+      return {
+        dataAvailable: true,
+        data: data.result,
+        total: data.count,
+        numberOfPages: data.numberOfPages,
+        message: constants.MESSAGES.DATA_REQUESTS_FETCHED,
       };
     } catch (error) {
       throw new Error(`Error Occurred in Service Layers: ${error}`);

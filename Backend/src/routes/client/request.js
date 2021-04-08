@@ -13,8 +13,7 @@ router.post(
 );
 
 router.get(
-  '/:clientId',
-  validator.fetchRequests,
+  '/',
   passport.authenticate(['jwt'], { session: false }),
   dataRequestsController.fetchRequests,
 );
@@ -24,6 +23,13 @@ router.post(
   validator.requestRole,
   passport.authenticate(['jwt'], { session: false }),
   dataRequestsController.requestRole,
+);
+
+router.get(
+  '/searchrequest',
+  validator.searchrequest,
+  passport.authenticate(['jwt'], { session: false }),
+  dataRequestsController.searchRequests,
 );
 
 module.exports = router;
