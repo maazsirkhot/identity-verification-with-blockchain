@@ -57,7 +57,7 @@ module.exports = {
         return false;
       }
 
-      const data = await dataRequestDao.getRequest({ "creator.userId" : clientId });
+      const data = await dataRequestDao.getRequest({ 'creator.userId': clientId });
 
       if (data.length === 0) {
         return {
