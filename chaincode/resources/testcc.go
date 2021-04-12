@@ -14,26 +14,26 @@ type SmartContract struct {
 }
 
 // Asset describes basic details of what makes up a simple asset
-// type Asset struct {
-// 	ID      string `json:"ID"`
-// 	IsValid bool   `json:"isValid"`
-// }
+type Asset struct {
+	ID      string `json:"ID"`
+	IsValid bool   `json:"isValid"`
+}
 
 type Identity struct {
-	userId   string `json:"userId"`
-	docType  string `json:"docType"`
-	verifier string `json:"verifier"`
-	isValid  bool   `json:"isValid"`
+	UserId   string `json:"userId"`
+	DocType  string `json:"docType"`
+	Verifier string `json:"verifier"`
+	IsValid  bool   `json:"isValid"`
 }
 
 // InitLedger adds a base set of assets to the ledger
 func (s *SmartContract) InitLedger(ctx contractapi.TransactionContextInterface) error {
 	identities := []Identity{
 		{
-			userId:   "dummy",
-			docType:  "dummydoc",
-			verifier: "dummyverifier",
-			isValid:  true,
+			UserId:   "dummy",
+			DocType:  "dummydoc",
+			Verifier: "dummyverifier",
+			IsValid:  true,
 		},
 	}
 
@@ -43,7 +43,7 @@ func (s *SmartContract) InitLedger(ctx contractapi.TransactionContextInterface) 
 			return err
 		}
 
-		err = ctx.GetStub().PutState(identity.userId, identityJSON)
+		err = ctx.GetStub().PutState(identity.UserId, identityJSON)
 		if err != nil {
 			return fmt.Errorf("failed to put to world state. %v", err)
 		}
@@ -63,10 +63,10 @@ func (s *SmartContract) CreateIdentity(ctx contractapi.TransactionContextInterfa
 	// }
 
 	identity := Identity{
-		userId:   userId,
-		docType:  docType,
-		verifier: verifier,
-		isValid:  isValid,
+		UserId:   userId,
+		DocType:  docType,
+		Verifier: verifier,
+		IsValid:  isValid,
 	}
 	identityJSON, err := json.Marshal(identity)
 	if err != nil {
@@ -105,10 +105,10 @@ func (s *SmartContract) UpdateIdentity(ctx contractapi.TransactionContextInterfa
 
 	// overwriting original asset with new asset
 	identity := Identity{
-		userId:   userId,
-		docType:  docType,
-		verifier: verifier,
-		isValid:  isValid,
+		UserId:   userId,
+		DocType:  docType,
+		Verifier: verifier,
+		IsValid:  isValid,
 	}
 	identityJSON, err := json.Marshal(identity)
 	if err != nil {
