@@ -25,20 +25,17 @@ const roleSchema = new mongoose.Schema(
       type: Boolean,
       required: true,
     },
-    permissions: [{
-      id: {
+    dataFields: [{
+      fieldId: {
         type: String,
         required: true,
       },
-      /**
-       * This attribute stores the time in seconds for which the role would provide access to a
-       * particular permission. When the role is assigned, this number will be added to the assigned
-       * time to set the actual expiry of the access. Ensure the date or timestamp is converted into
-       * seconds before putting it here.
-       */
-      expireDurationInSecs: {
-        type: Number,
+      fieldName: {
+        type: String,
         required: true,
+      },
+      abstractionParam: {
+        type: mongoose.Mixed,
       },
     }],
   },

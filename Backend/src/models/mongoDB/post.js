@@ -30,20 +30,6 @@ const postSchema = new mongoose.Schema(
         required: true,
       },
     },
-    role: {
-      roleId: {
-        type: String,
-        required: true,
-      },
-      roleName: {
-        type: String,
-        required: true,
-      },
-      expireDurationInSecs: {
-        type: Number,
-        required: true,
-      },
-    },
     expiry: {
       expireTime: {
         type: Date,
@@ -64,11 +50,11 @@ const postSchema = new mongoose.Schema(
         type: String,
         required: true,
       },
-      field_value: {
+      field_value: { // If isAbstracted TRUE in Request, then show abstracted value
         type: String,
         required: true,
       },
-      dataReference: {
+      dataReference: { // Comes from userDataField --> Blockchain
         type: String,
         required: false,
       },

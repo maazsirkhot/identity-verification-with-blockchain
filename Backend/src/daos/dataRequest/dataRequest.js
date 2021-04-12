@@ -1,4 +1,4 @@
-const { options } = require('joi');
+/* eslint-disable radix */
 const utilFunctions = require('../../helpers/utilFunctions');
 const DataRequest = require('../../models/mongoDB/dataRequest');
 
@@ -15,12 +15,12 @@ module.exports = {
   },
   getRequest: async (options) => {
     try {
-      return DataRequest.find(options);
+      return await DataRequest.find(options);
     } catch (error) {
       throw new Error(`Error Occurred in DAO Layers: ${error}`);
     }
   },
-  searchRequest: async(user, options, creatorId) => {
+  searchRequest: async (user, options, creatorId) => {
     try {
       if (!utilFunctions.validateAttributesInObject(options, ['offset', 'limit'])) {
         throw new Error('Error Occurred in DAO Layers: Pagination options not provided');
@@ -28,55 +28,55 @@ module.exports = {
       user = user.trim();
       let count = 0;
       let result = null;
-      if (user === "") {
+      if (user === '') {
         count = await DataRequest.find().count();
         result = await DataRequest.find()
-          .sort({ createdAt : "desc" })
+          .sort({ createdAt: 'desc' })
           .limit(parseInt(options.limit))
-          .skip(options.limit * options.pageNumber);;
+          .skip(options.limit * options.pageNumber);
       } else {
         count = await DataRequest.find(
           {
             $and:
             [
               {
-                $or: 
+                $or:
                 [
-                  { "user.username":  { $regex: user }}, 
-                  { "user.email": {$regex: user}}
-                ] 
+                  { 'user.username': { $regex: user } },
+                  { 'user.email': { $regex: user } },
+                ],
               },
               {
-                "creator.userId": creatorId
-              }
-            ]
-          }
+                'creator.userId': creatorId,
+              },
+            ],
+          },
         ).count();
-        
+
         result = await DataRequest.find(
           {
             $and:
             [
               {
-                $or: 
+                $or:
                 [
-                  { "user.username":  { $regex: user }}, 
-                  { "user.email": {$regex: user}}
-                ] 
+                  { 'user.username': { $regex: user } },
+                  { 'user.email': { $regex: user } },
+                ],
               },
               {
-                "creator.userId": creatorId
-              }
-            ]
-          }
+                'creator.userId': creatorId,
+              },
+            ],
+          },
         )
-        .sort({ createdAt : "desc" })
-        .limit(parseInt(options.limit))
-        .skip(options.limit * options.pageNumber);
+          .sort({ createdAt: 'desc' })
+          .limit(parseInt(options.limit))
+          .skip(options.limit * options.pageNumber);
       }
 
-      let numberOfPages = parseInt(count/options.limit);
-      if (count%options.limit != 0){
+      let numberOfPages = parseInt(count / options.limit);
+      if (count % options.limit !== 0) {
         numberOfPages += 1;
       }
 
@@ -89,5 +89,5 @@ module.exports = {
       console.log(error);
       throw new Error(`Error Occurred in DAO Layers: ${error}`);
     }
-  }
+  },
 };
