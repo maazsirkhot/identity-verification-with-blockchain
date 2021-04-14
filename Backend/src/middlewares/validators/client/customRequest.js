@@ -14,7 +14,7 @@ module.exports = {
     const schema = Joi.object({
       name: Joi.string().required(),
       fieldsAdded: Joi.array().required(),
-      creator: Joi.object().required(),
+      client: Joi.object().required(),
     });
     validators.validateRequestBody(req, next, schema);
   },

@@ -14,13 +14,13 @@ router.get(
   fetchInfoController.userDataFields,
 );
 
-// router.get(
-//   '/requests/:email',
-//   validator.dataRequests,
-//   passport.authorize(['jwt'], {
-//     session: false,
-//   }),
-//   fetchInfoController.dataRequests,
-// );
+router.get(
+  '/posts/:email',
+  validator.postsForUser,
+  passport.authorize(['jwt'], {
+    session: false,
+  }),
+  fetchInfoController.postsForUser,
+);
 
 module.exports = router;

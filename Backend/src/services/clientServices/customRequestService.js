@@ -4,10 +4,10 @@ const utilFunctions = require('../../helpers/utilFunctions');
 const customRequestDao = require('../../daos/customRequest/customRequest');
 
 module.exports = {
-  newUserService: async (creator, name, fieldsAdded) => {
+  newUserService: async (client, name, fieldsAdded) => {
     try {
       if (
-        !utilFunctions.validateAttributesInObject(creator, [
+        !utilFunctions.validateAttributesInObject(client, [
           'userId',
           'username',
           'email',
@@ -21,7 +21,7 @@ module.exports = {
         return false;
       }
 
-      const dataExists = await customRequestDao.getCustomRequestByName({ "name": name, "creator.userId" : creator.userId });
+      const dataExists = await customRequestDao.getCustomRequestByName({ "name": name, "client.userId" : client.userId });
       if(dataExists !== null){
         return {
           dataAvailable: false,
@@ -30,7 +30,7 @@ module.exports = {
         };
       }
       const data = await customRequestDao.createCustomRequest({
-        creator,
+        client,
         name,
         fieldsAdded,
       });
@@ -57,7 +57,7 @@ module.exports = {
         return false;
       }
 
-      const data = await customRequestDao.getCustomRequest({ "creator.userId" : clientId });
+      const data = await customRequestDao.getCustomRequest({ "client.userId" : clientId });
 
       if (data.length === 0) {
         return {
@@ -81,7 +81,7 @@ module.exports = {
         return false;
       }
 
-      const data = await customRequestDao.getCustomRequestByName({ "name": name, "creator.userId" : clientId });
+      const data = await customRequestDao.getCustomRequestByName({ "name": name, "client.userId" : clientId });
 
       if(!data){
         return {
@@ -106,13 +106,13 @@ module.exports = {
       throw new Error(`Error Occurred in Service Layers: ${error}`);
     }
   },
-  updateCustomRequestService: async (creatorUserId, customRequestObjectId, customReqDetails) => {
+  updateCustomRequestService: async (clientUserId, customRequestObjectId, customReqDetails) => {
     try{
-      if (!creatorUserId) {
+      if (!clientUserId) {
         return false;
       }
 
-      const data = await customRequestDao.updateCustomRequest({ "_id": customRequestObjectId, "creator.userId" : creatorUserId }, customReqDetails);
+      const data = await customRequestDao.updateCustomRequest({ "_id": customRequestObjectId, "client.userId" : clientUserId }, customReqDetails);
       if(!data){
         return {
           dataAvailable: false,

@@ -1,11 +1,12 @@
 /* eslint-disable radix */
+const _ = require('lodash');
 const utilFunctions = require('../../helpers/utilFunctions');
 const DataRequest = require('../../models/mongoDB/dataRequest');
 
 module.exports = {
   createDataRequest: async (dataRequest) => {
     try {
-      if (!utilFunctions.validateAttributesInObject(dataRequest, ['creator', 'user', 'fieldsRequested'])) {
+      if (!utilFunctions.validateAttributesInObject(dataRequest, ['client', 'user', 'fieldsRequested'])) {
         throw new Error('Parameters format is invalid.');
       }
       return new DataRequest(dataRequest).save();
@@ -20,7 +21,7 @@ module.exports = {
       throw new Error(`Error Occurred in DAO Layers: ${error}`);
     }
   },
-  searchRequest: async (user, options, creatorId) => {
+  searchRequest: async (user, options, clientId) => {
     try {
       if (!utilFunctions.validateAttributesInObject(options, ['offset', 'limit'])) {
         throw new Error('Error Occurred in DAO Layers: Pagination options not provided');
@@ -47,7 +48,7 @@ module.exports = {
                 ],
               },
               {
-                'creator.userId': creatorId,
+                'client.userId': clientId,
               },
             ],
           },
@@ -65,7 +66,7 @@ module.exports = {
                 ],
               },
               {
-                'creator.userId': creatorId,
+                'client.userId': clientId,
               },
             ],
           },
@@ -87,6 +88,16 @@ module.exports = {
       };
     } catch (error) {
       console.log(error);
+      throw new Error(`Error Occurred in DAO Layers: ${error}`);
+    }
+  },
+  updateDataRequest: async (options, updatedFields) => {
+    try {
+      if (!_.isPlainObject(updatedFields) || !_.isPlainObject(options)) {
+        throw new Error('Parameters format is invalid.');
+      }
+      return DataRequest.findOneAndUpdate(options, updatedFields, { new: true });
+    } catch (error) {
       throw new Error(`Error Occurred in DAO Layers: ${error}`);
     }
   },

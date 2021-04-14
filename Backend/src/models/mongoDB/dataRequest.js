@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const dataRequestSchema = new mongoose.Schema(
   {
-    creator: {
+    client: {
       userId: {
         type: String,
         required: true,
@@ -44,12 +44,14 @@ const dataRequestSchema = new mongoose.Schema(
         type: String,
         required: true,
       },
-      abstractionParams: [], // From Frontend
+      abstractionParam: { // From Frontend
+        type: mongoose.Mixed,
+      },
     }],
     status: {
       type: String,
-      enum: ['accepted', 'rejected', 'pending'],
-      default: 'pending',
+      enum: ['APPROVED', 'REJECTED', 'PENDING'],
+      default: 'PENDING',
       required: true,
     },
     comment: {

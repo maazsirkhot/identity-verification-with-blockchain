@@ -1,4 +1,5 @@
 const _ = require('lodash');
+const dateAdder = require('date-fns/add');
 
 module.exports = {
   validateAttributesInObject: (obj, attributes) => {
@@ -25,5 +26,25 @@ module.exports = {
       });
     });
     return check;
+  },
+  /**
+   *
+   * @param { // Values are representational
+        years: 2,
+        months: 9,
+        weeks: 1,
+        days: 7,
+        hours: 5,
+        minutes: 9,
+        seconds: 30,
+      } adder
+   * @returns Date
+   */
+  timestampAdderToCurrentTime: (adder) => {
+    if (!_.isPlainObject(adder)) {
+      return false;
+    }
+
+    return dateAdder(Date.now(), adder);
   },
 };

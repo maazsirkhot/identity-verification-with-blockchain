@@ -6,7 +6,7 @@ const roleDao = require('../../daos/role/role');
 const permissionDao = require('../../daos/permission/permission');
 
 module.exports = {
-  newUserService: async (creator, user, fieldsRequested, comment) => {
+  newUserService: async (client, user, fieldsRequested, comment) => {
     try {
       if (
         !utilFunctions.validateAttributesInObject(user, [
@@ -14,7 +14,7 @@ module.exports = {
           'username',
           'email',
         ])
-        || !utilFunctions.validateAttributesInObject(creator, [
+        || !utilFunctions.validateAttributesInObject(client, [
           'userId',
           'username',
           'email',
@@ -30,7 +30,7 @@ module.exports = {
 
       const data = await dataRequestDao.createDataRequest({
         user,
-        creator,
+        client,
         fieldsRequested,
         comment,
       });
@@ -57,7 +57,7 @@ module.exports = {
         return false;
       }
 
-      const data = await dataRequestDao.getRequest({ 'creator.userId': clientId });
+      const data = await dataRequestDao.getRequest({ 'client.userId': clientId });
 
       if (data.length === 0) {
         return {
@@ -75,7 +75,7 @@ module.exports = {
       throw new Error(`Error Occurred in Service Layers: ${error}`);
     }
   },
-  requestRoleService: async (user, creator, roleRequested) => {
+  requestRoleService: async (user, client, roleRequested) => {
     try {
       if (
         !utilFunctions.validateAttributesInObject(user, [
@@ -83,7 +83,7 @@ module.exports = {
           'username',
           'email',
         ])
-        || !utilFunctions.validateAttributesInObject(creator, [
+        || !utilFunctions.validateAttributesInObject(client, [
           'userId',
           'username',
           'email',
@@ -105,7 +105,7 @@ module.exports = {
 
       const data = await dataRequestDao.createDataRequest({
         user,
-        creator,
+        client,
         fieldsRequested,
       });
 
@@ -125,7 +125,7 @@ module.exports = {
       throw new Error(`Error Occurred in Service Layers: ${error}`);
     }
   },
-  searchRequestService: async (user, options, creatorId) => {
+  searchRequestService: async (user, options, clientId) => {
     try {
       if (!utilFunctions.validateAttributesInObject(options, ['pageNumber', 'limit'])) {
         return false;
@@ -134,7 +134,7 @@ module.exports = {
       options.offset = options.limit * (options.pageNumber);
       _.omit(options, ['pageNumber']);
 
-      const data = await dataRequestDao.searchRequest(user, options, creatorId);
+      const data = await dataRequestDao.searchRequest(user, options, clientId);
 
       if (data.length === 0) {
         return {

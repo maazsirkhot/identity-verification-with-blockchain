@@ -9,11 +9,11 @@ module.exports = {
 
     validators.validateRequestParam(req, next, schema);
   },
-  dataRequests: (req, res, next) => {
+  postsForUser: (req, res, next) => {
     const schema = Joi.object({
-      email: Joi.string().email().required(),
+      option: Joi.string().valid('CURRENT', 'EXPIRED', 'ALL').required(),
     });
 
-    validators.validateRequestParam(req, next, schema);
+    validators.validateQueryParam(req, next, schema);
   },
 };
