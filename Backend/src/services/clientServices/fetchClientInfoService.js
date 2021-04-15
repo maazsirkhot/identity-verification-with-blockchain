@@ -16,7 +16,7 @@ module.exports = {
 
       const data = await userDao.searchUser(user, type, options);
 
-      if (data.length === 0) {
+      if (data.result && data.result.length === 0) {
         return {
           dataAvailable: false,
           data: [],

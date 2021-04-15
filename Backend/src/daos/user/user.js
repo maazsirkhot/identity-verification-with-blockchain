@@ -67,8 +67,7 @@ module.exports = {
       if (!utilFunctions.validateAttributesInObject(options, ['offset', 'limit'])) {
         throw new Error('Error Occurred in DAO Layers: Pagination options not provided');
       }
-      const count = db.User.count({
-        attributes: ['userId', 'username', 'email', 'profilePicUrl'],
+      const count = await db.User.count({
         where: {
           [Op.and]: [
             { isActive: true },
@@ -91,7 +90,6 @@ module.exports = {
         },
       });
       const result = await db.User.findAll({
-        attributes: ['userId', 'username', 'email', 'profilePicUrl'],
         limit: options.limit,
         offset: options.offset,
         where: {
@@ -115,8 +113,8 @@ module.exports = {
           ],
         },
       });
-      numberOfPages = parseInt(count/limit);
-      if(count%limit != 0){
+      numberOfPages = parseInt(count/options.limit);
+      if(count%options.limit != 0){
         numberOfPages+=1;
       }
       return {
