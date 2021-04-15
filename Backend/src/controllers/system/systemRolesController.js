@@ -6,10 +6,10 @@ module.exports = {
     try {
       const role = {
         roleName: req.body.roleName,
-        permissions: req.body.permissions,
+        dataFields: req.body.dataFields,
         createdBy: {
           type: req.user.type,
-          id: req.user.id,
+          id: req.user.userId,
         },
         isDefault: req.user.type === 'system',
       };
