@@ -6,7 +6,7 @@ const mongoose = require('mongoose');
 module.exports = {
   createCustomRequest: async (customRequest) => {
     try {
-      if (!utilFunctions.validateAttributesInObject(customRequest, ['creator', 'fieldsAdded'])) {
+      if (!utilFunctions.validateAttributesInObject(customRequest, ['client', 'fieldsAdded'])) {
         throw new Error('Parameters format is invalid.');
       }
       return new CustomRequest(customRequest).save();

@@ -6,7 +6,7 @@ const customRequestSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    creator: {
+    client: {
       userId: {
         type: String,
         required: true,

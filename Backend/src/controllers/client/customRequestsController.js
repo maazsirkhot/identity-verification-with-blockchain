@@ -1,24 +1,25 @@
+/* eslint-disable max-len */
 const constants = require('../../../utils/constants');
 const customRequestService = require('../../services/clientServices/customRequestService');
 
 module.exports = {
   newCustomRequest: async (req, res) => {
     try {
-      if(req.user.type != 'client'){
+      if (req.user.type !== 'client') {
         return res.status(constants.STATUS_CODE.BAD_REQUEST_ERROR_STATUS).send({
           message: constants.MESSAGES.INVALID_CLIENT_USER,
           dataAvailable: false,
         });
       }
-      const creator = {
+      const client = {
         userId: req.user.userId,
         username: req.user.username,
         email: req.user.email,
       };
       const { fieldsAdded } = req.body;
-      const name = req.body.name;
+      const { name } = req.body;
 
-      const result = await customRequestService.newUserService(creator, name, fieldsAdded);
+      const result = await customRequestService.newUserService(client, name, fieldsAdded);
 
       if (!result) {
         return res.status(constants.STATUS_CODE.BAD_REQUEST_ERROR_STATUS).send({
@@ -29,7 +30,7 @@ module.exports = {
 
       if (!result.dataAvailable) {
         return res.status(constants.STATUS_CODE.BAD_REQUEST_ERROR_STATUS).send({
-          message: result.message?result.message:constants.MESSAGES.NO_DATA_AVAILABLE,
+          message: result.message ? result.message : constants.MESSAGES.NO_DATA_AVAILABLE,
           dataAvailable: result.dataAvailable,
         });
       }
@@ -102,19 +103,19 @@ module.exports = {
     }
   },
   updateCustomRequest: async (req, res) => {
-    try{
-      if(req.user.type != 'client'){
+    try {
+      if (req.user.type !== 'client') {
         return res.status(constants.STATUS_CODE.BAD_REQUEST_ERROR_STATUS).send({
           message: constants.MESSAGES.INVALID_CLIENT_USER,
           dataAvailable: false,
         });
       }
-      
-      const creatorUserId = req.user.userId;
-      const customRequestObjectId = req.params.customRequestObjectId;
+
+      const clientUserId = req.user.userId;
+      const { customRequestObjectId } = req.params;
       const customReqDetails = req.body;
 
-      const result = await customRequestService.updateCustomRequestService(creatorUserId, customRequestObjectId, customReqDetails);
+      const result = await customRequestService.updateCustomRequestService(clientUserId, customRequestObjectId, customReqDetails);
       if (!result) {
         return res.status(constants.STATUS_CODE.BAD_REQUEST_ERROR_STATUS).send({
           message: constants.MESSAGES.INVALID_PARAMETERS_ERROR,

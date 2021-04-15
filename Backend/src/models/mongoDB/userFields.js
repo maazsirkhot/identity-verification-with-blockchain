@@ -32,7 +32,7 @@ const userFieldSchema = new mongoose.Schema(
       },
       back: {
         type: String,
-      }
+      },
     },
     dataField: [
       {

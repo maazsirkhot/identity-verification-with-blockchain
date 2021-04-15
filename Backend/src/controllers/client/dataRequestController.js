@@ -4,13 +4,13 @@ const dataRequestService = require('../../services/clientServices/dataRequestSer
 module.exports = {
   newRequest: async (req, res) => {
     try {
-      if(req.user.type != 'client'){
+      if (req.user.type !== 'client') {
         return res.status(constants.STATUS_CODE.BAD_REQUEST_ERROR_STATUS).send({
           message: constants.MESSAGES.INVALID_CLIENT_USER,
           dataAvailable: false,
         });
       }
-      const creator = {
+      const client = {
         userId: req.user.userId,
         username: req.user.username,
         email: req.user.email,
@@ -21,9 +21,14 @@ module.exports = {
         email: req.body.user.email,
       };
       const { fieldsRequested } = req.body;
-      const comment = req.body.comment;
+      const { comment } = req.body;
 
-      const result = await dataRequestService.newUserService(creator, user, fieldsRequested, comment);
+      const result = await dataRequestService.newUserService(
+        client,
+        user,
+        fieldsRequested,
+        comment,
+      );
 
       if (!result) {
         return res.status(constants.STATUS_CODE.BAD_REQUEST_ERROR_STATUS).send({
@@ -38,7 +43,9 @@ module.exports = {
           dataAvailable: result.dataAvailable,
         });
       }
-      return res.status(constants.STATUS_CODE.CREATED_SUCCESSFULLY_STATUS).send(result);
+      return res
+        .status(constants.STATUS_CODE.CREATED_SUCCESSFULLY_STATUS)
+        .send(result);
     } catch (error) {
       console.log(error);
       return res
@@ -51,7 +58,9 @@ module.exports = {
   },
   fetchRequests: async (req, res) => {
     try {
-      const result = await dataRequestService.fetchRequestsService(req.user.userId);
+      const result = await dataRequestService.fetchRequestsService(
+        req.user.userId,
+      );
 
       if (!result) {
         return res.status(constants.STATUS_CODE.BAD_REQUEST_ERROR_STATUS).send({
@@ -66,7 +75,9 @@ module.exports = {
           dataAvailable: result.dataAvailable,
         });
       }
-      return res.status(constants.STATUS_CODE.CREATED_SUCCESSFULLY_STATUS).send(result);
+      return res
+        .status(constants.STATUS_CODE.CREATED_SUCCESSFULLY_STATUS)
+        .send(result);
     } catch (error) {
       console.log(error);
       return res
@@ -79,7 +90,7 @@ module.exports = {
   },
   requestRole: async (req, res) => {
     try {
-      const creator = {
+      const client = {
         userId: req.user.userId,
         username: req.user.username,
         email: req.user.email,
@@ -91,7 +102,11 @@ module.exports = {
       };
       const { roleRequested } = req.body;
 
-      const result = await dataRequestService.requestRoleService(creator, user, roleRequested);
+      const result = await dataRequestService.requestRoleService(
+        client,
+        user,
+        roleRequested,
+      );
 
       if (!result) {
         return res.status(constants.STATUS_CODE.BAD_REQUEST_ERROR_STATUS).send({
@@ -106,7 +121,9 @@ module.exports = {
           dataAvailable: result.dataAvailable,
         });
       }
-      return res.status(constants.STATUS_CODE.CREATED_SUCCESSFULLY_STATUS).send(result);
+      return res
+        .status(constants.STATUS_CODE.CREATED_SUCCESSFULLY_STATUS)
+        .send(result);
     } catch (error) {
       console.log(error);
       return res
@@ -118,15 +135,18 @@ module.exports = {
     }
   },
   searchRequests: async (req, res) => {
-    try{
+    try {
       const options = {
         limit: req.query.limit,
-        pageNumber: req.query.pageNumber-1,
+        pageNumber: req.query.pageNumber - 1,
       };
-      let user = "";
-      if (req.query.user)
-        user = req.query.user;
-      const result = await dataRequestService.searchRequestService(user, options, req.user.userId);
+      let user = '';
+      if (req.query.user) user = req.query.user;
+      const result = await dataRequestService.searchRequestService(
+        user,
+        options,
+        req.user.userId,
+      );
       if (!result) {
         return res.status(constants.STATUS_CODE.BAD_REQUEST_ERROR_STATUS).send({
           message: constants.MESSAGES.INVALID_PARAMETERS_ERROR,
