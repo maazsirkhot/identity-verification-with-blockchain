@@ -9,9 +9,14 @@ module.exports = {
         pageNumber: req.query.pageNumber,
       };
 
-      console.log('Options \n\n', options);
+      // console.log('Options \n\n', options);
+      if(!req.query.user) {
+        user = '';
+      } else {
+        user = req.query.user;
+      }
       const result = await fetchClientInfoService.searchUserService(
-        req.query.user,
+        user,
         'user',
         options
       );

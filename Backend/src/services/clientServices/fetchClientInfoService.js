@@ -7,7 +7,7 @@ const utilFunctions = require('../../helpers/utilFunctions');
 module.exports = {
   searchUserService: async (user, type, options) => {
     try {
-      if (!user || !utilFunctions.validateAttributesInObject(options, ['pageNumber', 'limit'])) {
+      if (!utilFunctions.validateAttributesInObject(options, ['pageNumber', 'limit'])) {
         return false;
       }
 
