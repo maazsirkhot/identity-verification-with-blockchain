@@ -34,9 +34,11 @@ module.exports = {
   },
   requestAction: async (req, res) => {
     try {
+      const expiry = req.query.expiry ? req.query.expiry : null;
       const result = await userRequestService.requestActionService(
         req.params.requestId,
         req.body.action,
+        expiry,
       );
 
       if (!result) {
