@@ -1,4 +1,4 @@
-module testcc
+module resourcescc
 
 go 1.14
 

@@ -1,1 +1,1 @@
-Chaincode for Blockchain is defined here
+This folder contains chaincode to interface with the Hyperledger Fabric network
