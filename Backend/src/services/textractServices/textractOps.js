@@ -88,7 +88,7 @@ module.exports = {
       throw new Error(`Error Occurred in DAO Layers:  + ${error}`);
     }
   },
-  createUserDetails: async (data, user, frontLink, backLink, keyValuePair) => {
+  createUserDetails: async (data, user, frontLink, backLink) => {
     try {
       console.log(data);
       const userData = new UserField({

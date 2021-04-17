@@ -86,12 +86,11 @@ module.exports = {
         }
       }
       /* console.log(relevantText); */
-      const keyValuePair = await textractService.getAllDataFields(req.body.idType);
       fs.unlinkSync(front.path);
       fs.unlinkSync(back.path);
       const validJsonData = textractService.ifValidJSON(req.body.relevantText);
       const userDetails = await textractService.createUserDetails(validJsonData,
-        req.user, frontImageLink, backImageLink, keyValuePair);
+        req.user, frontImageLink, backImageLink);
       if (!userDetails) {
         return res.status(constants.STATUS_CODE.BAD_REQUEST_ERROR_STATUS).send({
           message: constants.MESSAGES.USER_DETAILS_STORE_FAILED,
@@ -102,7 +101,7 @@ module.exports = {
       return res.status(constants.STATUS_CODE.SUCCESS_STATUS).send({
         message: constants.MESSAGES.USER_DETAILS_STORE_SUCCESS,
         userDetails,
-        dataAvailable: !!_.isPlainObject(userDetails),
+        dataAvailable: true,
       });
     } catch (error) {
       console.log(error);
