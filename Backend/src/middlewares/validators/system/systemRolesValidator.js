@@ -5,7 +5,7 @@ module.exports = {
   createRole: (req, res, next) => {
     const schema = Joi.object({
       roleName: Joi.string().required(),
-      permissions: Joi.array().required(),
+      dataFields: Joi.array().required(),
     });
 
     validators.validateRequestBody(req, next, schema);
