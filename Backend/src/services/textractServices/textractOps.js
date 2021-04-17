@@ -90,20 +90,6 @@ module.exports = {
   },
   createUserDetails: async (data, user, frontLink, backLink, keyValuePair) => {
     try {
-      data.push({
-        field_id: keyValuePair['Front Page'],
-        field_name: 'Front Page',
-        field_value: frontLink,
-        verifierDoc: keyValuePair.idType,
-      });
-      if (backLink != null) {
-        data.push({
-          field_id: keyValuePair['Back Page'],
-          field_name: 'Back Page',
-          field_value: backLink,
-          verifierDoc: keyValuePair.idType,
-        });
-      }
       console.log(data);
       const userData = new UserField({
         userId: user.userId,
