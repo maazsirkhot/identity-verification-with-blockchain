@@ -5,7 +5,7 @@ const utilFunctions = require('../../helpers/utilFunctions');
 module.exports = {
   getRole: async (options) => {
     try {
-      return Role.find(options);
+      return await Role.find(options);
     } catch (error) {
       throw new Error(`Error Occurred in DAO Layers: ${error}`);
     }

@@ -6,6 +6,7 @@ mongoose
     useNewUrlParser: true,
     useUnifiedTopology: true,
     poolSize: 100,
+    useFindAndModify: false,
   })
   .then(() => console.log('MongoDB Connected'))
   .catch((err) => console.log(err));
