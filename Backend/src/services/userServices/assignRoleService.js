@@ -5,7 +5,7 @@ const constants = require('../../../utils/constants');
 const userFieldsDao = require('../../daos/userFields/userFields');
 const _ = require('lodash');
 const dataRequestDao = require('../../daos/dataRequest/dataRequest');
-var ObjectId = require('mongodb').ObjectId; 
+const ObjectId = require('mongodb').ObjectId; 
 const fieldAbstractionMethods = require('../../helpers/fieldAbstractionMethods');
 
 module.exports = {
