@@ -67,56 +67,77 @@ module.exports = {
       if (!utilFunctions.validateAttributesInObject(options, ['offset', 'limit'])) {
         throw new Error('Error Occurred in DAO Layers: Pagination options not provided');
       }
-      const count = db.User.count({
-        attributes: ['userId', 'username', 'email', 'profilePicUrl'],
-        where: {
-          [Op.and]: [
-            { isActive: true },
-            { type: userType },
-            {
-              [Op.or]: [
-                {
-                  username: {
-                    [Op.like]: `%${searchString}%`,
+      let count = 0;
+      let result = [];
+      if(searchString == ''){
+        count = await db.User.count({
+          where: {
+            [Op.and]: [
+              { isActive: true },
+              { type: userType },
+            ],
+          },
+        });
+        result = await db.User.findAll({
+          limit: options.limit,
+          offset: options.offset,
+          where: {
+            [Op.and]: [
+              { isActive: true },
+              { type: userType },
+            ],
+          },
+        });
+      } else {
+        count = await db.User.count({
+          where: {
+            [Op.and]: [
+              { isActive: true },
+              { type: userType },
+              {
+                [Op.or]: [
+                  {
+                    username: {
+                      [Op.iLike]: `%${searchString}%`,
+                    },
                   },
-                },
-                {
-                  email: {
-                    [Op.like]: `%${searchString}%`,
+                  {
+                    email: {
+                      [Op.iLike]: `%${searchString}%`,
+                    },
                   },
-                },
-              ],
-            },
-          ],
-        },
-      });
-      const result = await db.User.findAll({
-        attributes: ['userId', 'username', 'email', 'profilePicUrl'],
-        limit: options.limit,
-        offset: options.offset,
-        where: {
-          [Op.and]: [
-            { isActive: true },
-            { type: userType },
-            {
-              [Op.or]: [
-                {
-                  username: {
-                    [Op.like]: `%${searchString}%`,
+                ],
+              },
+            ],
+          },
+        });
+        result = await db.User.findAll({
+          limit: options.limit,
+          offset: options.offset,
+          where: {
+            [Op.and]: [
+              { isActive: true },
+              { type: userType },
+              {
+                [Op.or]: [
+                  {
+                    username: {
+                      [Op.iLike]: `%${searchString}%`,
+                    },
                   },
-                },
-                {
-                  email: {
-                    [Op.like]: `%${searchString}%`,
+                  {
+                    email: {
+                      [Op.iLike]: `%${searchString}%`,
+                    },
                   },
-                },
-              ],
-            },
-          ],
-        },
-      });
-      numberOfPages = parseInt(count/limit);
-      if(count%limit != 0){
+                ],
+              },
+            ],
+          },
+        });
+      }
+      numberOfPages = parseInt(count/options.limit);
+      if(count%options.limit != 0){
         numberOfPages+=1;
       }
       return {

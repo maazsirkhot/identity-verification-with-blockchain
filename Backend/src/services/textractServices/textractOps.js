@@ -88,22 +88,8 @@ module.exports = {
       throw new Error(`Error Occurred in DAO Layers:  + ${error}`);
     }
   },
-  createUserDetails: async (data, user, frontLink, backLink, keyValuePair) => {
+  createUserDetails: async (data, user, frontLink, backLink) => {
     try {
-      data.push({
-        field_id: keyValuePair['Front Page'],
-        field_name: 'Front Page',
-        field_value: frontLink,
-        verifierDoc: keyValuePair.idType,
-      });
-      if (backLink != null) {
-        data.push({
-          field_id: keyValuePair['Back Page'],
-          field_name: 'Back Page',
-          field_value: backLink,
-          verifierDoc: keyValuePair.idType,
-        });
-      }
       console.log(data);
       const userData = new UserField({
         userId: user.userId,

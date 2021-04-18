@@ -7,7 +7,7 @@ const utilFunctions = require('../../helpers/utilFunctions');
 module.exports = {
   searchUserService: async (user, type, options) => {
     try {
-      if (!user || !utilFunctions.validateAttributesInObject(options, ['pageNumber', 'limit'])) {
+      if (!utilFunctions.validateAttributesInObject(options, ['pageNumber', 'limit'])) {
         return false;
       }
 
@@ -16,7 +16,7 @@ module.exports = {
 
       const data = await userDao.searchUser(user, type, options);
 
-      if (data.length === 0) {
+      if (data.result && data.result.length === 0) {
         return {
           dataAvailable: false,
           data: [],
