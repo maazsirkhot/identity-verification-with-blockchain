@@ -3,8 +3,8 @@ install:
 		github.com/hyperledger/fabric-contract-api-go/contractapi
 	
 run: 
-	go run resources/testcc.go
+	go run resources/resourcescc.go
 
 build:
-	go build resources/testcc.go
+	go build resources/resourcescc.go
 

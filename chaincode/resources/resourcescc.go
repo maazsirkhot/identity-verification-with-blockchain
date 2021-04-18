@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"strconv"
 	"time"
 
 	"github.com/hyperledger/fabric-contract-api-go/contractapi"
@@ -24,10 +25,11 @@ type Identity struct {
 	WalletId string `json:"walletId"`
 }
 
-// Structure of data in the ledger
+//Return type
 type ReturnTypeWallet struct {
-	Status   int    `json:"code"`
+	Status   int    `json:"status"`
 	WalletId string `json:"walletId"`
+	IsValid  bool 	`json:"isValid"`
 	Message  string `json:"message"`
 }
 
@@ -58,7 +60,7 @@ func (s *SmartContract) InitLedger(ctx contractapi.TransactionContextInterface) 
 }
 
 // CreateAsset issues a new asset to the world state with given details.
-func (s *SmartContract) CreateIdentity(ctx contractapi.TransactionContextInterface, userId string, docType string, verifier string, isValid bool) ([]byte, error) {
+func (s *SmartContract) CreateIdentity(ctx contractapi.TransactionContextInterface, userId string, docType string, verifier string) (string, error) {
 	// exists, err := s.AssetExists(ctx, id)
 	// if err != nil {
 	// 	return err
@@ -67,61 +69,88 @@ func (s *SmartContract) CreateIdentity(ctx contractapi.TransactionContextInterfa
 	// 	return fmt.Errorf("the asset %s already exists", id)
 	// }
 
-	walletId := b64.StdEncoding.EncodeToString([]byte(userId + docType + time.Now().String()))
+	partEnc := strconv.FormatInt(time.Now().Unix(), 16)
+	walletId := b64.StdEncoding.EncodeToString([]byte(userId + docType + partEnc))
+
 
 	identity := Identity{
 		UserId:   userId,
 		DocType:  docType,
 		Verifier: verifier,
-		IsValid:  isValid,
+		IsValid:  true,
 		WalletId: walletId,
 	}
 
 	identityJSON, err := json.Marshal(identity)
 	if err != nil {
-		return nil, err
+		return "nil", err
 	}
 	ctxErr := ctx.GetStub().PutState(walletId, identityJSON)
 	if ctxErr != nil {
 		retVal := ReturnTypeWallet{
 			Status:   400,
 			WalletId: "",
+			IsValid: false,
 			Message:  "Error saving to ledger",
 		}
 		ret, _ := json.Marshal(retVal)
 
-		return ret, nil
+		return string(ret), nil
 	} else {
 		retVal := ReturnTypeWallet{
 			Status:   200,
 			WalletId: walletId,
+			IsValid: true,
 			Message:  "Saved to ledger",
 		}
 		ret, _ := json.Marshal(retVal)
-		return ret, nil
+		return string(ret), nil
 	}
 }
 
 // ReadAsset returns the asset stored in the world state with given id.
-func (s *SmartContract) ReadIdentity(ctx contractapi.TransactionContextInterface, walletId string) (*Identity, error) {
+func (s *SmartContract) ReadIdentity(ctx contractapi.TransactionContextInterface, walletId string) (string, error) {
 	identityJSON, err := ctx.GetStub().GetState(walletId)
-	if err != nil {
-		return nil, fmt.Errorf("failed to read from world state: %v", err)
-	}
-	if identityJSON == nil {
-		return nil, fmt.Errorf("the identity %s does not exist", walletId)
+	if err != nil || identityJSON == nil {
+		retVal := ReturnTypeWallet{
+			Status:   400,
+			WalletId: "",
+			IsValid: false,
+			Message:  "Identity does not exist in the ledger",
+		}
+		ret, _ := json.Marshal(retVal)
+
+		return string(ret), nil
 	}
 
 	var identity Identity
 	err = json.Unmarshal(identityJSON, &identity)
+	
 	if err != nil {
-		return nil, err
+		retVal := ReturnTypeWallet{
+			Status:   400,
+			WalletId: "",
+			IsValid: false,
+			Message:  "Error marshal/unmarshal",
+		}
+		ret, _ := json.Marshal(retVal)
+
+		return string(ret), nil
+	} else {
+		retVal := ReturnTypeWallet{
+			Status:   200,
+			WalletId: identity.WalletId,
+			IsValid: identity.IsValid,
+			Message:  "Successfully read from ledger",
+		}
+		ret, _ := json.Marshal(retVal)
+		return string(ret), nil
 	}
-	return &identity, nil
+
 }
 
 // UpdateAsset updates an existing asset in the world state with provided parameters.
-func (s *SmartContract) UpdateIdentity(ctx contractapi.TransactionContextInterface, userId string, docType string, verifier string, isValid bool) error {
+func (s *SmartContract) UpdateIdentity(ctx contractapi.TransactionContextInterface, userId string, docType string, verifier string, walletId string) (string, error) {
 	// exists, err := s.AssetExists(ctx, id)
 	// if err != nil {
 	// 	return err
@@ -130,34 +159,111 @@ func (s *SmartContract) UpdateIdentity(ctx contractapi.TransactionContextInterfa
 	// 	return fmt.Errorf("the asset %s does not exist", id)
 	// }
 
-	newWalletId := b64.StdEncoding.EncodeToString([]byte(userId + docType + time.Now().String()))
+	partEnc := strconv.FormatInt(time.Now().Unix(), 16)
+	newWalletId := b64.StdEncoding.EncodeToString([]byte(userId + docType + partEnc))
 
 	// overwriting original asset with new asset
 	identity := Identity{
 		UserId:   userId,
 		DocType:  docType,
 		Verifier: verifier,
-		IsValid:  isValid,
+		IsValid:  true,
 		WalletId: newWalletId,
 	}
 
-	identityJSON, err := json.Marshal(identity)
-	if err != nil {
-		return err
+	oldIdentity := Identity{
+		UserId:   userId,
+		DocType:  docType,
+		Verifier: verifier,
+		IsValid:  false,
+		WalletId: walletId,
 	}
-	return ctx.GetStub().PutState(newWalletId, identityJSON)
+
+	identityJSON, err := json.Marshal(identity)
+	oldIdentityJSON, err1 := json.Marshal(oldIdentity)
+	if err != nil || err1 != nil {
+		retVal := ReturnTypeWallet{
+			Status:   400,
+			WalletId: "",
+			IsValid: false,
+			Message:  "Error marshal/unmarshal",
+		}
+		ret, _ := json.Marshal(retVal)
+
+		return string(ret), nil
+	}
+	
+	//Update old identity--no more valid
+	ctxErr1 := ctx.GetStub().PutState(walletId, oldIdentityJSON)
+	if ctxErr1 != nil {
+		retVal := ReturnTypeWallet{
+			Status:   400,
+			WalletId: "",
+			IsValid: false,
+			Message:  "Error updating old identity",
+		}
+		ret, _ := json.Marshal(retVal)
+
+		return string(ret), nil
+	}
+
+	//Update new identity
+	ctxErr := ctx.GetStub().PutState(newWalletId, identityJSON)
+	if ctxErr != nil {
+		retVal := ReturnTypeWallet{
+			Status:   400,
+			WalletId: "",
+			IsValid: false,
+			Message:  "Error updating ledger",
+		}
+		ret, _ := json.Marshal(retVal)
+
+		return string(ret), nil
+	} else {
+		retVal := ReturnTypeWallet{
+			Status:   200,
+			WalletId: newWalletId,
+			IsValid: true,
+			Message:  "Updated ledger",
+		}
+		ret, _ := json.Marshal(retVal)
+		return string(ret), nil
+	}
 }
 
-func (s *SmartContract) DeleteAsset(ctx contractapi.TransactionContextInterface, walletId string) error {
-	exists, err := s.WalletExists(ctx, walletId)
-	if err != nil {
-		return err
-	}
-	if !exists {
-		return fmt.Errorf("the asset %s does not exist", walletId)
+func (s *SmartContract) DeleteIdentity(ctx contractapi.TransactionContextInterface, walletId string) (string, error) {
+	// exists, err := s.WalletExists(ctx, walletId)
+	// if err != nil {
+	// 	return err
+	// }
+	// if !exists {
+	// 	return fmt.Errorf("the asset %s does not exist", walletId)
+	// }
+
+	// return ctx.GetStub().DelState(walletId)
+
+	ctxErr := ctx.GetStub().DelState(walletId)
+	if ctxErr != nil {
+		retVal := ReturnTypeWallet{
+			Status:   400,
+			WalletId: "",
+			IsValid: false,
+			Message:  "Error deleting identity",
+		}
+		ret, _ := json.Marshal(retVal)
+		return string(ret), nil
+	} else {
+		retVal := ReturnTypeWallet{
+			Status:   200,
+			WalletId: walletId,
+			IsValid: false,
+			Message:  "Deleted from ledger",
+		}
+		ret, _ := json.Marshal(retVal)
+		return string(ret), nil
 	}
 
-	return ctx.GetStub().DelState(walletId)
+
 }
 
 func (s *SmartContract) WalletExists(ctx contractapi.TransactionContextInterface, walletId string) (bool, error) {
