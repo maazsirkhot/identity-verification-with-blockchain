@@ -84,7 +84,7 @@ Do not use existing binaries as is in bin/ folder, they may not work on your sys
 9.  Can check the logs for pods like orderers:
     kubectl logs -f orderers-ca-d69cbc664-qbs6zk
 
-    kubectl exec -it <container_name> bash
+    kubectl exec -it $(kubectl get pods -o=name | grep example1 | sed "s/^.\{4\}//") -- bash
     Also, crypto-config files are gecnerated. Check for crypto-config folder:
     root@example1-6858b4f776-wmlth:/host# cd files
     root@example1-6858b4f776-wmlth:/host/files# ls
@@ -234,10 +234,10 @@ Do not use existing binaries as is in bin/ folder, they may not work on your sys
     kubectl exec -it $(kubectl get pods -o=name | grep cli-peer0-verify-deployment | sed "s/^.\{4\}//") -- bash -c 'peer chaincode invoke -C mainchannel -n resources -c '\''{"Args":["CreateIdentity","regy3fh334","Passport","Passport Authority"]}'\'' -o orderer0-service:7050 --tls --cafile=/etc/hyperledger/orderers/msp/tlscacerts/orderers-ca-service-7054.pem'
 
     //ReadIdentity(ctx contractapi.TransactionContextInterface, walletId string)
-    kubectl exec -it $(kubectl get pods -o=name | grep cli-peer0-verify-deployment | sed "s/^.\{4\}//") -- bash -c 'peer chaincode query -C mainchannel -n resources -c '\''{"Args":["ReadIdentity","Mzd5YWZkc3lnZTIzREw2MDdiODc5Yw=="]}'\'' -o orderer0-service:7050 --tls --cafile=/etc/hyperledger/orderers/msp/tlscacerts/orderers-ca-service-7054.pem'
+    kubectl exec -it $(kubectl get pods -o=name | grep cli-peer0-verify-deployment | sed "s/^.\{4\}//") -- bash -c 'peer chaincode query -C mainchannel -n resources -c '\''{"Args":["ReadIdentity","cmVneTNmaDMzNFBhc3Nwb3J0NjA3YmUyNmE="]}'\'' -o orderer0-service:7050 --tls --cafile=/etc/hyperledger/orderers/msp/tlscacerts/orderers-ca-service-7054.pem'
 
     //UpdateIdentity(ctx contractapi.TransactionContextInterface, userId string, docType string, verifier string, walletId string)
-    kubectl exec -it $(kubectl get pods -o=name | grep cli-peer0-verify-deployment | sed "s/^.\{4\}//") -- bash -c 'peer chaincode invoke -C mainchannel -n resources -c '\''{"Args":["UpdateIdentity","regy3fh334","DL","DL Authority","cmVneTNmaDMzNFBhc3Nwb3J0NjA3YmNhNTc="]}'\'' -o orderer0-service:7050 --tls --cafile=/etc/hyperledger/orderers/msp/tlscacerts/orderers-ca-service-7054.pem'
+    kubectl exec -it $(kubectl get pods -o=name | grep cli-peer0-verify-deployment | sed "s/^.\{4\}//") -- bash -c 'peer chaincode invoke -C mainchannel -n resources -c '\''{"Args":["UpdateIdentity","regy3fh334","DL","DL Authority","cmVneTNmaDMzNFBhc3Nwb3J0NjA3YmUyNmE="]}'\'' -o orderer0-service:7050 --tls --cafile=/etc/hyperledger/orderers/msp/tlscacerts/orderers-ca-service-7054.pem'
 
     //Delete wallet/identity for the user
     kubectl exec -it $(kubectl get pods -o=name | grep cli-peer0-verify-deployment | sed "s/^.\{4\}//") -- bash -c 'peer chaincode invoke -C mainchannel -n resources -c '\''{"Args":["DeleteIdentity","Mzd5YWZkc3lnZTIzREw2MDdiODc5Yw=="]}'\'' -o orderer0-service:7050 --tls --cafile=/etc/hyperledger/orderers/msp/tlscacerts/orderers-ca-service-7054.pem'

@@ -62,7 +62,7 @@ do
             echo "Waiting to commit chaincode..."
             sleep 10
             # Only 1 peer needs to be commiting the chaincode
-            if [[ "$CORE_PEER_LOCALMSPID" == *"ibm"* ]]; then
+            if [[ "$CORE_PEER_LOCALMSPID" == *"verify"* ]]; then
                 peer lifecycle chaincode commit \
                     -o orderer0:7050 --tls \
                     --cafile=/etc/hyperledger/orderers/msp/tlscacerts/orderers-ca-7054.pem \
