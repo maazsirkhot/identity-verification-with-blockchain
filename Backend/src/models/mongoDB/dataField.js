@@ -12,7 +12,14 @@ const dataFieldSchema = new mongoose.Schema(
         type: String,
       },
     },
-    abstractionTypes: [String],
+    abstractionTypes: [{
+      userDisplay: {
+        type: String,
+      },
+      apiParam: {
+        type: String,
+      }
+    }],
     verificationEntities: {
       type: [String],
       required: true,

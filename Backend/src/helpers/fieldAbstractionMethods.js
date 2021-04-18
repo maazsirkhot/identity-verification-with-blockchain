@@ -1,3 +1,12 @@
 module.exports = { // Function names must be same as field_name
-  age: (ageCondition, actualAge) => ageCondition >= actualAge,
+  Age: (ageCondition, dob) => {
+    var today = new Date();
+    var birthDate = new Date(dob);
+    var actualAge = today.getFullYear() - birthDate.getFullYear();
+    var m = today.getMonth() - birthDate.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+      actualAge--;
+    }
+    return actualAge >= parseInt(ageCondition);
+  },
 };

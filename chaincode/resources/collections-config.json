@@ -1,0 +1,9 @@
+[
+    {
+        "name": "verifyResourcesPrivateData",
+        "policy": "OR('verify.member')",
+        "requiredPeerCount": 1,
+        "maxPeerCount": 3,
+        "blockToLive": 0
+    }
+]

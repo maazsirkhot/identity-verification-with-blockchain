@@ -5,7 +5,7 @@ const utilFunctions = require('../../helpers/utilFunctions');
 module.exports = {
   getRole: async (options) => {
     try {
-      return Role.find(options);
+      return await Role.find(options);
     } catch (error) {
       throw new Error(`Error Occurred in DAO Layers: ${error}`);
     }
@@ -14,18 +14,15 @@ module.exports = {
     try {
       if (
         !_.isPlainObject(role)
-        || !utilFunctions.validateAttributesInObject(role, ['roleName', 'createdBy', 'isActive', 'isDefault', 'permissions'])
+        || !utilFunctions.validateAttributesInObject(role, ['roleName', 'createdBy', 'isActive', 'isDefault', 'dataFields'])
       ) {
         throw new Error('Parameters format is invalid.');
       }
 
-      if (utilFunctions.validateAttributesInObject(role.createdBy, ['type', 'id'])) {
+      if (!utilFunctions.validateAttributesInObject(role.createdBy, ['id', 'type'])) {
         throw new Error('Parameters format is invalid.');
       }
 
-      if (utilFunctions.validateArrayOfObjects(role.permissions, ['id', 'expireDurationInSecs'])) {
-        throw new Error('Parameters format is invalid.');
-      }
       return new Role(role).save();
     } catch (error) {
       throw new Error(`Error Occurred in DAO Layers: ${error}`);
