@@ -14,8 +14,20 @@ spec:
       labels:
         app: node-app 
     spec:
+      volumes:
+        - name: my-pv-storage
+          persistentVolumeClaim:
+            claimName: my-pv-claim
+        - name: host
+          hostPath:
+            path: /var/run
       containers:
       - name: node-app
-        image: krutikavk/fabric-be:latest
+        image: krutikavk/fabric-be:v3
         ports:
-        - containerPort: 4000
+          - containerPort: 4000
+        volumeMounts:
+            - mountPath: /host
+              name: my-pv-storage
+            - mountPath: /var/run
+              name: host

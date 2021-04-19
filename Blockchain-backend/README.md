@@ -12,10 +12,10 @@ Follow Blockchain/README.md for details on setting up Fabric network
 All paths relative to Blockchain-backend folder
 1. Create Dockerfile for Blockchain-backend and build it
     docker login
-    docker build -t krutikavk/fabric-be:latest .
+    docker build -t krutikavk/fabric-be:v2 .
 
     For uploading the file on dockerhub, 
-    docker push krutikavk/fabric-be:latest
+    docker push krutikavk/fabric-be:v2
 
     NOTE: 
     krutikavk/fabric-be:latest: <user-id>/<image-name>:<image-tag>
@@ -34,10 +34,10 @@ All paths relative to Blockchain-backend folder
 
     Follow the IP address to use APIs from backend.
 
-6. curl http://127.0.0.1:62552/resources/gud23734fhiuegc2x
+6. curl http://127.0.0.1:50401/resources/gud23734fhiuegc2x
     {"status":200,"walletId":"Mzd5YWZkc3lnZTIzUGFzc3BvcnQ2MDdiODc0ZA==","isValid":false,"message":"Successfully read from ledger"}%
 
-    curl -X POST http://127.0.0.1:62552/resources -d '{"userId": "gud23734fhiuegc2x","docType": "Passport","verifier": "Passport Authority"}]}'
+    curl -X POST http://127.0.0.1:50401/resources -d '{"userId": "gud23734fhiuegc2x","docType": "Passport","verifier": "Passport Authority"}]}'
 
    
 

@@ -38,24 +38,7 @@ Do not use existing binaries as is in bin/ folder, they may not work on your sys
 
 ## Network setup steps:
 
-1.  Set permissions for scripts folder
-    sudo chmod -R 777 scripts/
-
-2.  Generate crypto-config folder with certs
-    docker-compose -f Blockchain/docker/docker-compose-ca.yaml up
-    (Add -d to the end to run as administrator if permission denied error without)
-
-    crypto-config folder should now be created inside main folder. Don't need CA network anymore.
-    docker-compose -f Blockchain/docker/docker-compose-ca.yaml down -d
-
-    Make sure to set down the network if previously used.
-    Check if crypto-config folder is created with below
-
-3.  Change ownership of crypto-config
-    sudo chmod -R 777 crypto-config
-    sudo chown $USER:$USER -R crypto-config
-
-4.  Start minikube
+1.  Start minikube
     minikube start
 
 5.  Start pvc. This will also start pv.
@@ -234,10 +217,12 @@ Do not use existing binaries as is in bin/ folder, they may not work on your sys
     kubectl exec -it $(kubectl get pods -o=name | grep cli-peer0-verify-deployment | sed "s/^.\{4\}//") -- bash -c 'peer chaincode invoke -C mainchannel -n resources -c '\''{"Args":["CreateIdentity","regy3fh334","Passport","Passport Authority"]}'\'' -o orderer0-service:7050 --tls --cafile=/etc/hyperledger/orderers/msp/tlscacerts/orderers-ca-service-7054.pem'
 
     //ReadIdentity(ctx contractapi.TransactionContextInterface, walletId string)
-    kubectl exec -it $(kubectl get pods -o=name | grep cli-peer0-verify-deployment | sed "s/^.\{4\}//") -- bash -c 'peer chaincode query -C mainchannel -n resources -c '\''{"Args":["ReadIdentity","cmVneTNmaDMzNFBhc3Nwb3J0NjA3YmUyNmE="]}'\'' -o orderer0-service:7050 --tls --cafile=/etc/hyperledger/orderers/msp/tlscacerts/orderers-ca-service-7054.pem'
+    kubectl exec -it $(kubectl get pods -o=name | grep cli-peer0-verify-deployment | sed "s/^.\{4\}//") -- bash -c 'peer chaincode query -C mainchannel -n resources -c '\''{"Args":["ReadIdentity","cmVneTNmaDMzNERMNjA3Y2M1NmQ="]}'\'' -o orderer0-service:7050 --tls --cafile=/etc/hyperledger/orderers/msp/tlscacerts/orderers-ca-service-7054.pem'
+
+    cmVneTNmaDMzNERMNjA3Y2M1NmQ=
 
     //UpdateIdentity(ctx contractapi.TransactionContextInterface, userId string, docType string, verifier string, walletId string)
-    kubectl exec -it $(kubectl get pods -o=name | grep cli-peer0-verify-deployment | sed "s/^.\{4\}//") -- bash -c 'peer chaincode invoke -C mainchannel -n resources -c '\''{"Args":["UpdateIdentity","regy3fh334","DL","DL Authority","cmVneTNmaDMzNFBhc3Nwb3J0NjA3YmUyNmE="]}'\'' -o orderer0-service:7050 --tls --cafile=/etc/hyperledger/orderers/msp/tlscacerts/orderers-ca-service-7054.pem'
+    kubectl exec -it $(kubectl get pods -o=name | grep cli-peer0-verify-deployment | sed "s/^.\{4\}//") -- bash -c 'peer chaincode invoke -C mainchannel -n resources -c '\''{"Args":["UpdateIdentity","regy3fh334","DL","DL Authority","cmVneTNmaDMzNFBhc3Nwb3J0NjA3Y2M0NDg="]}'\'' -o orderer0-service:7050 --tls --cafile=/etc/hyperledger/orderers/msp/tlscacerts/orderers-ca-service-7054.pem'
 
     //Delete wallet/identity for the user
-    kubectl exec -it $(kubectl get pods -o=name | grep cli-peer0-verify-deployment | sed "s/^.\{4\}//") -- bash -c 'peer chaincode invoke -C mainchannel -n resources -c '\''{"Args":["DeleteIdentity","Mzd5YWZkc3lnZTIzREw2MDdiODc5Yw=="]}'\'' -o orderer0-service:7050 --tls --cafile=/etc/hyperledger/orderers/msp/tlscacerts/orderers-ca-service-7054.pem'
+    kubectl exec -it $(kubectl get pods -o=name | grep cli-peer0-verify-deployment | sed "s/^.\{4\}//") -- bash -c 'peer chaincode invoke -C mainchannel -n resources -c '\''{"Args":["DeleteIdentity","cmVneTNmaDMzNERMNjA3Y2M1NmQ="]}'\'' -o orderer0-service:7050 --tls --cafile=/etc/hyperledger/orderers/msp/tlscacerts/orderers-ca-service-7054.pem'
