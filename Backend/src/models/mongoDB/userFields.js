@@ -57,6 +57,11 @@ const userFieldSchema = new mongoose.Schema(
           required: true,
           default: false,
         },
+        isCurrent: {
+          type: Boolean,
+          required: true,
+          default: false,
+        },
         permissions: {
           type: [Object],
           required: false,

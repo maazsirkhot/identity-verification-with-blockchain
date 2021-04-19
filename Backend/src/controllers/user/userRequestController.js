@@ -5,7 +5,7 @@ module.exports = {
   getUserRequest: async (req, res) => {
     try {
       const result = await userRequestService.getUserRequestService(
-        req.params.email,
+        req.user.email,
       );
 
       if (!result) {
@@ -34,9 +34,11 @@ module.exports = {
   },
   requestAction: async (req, res) => {
     try {
+      const expiry = req.query.expiry ? req.query.expiry : null;
       const result = await userRequestService.requestActionService(
         req.params.requestId,
         req.body.action,
+        expiry,
       );
 
       if (!result) {

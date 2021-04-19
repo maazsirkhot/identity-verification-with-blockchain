@@ -11,7 +11,8 @@ module.exports = {
   },
   requestAction: (req, res, next) => {
     const schema = Joi.object({
-      action: Joi.string().required(),
+      action: Joi.string().valid('APPROVED', 'REJECTED').required(),
+      expiry: Joi.object(),
     });
 
     validators.validateRequestBody(req, next, schema);

@@ -6,8 +6,8 @@ const userRequestController = require('../../controllers/user/userRequestControl
 const validator = require('../../middlewares/validators/user/userRequest');
 
 router.get(
-  '/:email',
-  validator.getUserRequest,
+  '/',
+  // validator.getUserRequest,
   passport.authenticate(['jwt'], { session: false }),
   userRequestController.getUserRequest,
 );

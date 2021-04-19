@@ -38,7 +38,7 @@ module.exports = {
         return false;
       }
 
-      if (action === 'rejected') {
+      if (action === 'REJECTED') {
         const result = await dataRequestDao.updateDataRequest(
           { id: requestId },
           { status: action },
