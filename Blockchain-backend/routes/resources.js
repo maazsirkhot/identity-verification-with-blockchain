@@ -17,20 +17,20 @@ router.post('/', async (request, response) => {
         return;
     }
 
-    const data = {...request.body}
+    // const data = {...request.body}
 
     // mainNetwork = await network.setup();
 
     // const contract = mainNetwork.getContract('resources');
 
-    // CreateIdentity(ctx contractapi.TransactionContextInterface, userId string, docType string, verifier string)
+    // // CreateIdentity(ctx contractapi.TransactionContextInterface, userId string, docType string, verifier string)
     // const createResp = await contract.submitTransaction('CreateIdentity', data.userId, data.docType, data.verifier)
     // console.log(createResp);
     // response.status(200).end('Added new wallet');
 
 
     //Dummy data 
-    //For incorrect data:
+    // For incorrect data:
     // retVal := ReturnTypeWallet{
 	// 		Status:   400,
 	// 		WalletId: "",
@@ -111,7 +111,7 @@ router.post('/delete/:walletId', async(request,response)=>{
     // Delete true {"status":200,"walletId":"Mzd5YWZkc3lnZTIzUGFzc3BvcnQ2MDdiODc0ZA==","isValid":false,"message":"Successfully read from ledger"}
     // Delete false {"status":400,"walletId":"","isValid":false,"message":"Identity does not exist in the ledger"}
 
-    const results = {"status":200,"walletId":"Mzd5YWZkc3lnZTIzUGFzc3BvcnQ2MDdiODc0ZA==","isValid":false,"message":"Successfully read from ledger"}
+    const results = {"status":200,"walletId":"Mzd5YWZkc3lnZTIzUGFzc3BvcnQ2MDdiODc0ZA==","isValid":false,"message":"Successfully deleted from ledger"}
     response.writeHead(200,{
         'Content-Type' : 'application/json'
     })
