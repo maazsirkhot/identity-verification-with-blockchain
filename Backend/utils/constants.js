@@ -63,7 +63,7 @@ module.exports = {
     USER_EXISTS: 'User with this username or email already exists',
     POST_CREATED: 'Data request has been approved and a post has been created successfully',
     FAILED_ROLE_ASSIGN: 'Failed to assign the Role',
-    ROLE_ASSIGN_CREATED: 'Successfully assigned the Role'
+    ROLE_ASSIGN_CREATED: 'Successfully assigned the Role',
   },
   ENV_VARIABLES: {
     AWS_S3_ACCESS_KEY: process.env.AWS_S3_ACCESS_KEY,

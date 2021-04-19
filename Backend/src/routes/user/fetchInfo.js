@@ -15,11 +15,20 @@ router.get(
 );
 
 router.get(
-  '/profile/',
+  '/profile',
+  validator.getProfile,
   passport.authorize(['jwt'], {
     session: false,
   }),
   fetchInfoController.profileForUser,
 );
 
+router.put(
+  'profile/setdocument',
+  // validator.setDocumentForUser,
+  passport.authorize(['jwt'], {
+    session: false,
+  }),
+  fetchInfoController.setDocumentForUser,
+);
 module.exports = router;

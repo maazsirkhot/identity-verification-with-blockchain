@@ -1,7 +1,9 @@
+/* eslint-disable max-len */
 const _ = require('lodash');
 const userDetailsDao = require('../../daos/textract/userDetailsDao');
 const postDao = require('../../daos/post/post');
 const constants = require('../../../utils/constants');
+const utilFunctions = require('../../helpers/utilFunctions');
 
 module.exports = {
   userDataFieldsService: async (userEmail) => {
@@ -17,6 +19,7 @@ module.exports = {
           data: [],
         };
       }
+      result.dataField = _.filter(result.dataField, (field) => field.isVerified === true);
       console.log(result);
       return {
         dataAvailable: true,
@@ -71,7 +74,7 @@ module.exports = {
       throw new Error(`Error Occurred in Service Layers: ${error}`);
     }
   },
-  profileForUserService: async (userEmail) => {
+  profileForUserService: async (userEmail, option) => {
     try {
       if (!userEmail) {
         return false;
@@ -85,8 +88,53 @@ module.exports = {
         };
       }
       console.log(result);
+      if (option === 'CURRENT') {
+        result.dataField = _.filter(result.dataField, (field) => field.isCurrent === true && field.isVerified === true);
+      } else {
+        result.dataField = _.filter(result.dataField, (field) => field.isVerified === true);
+      }
 
-      result.dataField = _.filter(result.dataField, (field) => field.isCurrent === true);
+      return {
+        dataAvailable: true,
+        data: result,
+        message: constants.MESSAGES.USER_DETAILS,
+      };
+    } catch (error) {
+      throw new Error(`Error Occurred in Service Layers: ${error}`);
+    }
+  },
+  setDocumentForUserService: async (user, dataFieldsWithDoc) => {
+    try {
+      if (!utilFunctions.validateArrayOfObjects(dataFieldsWithDoc, ['fieldName', 'docshortName']));
+
+      const userFields = await userDetailsDao.findUserDetailsByEmail(user.email);
+
+      const userDataFields = userFields.dataField;
+
+      const updatedUserDataFields = _.map(userDataFields, (datafield) => {
+        const dataFieldWithDoc = _.find(dataFieldsWithDoc, (entry) => entry.fieldName === datafield.field_name);
+
+        if (typeof (dataFieldWithDoc) === 'undefined') {
+          return datafield;
+        }
+
+        if (datafield.verifierDoc.docshortName === dataFieldWithDoc.docshortName) {
+          datafield.isCurrent = true;
+        } else {
+          datafield.isCurrent = false;
+        }
+        return datafield;
+      });
+
+      const result = await userDetailsDao.updateUserFields({ userEmail: user.email }, { dataField: updatedUserDataFields });
+
+      if (result.length === 0) {
+        return {
+          dataAvailable: false,
+          data: [],
+        };
+      }
+
       return {
         dataAvailable: true,
         data: result,
