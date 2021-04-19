@@ -6,7 +6,7 @@ module.exports = {
     try {
       const createdBy = {
         type: req.user.type,
-        id: req.user.id,
+        id: req.user.userId,
       };
       const result = await roleManagementService.getRolesForUserService(
         createdBy,
