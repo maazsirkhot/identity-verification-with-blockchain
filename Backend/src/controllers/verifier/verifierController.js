@@ -62,12 +62,14 @@ module.exports = {
         }); 
       }
       const userDetails = req.body.userDetails;
-      const walletId = await verifierService.getWalletIdFromBlockchainService(userDetails.userId, req.user.userId);
-      if (!walletId) {
-        return res.status(constants.STATUS_CODE.INTERNAL_SERVER_ERROR_STATUS).send({
-          message: constants.MESSAGES.FAILED_BLOCKCHAIN_STORE_INFORMATION,
-          dataAvailable: false,
-        });
+      if (userDetails.verifierApproval.status === 'APPROVED') {
+        const walletId = await verifierService.getWalletIdFromBlockchainService(userDetails.userId, req.user.userId);
+        if (!walletId) {
+          return res.status(constants.STATUS_CODE.INTERNAL_SERVER_ERROR_STATUS).send({
+            message: constants.MESSAGES.FAILED_BLOCKCHAIN_STORE_INFORMATION,
+            dataAvailable: false,
+          });
+        }
       }
       const updatedUserData = await verifierService.updateUserData(userDetails, req.user.userId, walletId);
       if (!updatedUserData) {
