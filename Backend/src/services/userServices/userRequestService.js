@@ -17,12 +17,30 @@ module.exports = {
       const result = await dataRequestDao.getRequest({
         'user.email': userEmail,
       });
+
+      const userFields = await userFieldsDao.getUserFields({ userEmail });
+
+      userFields.dataField = _.filter(userFields.dataField, (field) => field.isVerified === true && field.isCurrent === true);
+
       if (result.length === 0) {
         return {
           dataAvailable: false,
           data: [],
         };
       }
+
+      result.fieldsRequested = _.map(result.fieldsRequested, (field) => {
+        const userField = _.find(userFields.dataField, (entry) => entry.field_name === field.fieldName);
+
+        if (typeof userField === 'undefined') {
+          field.userField = false;
+        } else {
+          field.userField = userField;
+        }
+
+        return field;
+      });
+
       return {
         dataAvailable: true,
         data: result,
@@ -38,7 +56,7 @@ module.exports = {
         return false;
       }
 
-      if (action === 'rejected') {
+      if (action === 'REJECTED') {
         const result = await dataRequestDao.updateDataRequest(
           { id: requestId },
           { status: action },

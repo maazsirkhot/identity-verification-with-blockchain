@@ -1,0 +1,87 @@
+{
+	"name": "first-network",
+	"version": "1.1",
+	"channels": {
+		"mainchannel": {
+            "orderers": [
+                "orderer0-service",
+                "orderer1-service",
+                "orderer2-service"
+            ],
+			"peers": [
+				"peer0-verify-service",
+				"peer1-verify-service"
+            ],
+			"connection": {
+				"timeout": {
+					"peer": {
+						"endorser": "60000",
+						"eventHub": "60000",
+						"eventReg": "60000"
+					}
+				}
+			}
+		}
+	},
+	"organizations": {
+		"verify": {
+			"mspid": "verify",
+			"adminPrivateKey": {
+				"path": "/host/files/crypto-config/peerOrganizations/verify/users/Admin@verify/msp/keystore/pvt-cert.pem"
+			},
+			"peers": ["peer0-verify-service","peer1-verify-service"],
+			"signedCert": {
+				"path": "/host/files/crypto-config/peerOrganizations/verify/users/Admin@verify/msp/admincerts/Admin@verify-cert.pem"
+			}
+		}
+    },
+    "orderers": {
+        "orderer0": {
+            "url": "grpcs://orderer0-service:7050",
+            "grpcOptions": {
+                "ssl-target-name-override": "orderer0-service"
+            },
+            "tlsCACerts": {
+                "path": "/host/files/crypto-config/ordererOrganizations/orderer/orderers/orderer0/msp/tlscacerts/tlsca.orderer-cert.pem"
+            }
+        },
+        "orderer1": {
+            "url": "grpcs://orderer1-service:7050",
+            "grpcOptions": {
+                "ssl-target-name-override": "orderer1-service"
+            },
+            "tlsCACerts": {
+                "path": "/host/files/crypto-config/ordererOrganizations/orderer/orderers/orderer1/msp/tlscacerts/tlsca.orderer-cert.pem"
+            }
+        },
+        "orderer2": {
+            "url": "grpcs://orderer2-service:7050",
+            "grpcOptions": {
+                "ssl-target-name-override": "orderer2-service"
+            },
+            "tlsCACerts": {
+                "path": "/host/files/crypto-config/ordererOrganizations/orderer/orderers/orderer2/msp/tlscacerts/tlsca.orderer-cert.pem"
+            }
+        }
+    },
+	"peers": {
+		"peer0-verify": {
+			"url": "grpcs://peer0-verify-service:7051",
+			"tlsCACerts": {
+				"path": "/host/files/crypto-config/peerOrganizations/verify/peers/peer0-verify/tls/ca.crt"
+			},
+            "grpcOptions": {
+              "ssl-target-name-override": "peer0-verify-service"
+            }
+		},
+		"peer1-verify": {
+			"url": "grpcs://peer1-verify-service:7051",
+			"tlsCACerts": {
+				"path": "/host/files/crypto-config/peerOrganizations/verify/peers/peer1-verify/tls/ca.crt"
+			},
+            "grpcOptions": {
+              "ssl-target-name-override": "peer1-verify-service"
+            }
+		}
+	}
+}
