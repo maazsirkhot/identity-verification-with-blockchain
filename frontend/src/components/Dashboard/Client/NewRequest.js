@@ -53,7 +53,11 @@ export default function NewRequest({ uniqueID, userDetails, infoFields }) {
   }
   function handleMethodChange(i, event) {
     const values = [...fieldsRequested];
-    values[i].isAbstracted = event.target.value;
+
+    if (event.target.value !== 'complete information') {
+      values[i].isAbstracted = true;
+    }
+    values[i].abstractionParams = event.target.value;
     setFields(values);
   }
 
