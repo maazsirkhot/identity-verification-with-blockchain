@@ -45,10 +45,10 @@ module.exports = {
             output.push(d);
           } else if (innerdata.Text
               && innerdata.Text.substring(0, 3) === 'EXP'
-              && keyValuePair['Expiry Date']) {
+              && keyValuePair['DL Expiry Date']) {
             const d = {};
-            d.field_id = keyValuePair['Expiry Date'];
-            d.field_name = 'Expiry Date';
+            d.field_id = keyValuePair['DL Expiry Date'];
+            d.field_name = 'DL Expiry Date';
             d.field_value = innerdata.Text.substring(4);
             d.verifierDoc = keyValuePair.idType;
             output.push(d);
