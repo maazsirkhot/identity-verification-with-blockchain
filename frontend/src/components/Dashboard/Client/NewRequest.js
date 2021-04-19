@@ -6,8 +6,8 @@ export default function NewRequest({ uniqueID, userDetails, infoFields }) {
     {
       fieldId: null,
       fieldName: '',
-      isAbstracted: '',
-      abstractionParams: [],
+      isAbstracted: false,
+      abstractionParams: '',
     },
   ]);
 
@@ -60,16 +60,18 @@ export default function NewRequest({ uniqueID, userDetails, infoFields }) {
   function getMethodName(fieldName) {
     const method = infoFields
       .filter((field) => field.fieldName === fieldName)
-      .map((selectedField) => selectedField.fieldAbstraction.method);
-    return method[0].map((name) => <option value={name}>{name}</option>);
+      .map((selectedField) => selectedField.abstractionTypes);
+    return method[0].map((methodName) => (
+      <option value={methodName.apiParam}>{methodName.userDisplay}</option>
+    ));
   }
   function handleAdd() {
     const values = [...fieldsRequested];
     values.push({
       fieldId: null,
       fieldName: '',
-      isAbstracted: '',
-      abstractionParams: [],
+      isAbstracted: false,
+      abstractionParams: '',
     });
     setFields(values);
   }
@@ -87,8 +89,8 @@ export default function NewRequest({ uniqueID, userDetails, infoFields }) {
       {
         fieldId: null,
         fieldName: '',
-        isAbstracted: '',
-        abstractionParams: [],
+        isAbstracted: false,
+        abstractionParams: '',
       },
     ]);
     window.$('#infoField-0').prop('selectedIndex', 0);
@@ -217,7 +219,7 @@ export default function NewRequest({ uniqueID, userDetails, infoFields }) {
                       <select
                         class="form-control"
                         name={`infoFieldMethod-${idx}`}
-                        value={field.isAbstracted}
+                        value={field.abstractionParams}
                         onChange={(e) => handleMethodChange(idx, e)}
                         required
                       >

@@ -1,9 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import ImageGallery from 'react-image-gallery';
 import user from '../../../assets/img/default_user.png';
+import axiosInstance from '../../../utils/axiosInstance';
 
 export default function RequestInfo({ approvaldata, uniqueID }) {
   let approvalClassName = 'bg-danger';
+
+  const [comments, setComments] = useState('');
 
   const monthNames = [
     'January',
@@ -22,10 +25,6 @@ export default function RequestInfo({ approvaldata, uniqueID }) {
 
   let images = [];
 
-  let size = 0;
-
-  size = approvaldata.dataField.length;
-
   images = [
     {
       original: approvaldata.docImage.front,
@@ -42,11 +41,60 @@ export default function RequestInfo({ approvaldata, uniqueID }) {
     approvalClassName = 'bg-warning';
   }
 
-  function getDate() {
-    const currentdate = new Date(approvaldata.createdAt);
+  function getDate(date) {
+    const currentdate = new Date(date);
     return `${currentdate.getDate()} ${
       monthNames[currentdate.getMonth()]
     }, ${currentdate.getFullYear()}`;
+  }
+
+  function onApproval() {
+    const data = {
+      status: 'APPROVED',
+      comments,
+      verifiedBy: null,
+    };
+    approvaldata.verifierApproval = data;
+
+    const userData = {
+      userDetails: approvaldata,
+    };
+    axiosInstance()
+      .post('/verifier/fetch/updateUserData', userData)
+      .then((res) => {
+        if (res.status === 200) {
+          window.$(`request-info${uniqueID}`).modal('toggle');
+          setTimeout(() => window.location.reload(), 500);
+        }
+      })
+      .catch((err) => {
+        alert('Something went wrong, please, please try again later');
+        console.log(err.data);
+      });
+  }
+  function onReject() {
+    const data = {
+      status: 'REJECTED',
+      comments,
+      verifiedBy: null,
+    };
+    approvaldata.verifierApproval = data;
+
+    const userData = {
+      userDetails: approvaldata,
+    };
+    axiosInstance()
+      .post('/verifier/fetch/updateUserData', userData)
+      .then((res) => {
+        if (res.status === 200) {
+          window.$(`request-info${uniqueID}`).modal('toggle');
+          setTimeout(() => window.location.reload(), 500);
+        }
+      })
+      .catch((err) => {
+        alert('Something went wrong, please, please try again later');
+        console.log(err.data);
+      });
   }
 
   return (
@@ -110,30 +158,42 @@ export default function RequestInfo({ approvaldata, uniqueID }) {
 
                       <br />
                       <strong>Request Date : </strong>
-                      {getDate()}
+                      {getDate(approvaldata.createdAt)}
                       <br />
-                      <strong>Verification Date : </strong>
-                      <br />
-                      {approvaldata.verifierApproval.status === 'APPROVED' ? (
-                        <p>
-                          <strong> Comments: </strong>
-                          {approvaldata.verifierApproval.comments}
-                        </p>
+
+                      {approvaldata.verifierApproval.status !== 'PENDING' ? (
+                        <>
+                          <strong>Verification Date : </strong>
+                          {getDate(approvaldata.updatedAt)}
+
+                          <br />
+                          <p>
+                            <strong> Comments: </strong>
+                            {approvaldata.verifierApproval.comments}
+                          </p>
+                        </>
                       ) : (
                         <form>
                           <textarea
                             class="form-control"
                             rows="3"
                             placeholder="Comments"
+                            value={comments}
+                            onChange={(e) => setComments(e.target.value)}
                           />
                           <button
                             type="button"
                             class="custom-btn2 bg-approve"
                             style={{ marginRight: '20px' }}
+                            onClick={onApproval}
                           >
                             Approve
                           </button>
-                          <button type="button" class="custom-btn2 bg-decline">
+                          <button
+                            type="button"
+                            class="custom-btn2 bg-decline"
+                            onClick={onReject}
+                          >
                             Decline
                           </button>
                         </form>
@@ -145,15 +205,13 @@ export default function RequestInfo({ approvaldata, uniqueID }) {
               <div style={{ paddingLeft: '30px' }}>
                 <p style={{ lineHeight: '30px' }}>
                   {approvaldata &&
-                    approvaldata.dataField
-                      .filter((field, index) => index < size - 2)
-                      .map((field) => (
-                        <>
-                          <strong>{field.field_name} : </strong>
-                          {field.field_value}
-                          <br />
-                        </>
-                      ))}
+                    approvaldata.dataField.map((field) => (
+                      <>
+                        <strong>{field.field_name} : </strong>
+                        {field.field_value}
+                        <br />
+                      </>
+                    ))}
                 </p>
 
                 <ImageGallery items={images} showPlayButton={false} />

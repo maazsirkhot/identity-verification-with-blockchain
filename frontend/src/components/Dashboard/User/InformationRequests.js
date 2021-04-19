@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import axiosInstance from '../../../utils/axiosInstance';
 import DashboardNavbar from '../../Header/DashboardNavbar';
 import SideBar from '../../Header/SideBar';
 import RequestItem from './RequestItem';
@@ -8,6 +9,16 @@ import '../../../assets/css/header.css';
 import '../../../assets/css/dashboard.css';
 
 export default function InformationRequests() {
+  useEffect(() => {
+    axiosInstance()
+      .get('/user/request')
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log('Caught in error', err);
+      });
+  }, []);
   return (
     <div className="main-wrapper">
       <DashboardNavbar />

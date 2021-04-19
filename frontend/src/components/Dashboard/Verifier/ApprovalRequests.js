@@ -23,6 +23,7 @@ export class ApprovalRequests extends Component {
         this.setState({
           verifierrequests: res.data.verifierData,
         });
+        console.log(res.data);
       })
       .catch((err) => {
         console.log(err.response);

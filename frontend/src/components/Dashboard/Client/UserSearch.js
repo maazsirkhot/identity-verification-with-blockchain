@@ -11,6 +11,7 @@ import '../../../assets/css/dashboard.css';
 export default function UserSearch() {
   const [userDetails, setUserDetails] = useState([]);
   const [pageNumber, setPageNumber] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
   const [searchText, setSearchText] = useState('');
   const [infoFields, setInfoFields] = useState([]);
   const limit = 5;
@@ -20,6 +21,7 @@ export default function UserSearch() {
       .get('/system/infoFields')
       .then((res) => {
         setInfoFields(res.data.data);
+        console.log(res.data.data);
       })
       .catch((err) => {
         console.log('Caught in error', err);
@@ -37,7 +39,7 @@ export default function UserSearch() {
       .get('/client/fetch/searchuser', { params })
       .then((res) => {
         setUserDetails(res.data.data);
-        console.log(res);
+        setTotalPages(res.data.numberOfPages);
       })
       .catch((err) => {
         console.log('Caught in error', err);
@@ -63,21 +65,23 @@ export default function UserSearch() {
     }
   }
   function nextPage() {
-    const params = {
-      user: searchText,
-      limit,
-      pageNumber: pageNumber + 1,
-    };
+    if (pageNumber < totalPages) {
+      const params = {
+        user: searchText,
+        limit,
+        pageNumber: pageNumber + 1,
+      };
 
-    axiosInstance()
-      .get('/client/fetch/searchuser', { params })
-      .then((res) => {
-        setUserDetails(res.data.data);
-        setPageNumber(pageNumber + 1);
-      })
-      .catch((err) => {
-        console.log('Caught in error', err.response.data);
-      });
+      axiosInstance()
+        .get('/client/fetch/searchuser', { params })
+        .then((res) => {
+          setUserDetails(res.data.data);
+          setPageNumber(pageNumber + 1);
+        })
+        .catch((err) => {
+          console.log('Caught in error', err.response.data);
+        });
+    }
   }
   return (
     <div className="main-wrapper">
@@ -92,7 +96,9 @@ export default function UserSearch() {
                 <h4 aria-hidden onClick={prevPage}>
                   &laquo;
                 </h4>
-                <p>{pageNumber}</p>
+                <p>
+                  {pageNumber} of {totalPages}
+                </p>
                 <h4 aria-hidden onClick={nextPage}>
                   &raquo;
                 </h4>
