@@ -3,7 +3,7 @@ const fs = require('fs');
 
 const mspID = process.env.MSPID || 'verify'
 // const crytoPath = `${process.env.ENV == 'dev' ? '../crypto-config' : '/tmp/crypto'}`
-const cryptoPath = '../crypto-config'
+const cryptoPath = '/host/files/crypto-config'
 
 async function setup(user = 'Admin') {
     // User validation check... there's a better way
