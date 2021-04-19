@@ -21,7 +21,6 @@ export default function UserSearch() {
       .get('/system/infoFields')
       .then((res) => {
         setInfoFields(res.data.data);
-        console.log(res.data.data);
       })
       .catch((err) => {
         console.log('Caught in error', err);
