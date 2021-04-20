@@ -30,6 +30,10 @@ const roleAssignSchema = new mongoose.Schema(
         required: true,
       },
     },
+    requestId: {
+      type: String,
+      required: true,
+    },
     role: {
       roleId: {
         type: String,
