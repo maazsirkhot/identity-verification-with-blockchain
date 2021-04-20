@@ -33,4 +33,13 @@ module.exports = {
       throw new Error(`Error Occurred in DAO Layers: ${error}`);
     }
   },
+  getOneUserField: async (options) => {
+    try {
+      const data = await userFields.findOne(options);
+      console.log(data);
+      return await userFields.findOne(options);
+    } catch (error) {
+      throw new Error(`Error Occurred in DAO Layers: ${error}`);
+    }
+  },
 };
