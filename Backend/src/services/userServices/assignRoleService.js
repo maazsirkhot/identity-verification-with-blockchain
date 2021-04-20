@@ -103,14 +103,6 @@ module.exports = {
       
       const roleAssignData = await roleAssignDao.createRoleAssign(user, client, role, userDataFields, requestId);
 
-
-      const roleAssignData = await roleAssignDao.createRoleAssign(
-        user,
-        client,
-        role,
-        userDataFields
-      );
-
       if (!roleAssignData) {
         return {
           dataAvailable: false,
