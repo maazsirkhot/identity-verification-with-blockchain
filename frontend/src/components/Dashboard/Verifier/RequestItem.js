@@ -55,7 +55,7 @@ export default function RequestItems({ userdata }) {
         <p>{date}</p>
       </td>
 
-      <RequestInfo userdata={userdata} uniqueID={userdata.userId} />
+      <RequestInfo approvaldata={userdata} uniqueID={userdata.userId} />
     </tr>
   );
 }

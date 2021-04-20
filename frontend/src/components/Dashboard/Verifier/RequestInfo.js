@@ -59,6 +59,7 @@ export default function RequestInfo({ approvaldata, uniqueID }) {
     const userData = {
       userDetails: approvaldata,
     };
+
     axiosInstance()
       .post('/verifier/fetch/updateUserData', userData)
       .then((res) => {
@@ -69,7 +70,7 @@ export default function RequestInfo({ approvaldata, uniqueID }) {
       })
       .catch((err) => {
         alert('Something went wrong, please, please try again later');
-        console.log(err.data);
+        console.log(err.response.data);
       });
   }
   function onReject() {
@@ -96,6 +97,8 @@ export default function RequestInfo({ approvaldata, uniqueID }) {
         console.log(err.data);
       });
   }
+
+  console.log(user);
 
   return (
     <div>
