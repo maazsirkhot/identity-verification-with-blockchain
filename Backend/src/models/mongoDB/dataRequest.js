@@ -47,6 +47,10 @@ const dataRequestSchema = new mongoose.Schema(
       abstractionParam: { // From Frontend
         type: mongoose.Mixed,
       },
+      userDisplay: {
+        type: String,
+        required: false,
+      },
     }],
     status: {
       type: String,

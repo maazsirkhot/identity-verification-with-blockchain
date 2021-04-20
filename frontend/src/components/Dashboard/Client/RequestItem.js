@@ -17,7 +17,7 @@ export default function RequestItem({ requestDetails }) {
   ];
 
   const [date, setDate] = useState(' ');
-  const [statusClass, setStatusClass] = useState('reject');
+  const [statusClass, setStatusClass] = useState('REJECTED');
   const [statusIcon, setStatusIcon] = useState('fas fa-user-times');
   useEffect(() => {
     const currentdate = new Date(requestDetails.createdAt);
@@ -26,10 +26,11 @@ export default function RequestItem({ requestDetails }) {
         monthNames[currentdate.getMonth()]
       }, ${currentdate.getFullYear()}`
     );
-    if (requestDetails.status === 'pending') {
+
+    if (requestDetails.status === 'PENDING') {
       setStatusClass('pending');
       setStatusIcon('fas fa-history');
-    } else if (requestDetails.status === 'approved') {
+    } else if (requestDetails.status === 'APPROVED') {
       setStatusClass('success');
       setStatusIcon('fas fa-check');
     }

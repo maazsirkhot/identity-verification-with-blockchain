@@ -10,6 +10,7 @@ export default function DigitalID({ userDetails }) {
       setStatusClass('pending');
     }
   }, []);
+
   return (
     <div className="col-xl-10 col-lg-12 col-md-12">
       <div className="digitalid-card">
