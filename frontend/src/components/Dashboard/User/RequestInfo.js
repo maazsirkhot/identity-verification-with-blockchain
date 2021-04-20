@@ -12,7 +12,7 @@ export default function RequestInfo({ requestDetails }) {
       client={requestDetails.client}
     />,
   ];
-  console.log(requestDetails);
+
   return (
     <div>
       <button

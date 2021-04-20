@@ -31,9 +31,11 @@ export default function InformationRequests() {
             <div className="card">
               <div className="card-body">
                 <br />
-                {infoRequestDetails.map((requestDetails) => (
-                  <RequestItem requestDetails={requestDetails} />
-                ))}
+                {infoRequestDetails
+                  ? infoRequestDetails.map((requestDetails) => (
+                      <RequestItem requestDetails={requestDetails} />
+                    ))
+                  : 'You do not have any requests yet!'}
               </div>
             </div>
           </div>
