@@ -100,6 +100,9 @@ module.exports = {
           });
         }
       });
+      
+      const roleAssignData = await roleAssignDao.createRoleAssign(user, client, role, userDataFields, requestId);
+
 
       const roleAssignData = await roleAssignDao.createRoleAssign(
         user,
@@ -132,6 +135,13 @@ module.exports = {
         data: roleAssignData,
         message: constants.MESSAGES.ROLE_ASSIGN_CREATED,
       };
+    } catch (error) {
+      throw new Error(`Error Occurred in Service Layers: ${error}`);
+    }
+  },
+  getAssignRole: async (requestId) => {
+    try {
+      return await roleAssignDao.findData({requestId});
     } catch (error) {
       throw new Error(`Error Occurred in Service Layers: ${error}`);
     }

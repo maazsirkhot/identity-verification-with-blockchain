@@ -14,4 +14,13 @@ router.post(
   assignRoleController.createAssignRole,
 );
 
+router.get(
+  '/',
+  assignRoleValidator.getAssignRoleFields,
+  passport.authenticate(['jwt'], {
+    session: false,
+  }),
+  assignRoleController.getAssignRole,
+);
+
 module.exports = router;

@@ -73,4 +73,30 @@ module.exports = {
         });
     }
   },
+  getAssignRole: async (req, res) => {
+    try {
+      const requestId = req.query.requestId;
+      const assignRoleData = await assignRoleService.getAssignRole(requestId);
+      if (!assignRoleData) {
+        return res.status(constants.STATUS_CODE.BAD_REQUEST_ERROR_STATUS).send({
+          message: constants.MESSAGES.NO_DATA_AVAILABLE,
+          dataAvailable: result.dataAvailable,
+        });
+      }
+      return res.status(constants.STATUS_CODE.SUCCESS_STATUS).send({
+        data: assignRoleData,
+        message: constants.MESSAGES.SUCCESS_ROLE_ASSIGN,
+        dataAvailable: true,
+      });
+    } catch (error) {
+      console.log(error);
+      return res
+        .status(constants.STATUS_CODE.INTERNAL_SERVER_ERROR_STATUS)
+        .send({
+          message: constants.MESSAGES.SERVER_ERROR,
+          dataAvailable: false,
+          error,
+        });
+    }
+  }
 };
