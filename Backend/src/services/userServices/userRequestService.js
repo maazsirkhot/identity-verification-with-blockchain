@@ -1,5 +1,6 @@
 /* eslint-disable max-len */
 const _ = require('lodash');
+const mongoose = require('mongoose');
 const constants = require('../../../utils/constants');
 const utilFunctions = require('../../helpers/utilFunctions');
 const dataRequestDao = require('../../daos/dataRequest/dataRequest');
@@ -67,9 +68,10 @@ module.exports = {
           message: constants.MESSAGES.DATA_REQUESTS_UPDATED,
         };
       }
-
-      const dataRequest = await dataRequestDao.getRequest({ id: requestId });
-      const user = await userFieldsDao.getUserFields({
+      const allResults = await dataRequestDao.getRequest({ _id: mongoose.Types.ObjectId(requestId) });
+      const dataRequest = allResults[0];
+      console.log(dataRequest);
+      const user = await userFieldsDao.getOneUserField({
         userEmail: dataRequest.user.email,
       });
 
@@ -89,14 +91,15 @@ module.exports = {
       // Build the userDataFields Object --> Possible future scope to refactor and split this activity
       const userDataFields = [];
       _.forEach(userFields, async (userField) => {
-        if (_.includes(allFieldNames, userField.field_name && userField.isVerified)) {
+        if (_.includes(allFieldNames, userField.field_name) && userField.isVerified && userField.isCurrent) {
           const requestField = _.remove(
             dataRequest.fieldsRequested,
             (field) => field.fieldName === userField.field_name,
           );
 
           let fieldValue;
-          if (requestField.isAbstracted) {
+          console.log(requestField[0].isAbstracted);
+          if (requestField[0].isAbstracted === true) {
             fieldValue = fieldAbstractionMethods[userField.field_name](requestField.abstractionParam, userField.field_value);
           } else {
             fieldValue = userField.field_value;
@@ -120,7 +123,7 @@ module.exports = {
       });
 
       await dataRequestDao.updateDataRequest(
-        { id: requestId },
+        { _id: requestId },
         { status: action },
       );
 

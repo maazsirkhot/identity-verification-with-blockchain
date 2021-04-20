@@ -96,7 +96,9 @@ module.exports = {
       if (!_.isPlainObject(updatedFields) || !_.isPlainObject(options)) {
         throw new Error('Parameters format is invalid.');
       }
-      return DataRequest.findOneAndUpdate(options, updatedFields, { new: true });
+      const data = await DataRequest.findOneAndUpdate(options, updatedFields, { new: true });
+      console.log(data);
+      return await DataRequest.findOneAndUpdate(options, updatedFields, { new: true });
     } catch (error) {
       throw new Error(`Error Occurred in DAO Layers: ${error}`);
     }
