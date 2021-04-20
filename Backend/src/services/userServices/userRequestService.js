@@ -59,7 +59,7 @@ module.exports = {
 
       if (action === 'REJECTED') {
         const result = await dataRequestDao.updateDataRequest(
-          { id: requestId },
+          { _id: requestId },
           { status: action },
         );
         return {
