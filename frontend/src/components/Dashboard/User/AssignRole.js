@@ -53,6 +53,8 @@ export default function AssignRole({ client, requestId }) {
       .post('/user/assignRole', data)
       .then((res) => {
         console.log(res.data);
+        alert('Your information has been shared!');
+        window.location.reload();
       });
   }
 
