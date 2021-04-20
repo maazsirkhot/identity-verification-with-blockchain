@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import logo from '../../../assets/img/logo_v2.png';
+import axiosInstance from '../../../utils/axiosInstance';
 
 export default function RequestItem({ requestDetails }) {
   const monthNames = [
@@ -17,8 +19,9 @@ export default function RequestItem({ requestDetails }) {
   ];
 
   const [date, setDate] = useState(' ');
-  const [statusClass, setStatusClass] = useState('REJECTED');
+  const [statusClass, setStatusClass] = useState('reject');
   const [statusIcon, setStatusIcon] = useState('fas fa-user-times');
+  const [userDetails, setUserDetails] = useState([]);
   useEffect(() => {
     const currentdate = new Date(requestDetails.createdAt);
     setDate(
@@ -36,6 +39,30 @@ export default function RequestItem({ requestDetails }) {
     }
   });
 
+  function onClick() {
+    const params = {
+      requestId: requestDetails._id,
+    };
+    axiosInstance()
+      .get('/user/assignRole', { params })
+      .then((res) => {
+        console.log(res.data.data);
+        if (res.data.data.length > 0)
+          setUserDetails(res.data.data[0].userDataFields);
+        else setUserDetails([]);
+      });
+  }
+  function getUserDetails() {
+    if (userDetails.length > 0) {
+      return userDetails.map((fieldsRequested) => (
+        <>
+          {fieldsRequested.field_name}: {fieldsRequested.field_value}
+          <br />
+        </>
+      ));
+    }
+    return null;
+  }
   return (
     <div className="col-xl-12 col-lg-12 col-md-12">
       <div className="request-item">
@@ -55,12 +82,60 @@ export default function RequestItem({ requestDetails }) {
           <p> {date}</p>
         </div>
 
-        <div className={`digitalid-status request-status ${statusClass}`}>
+        <button
+          className={`digitalid-status request-status ${statusClass}`}
+          data-toggle="modal"
+          data-target="#request-information"
+          type="button"
+          onClick={onClick}
+        >
           <div className="col-xs-4 col-md-4 text-center pt-2 pb-2 bg-light-dark">
             <i className={statusIcon} />
           </div>
           <div className="col-xs-8 col-md-8 pt-2 pb-2 text-center header">
             <h4>{requestDetails.status}</h4>
+          </div>
+        </button>
+        <div
+          className="modal modal-backdrop fade in"
+          id="request-information"
+          tabIndex="-1"
+          role="dialog"
+          aria-hidden="true"
+          data-backdrop="false"
+        >
+          <div className="modal-dialog" role="document">
+            <div className="modal-content">
+              <div className="tab-pane fade show active document-upload-about">
+                <div className="theme-modal-header">
+                  <div className="title">
+                    <img src={logo} alt="logo" width="100" />
+                    <br />
+                    <i className="fas fa-lock" /> Secure Identity Verifcation
+                  </div>
+                  <button
+                    type="button"
+                    className="close"
+                    data-dismiss="modal"
+                    aria-label="Close"
+                  >
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+              </div>
+              <div className="modal-body">
+                {requestDetails.status === 'PENDING' ? (
+                  'User is yet to approve the request'
+                ) : (
+                  <>
+                    <h5 style={{ textAlign: 'center' }}>
+                      Information Requested
+                    </h5>
+                    <p>{getUserDetails()}</p>
+                  </>
+                )}
+              </div>
+            </div>
           </div>
         </div>
       </div>
