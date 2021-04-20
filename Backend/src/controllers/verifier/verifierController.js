@@ -62,7 +62,7 @@ module.exports = {
         }); 
       }
       const userDetails = req.body.userDetails;
-      const walletId = "";
+      let walletId = "";
       if (userDetails.verifierApproval.status === 'APPROVED') {
         walletId = await verifierService.getWalletIdFromBlockchainService(userDetails.userId, req.user.userId);
         if (!walletId) {
