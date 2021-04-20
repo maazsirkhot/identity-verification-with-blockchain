@@ -30,8 +30,8 @@ module.exports = {
       let count = 0;
       let result = null;
       if (user === '') {
-        count = await DataRequest.find().count();
-        result = await DataRequest.find()
+        count = await DataRequest.find({'client.userId':clientId}).count();
+        result = await DataRequest.find({'client.userId':clientId})
           .sort({ createdAt: 'desc' })
           .limit(parseInt(options.limit))
           .skip(options.limit * options.pageNumber);

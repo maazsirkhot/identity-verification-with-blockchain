@@ -33,7 +33,12 @@ const customRequestSchema = new mongoose.Schema(
         type: String,
         required: true,
       },
-      abstractionParams: [], 
+      abstractionParam: {
+        type: mongoose.Mixed,
+      }, 
+      userDisplay: {
+        type: String
+      },
     }],
   },
   {

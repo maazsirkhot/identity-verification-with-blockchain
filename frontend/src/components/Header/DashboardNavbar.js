@@ -6,6 +6,7 @@ export default function DashboardNavbar() {
   function logout() {
     localStorage.removeItem('username');
     localStorage.removeItem('token');
+    localStorage.removeItem('userType');
   }
   return (
     <div>

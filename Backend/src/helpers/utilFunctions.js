@@ -2,7 +2,7 @@ const _ = require('lodash');
 const dateAdder = require('date-fns/add');
 
 module.exports = {
-  validateAttributesInObject: 
+  validateAttributesInObject:
   (obj, attributes) => {
     if (!_.isArray(attributes) || !_.isPlainObject(obj)) {
       return false;

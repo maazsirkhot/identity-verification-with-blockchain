@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import axiosInstance from '../../../utils/axiosInstance';
 import DashboardNavbar from '../../Header/DashboardNavbar';
 import SideBar from '../../Header/SideBar';
 import RequestItem from './RequestItem';
@@ -8,6 +9,17 @@ import '../../../assets/css/header.css';
 import '../../../assets/css/dashboard.css';
 
 export default function InformationRequests() {
+  const [infoRequestDetails, setRequestDetails] = useState([]);
+  useEffect(() => {
+    axiosInstance()
+      .get('/user/request')
+      .then((res) => {
+        setRequestDetails(res.data.data);
+      })
+      .catch((err) => {
+        console.log('Caught in error', err);
+      });
+  }, []);
   return (
     <div className="main-wrapper">
       <DashboardNavbar />
@@ -19,9 +31,9 @@ export default function InformationRequests() {
             <div className="card">
               <div className="card-body">
                 <br />
-                <RequestItem />
-                <RequestItem />
-                <RequestItem />
+                {infoRequestDetails.map((requestDetails) => (
+                  <RequestItem requestDetails={requestDetails} />
+                ))}
               </div>
             </div>
           </div>

@@ -1,3 +1,4 @@
+const _ = require('lodash');
 const dataField = require('../../models/mongoDB/dataField');
 const idType = require('../../models/mongoDB/idType');
 const userFields = require('../../models/mongoDB/userFields');
@@ -57,6 +58,16 @@ module.exports = {
   findIdTypeByShortName: async (data) => {
     try {
       return await idType.findOne({}).where('shortName').equals(data);
+    } catch (error) {
+      throw new Error(`Error Occurred in DAO Layers:  + ${error}`);
+    }
+  },
+  updateUserFields: async (options, updatedFields) => {
+    try {
+      if (!_.isPlainObject(updatedFields) || !_.isPlainObject(options)) {
+        throw new Error('Parameters format is invalid.');
+      }
+      return userFields.findOneAndUpdate(options, updatedFields, { new: true });
     } catch (error) {
       throw new Error(`Error Occurred in DAO Layers:  + ${error}`);
     }

@@ -5,61 +5,84 @@ const constants = require('../../../utils/constants');
 const userFieldsDao = require('../../daos/userFields/userFields');
 const _ = require('lodash');
 const dataRequestDao = require('../../daos/dataRequest/dataRequest');
-const ObjectId = require('mongodb').ObjectId; 
+const ObjectId = require('mongodb').ObjectId;
 const fieldAbstractionMethods = require('../../helpers/fieldAbstractionMethods');
 
 module.exports = {
   createassignRole: async (user, client, role, requestId, action) => {
     try {
-      if (!utilFunctions.validateAttributesInObject(user, ['userId', 'username','email'])) {
+      if (
+        !utilFunctions.validateAttributesInObject(user, [
+          'userId',
+          'username',
+          'email',
+        ])
+      ) {
         return false;
       }
-      if (!utilFunctions.validateAttributesInObject(client, ['userId', 'username','email'])) {
+      if (
+        !utilFunctions.validateAttributesInObject(client, [
+          'userId',
+          'username',
+          'email',
+        ])
+      ) {
         return false;
       }
-      if (!utilFunctions.validateAttributesInObject(role, ['roleId', 'roleName'])) {
+      if (
+        !utilFunctions.validateAttributesInObject(role, ['roleId', 'roleName'])
+      ) {
         return false;
       }
-      const userFields = await userFieldsDao.getUserFields({userId: user.userId});
-      if(!userFields) {
+
+      const userFields = await userFieldsDao.getUserFields({
+        userId: user.userId,
+      });
+      if (!userFields) {
         return {
           dataAvailable: false,
           message: constants.MESSAGES.USER_NOT_EXIST,
         };
       }
-      if(userFields.length === 0) {
+      if (userFields.length === 0) {
         return {
           dataAvailable: false,
           message: constants.MESSAGES.USER_NOT_EXIST,
         };
       }
+
       const userDataFieldsFromDB = userFields[0].dataField;
 
       //get fieldname->idtype from profile
       //to be removed
       idType = 'CADL';
-      const roleDataFields = await roleDao.getRole({_id: role.roleId});
+      const roleDataFields = await roleDao.getRole({ _id: role.roleId });
       const userDataFields = [];
-      let fieldName = "";
+      let fieldName = '';
       _.forEach(roleDataFields[0].dataFields, async (roleField) => {
-        let fieldValue = "";
+        let fieldValue = '';
         found = false;
-        userData = "";
+        userData = '';
         fieldName = roleField.fieldName;
         _.forEach(userDataFieldsFromDB, async (userField) => {
           if (roleField.fieldName === 'Age') {
             checkFieldName = 'Date of Birth';
           } else {
-            checkFieldName = roleField.fieldName
+            checkFieldName = roleField.fieldName;
           }
-          if(userField.field_name === checkFieldName && 
-            userField.verifierDoc.docshortName == idType) {
+          if (
+            userField.field_name === checkFieldName &&
+            userField.verifierDoc.docshortName == idType
+          ) {
             found = true;
             userData = userField;
-            if(roleField.abstractionParam === "complete information"){
+            if (roleField.abstractionParam === 'complete information') {
               fieldValue = userField.field_value;
             } else {
-              fieldValue = fieldAbstractionMethods[roleField.fieldName](roleField.abstractionParam, userField.field_value);
+              fieldValue = fieldAbstractionMethods[roleField.fieldName](
+                roleField.abstractionParam,
+                userField.field_value
+              );
             }
           }
         });
@@ -77,10 +100,15 @@ module.exports = {
           });
         }
       });
-      
-      const roleAssignData = await roleAssignDao.createRoleAssign(user, client, role, userDataFields);
 
-      if(!roleAssignData) {
+      const roleAssignData = await roleAssignDao.createRoleAssign(
+        user,
+        client,
+        role,
+        userDataFields
+      );
+
+      if (!roleAssignData) {
         return {
           dataAvailable: false,
           message: constants.MESSAGES.FAILED_ROLE_ASSIGN,
@@ -89,7 +117,7 @@ module.exports = {
 
       updateRoleAssign = await dataRequestDao.updateDataRequest(
         { _id: new ObjectId(requestId) },
-        { status: action },
+        { status: action }
       );
 
       if (!updateRoleAssign) {

@@ -63,12 +63,14 @@ module.exports = {
     USER_EXISTS: 'User with this username or email already exists',
     POST_CREATED: 'Data request has been approved and a post has been created successfully',
     FAILED_ROLE_ASSIGN: 'Failed to assign the Role',
-    ROLE_ASSIGN_CREATED: 'Successfully assigned the Role'
+    ROLE_ASSIGN_CREATED: 'Successfully assigned the Role',
+    FAILED_BLOCKCHAIN_STORE_INFORMATION: 'Failed to create digital credentials in Blockchain',
   },
   ENV_VARIABLES: {
     AWS_S3_ACCESS_KEY: process.env.AWS_S3_ACCESS_KEY,
     AWS_S3_SECRET_ACCESS_KEY: process.env.AWS_S3_SECRET_ACCESS_KEY,
     AWS_REGION: process.env.AWS_REGION,
     AWS_S3_BUCKET_NAME: process.env.AWS_BUCKET_NAME,
+    BLOCKCHAIN_HOST: process.env.BLOCKCHAIN_HOST,
   },
 };

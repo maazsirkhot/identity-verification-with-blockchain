@@ -5,6 +5,12 @@ import logowhite from '../../assets/img/logo-white.png';
 import logo from '../../assets/img/logo.png';
 
 export default function NavBar() {
+  let navigation = '/user/wallet';
+  if (localStorage.getItem('userType') === 'client') {
+    navigation = '/client/requests';
+  } else if (localStorage.getItem('userType') === 'verifier') {
+    navigation = '/verifier/requests';
+  }
   return (
     <div>
       <div id="mysidemenu">
@@ -21,14 +27,14 @@ export default function NavBar() {
               </a>
             </li>
             <li>
-              <a href="/#about">
+              <Link to={navigation}>
                 <i
                   className="fa fa-user"
                   aria-hidden="true"
                   style={{ fontSize: '18px' }}
                 />
                 Dashboard
-              </a>
+              </Link>
             </li>
 
             <li>

@@ -6,8 +6,9 @@ export default function EditCustomRequests({ customrequest }) {
     {
       fieldId: null,
       fieldName: '',
-      isAbstracted: '',
-      abstractionParams: [],
+      isAbstracted: false,
+      abstractionParam: '',
+      userDisplay: '',
     },
   ]);
 
@@ -31,7 +32,8 @@ export default function EditCustomRequests({ customrequest }) {
         fieldId: field.fieldId,
         fieldName: field.fieldName,
         isAbstracted: field.isAbstracted,
-        abstractionParams: field.abstractionParams,
+        abstractionParam: field.abstractionParam,
+        userDisplay: field.userDisplay,
       })
     );
 
@@ -45,27 +47,43 @@ export default function EditCustomRequests({ customrequest }) {
   }
   function handleMethodChange(i, event) {
     const values = [...fieldsRequested];
-    values[i].isAbstracted = event.target.value;
+
+    if (event.target.value !== 'complete information') {
+      values[i].isAbstracted = true;
+    }
+    values[i].abstractionParam = event.target.value;
+    values[i].userDisplay = event.target.options[
+      event.target.options.selectedIndex
+    ].getAttribute('userDisplay');
     setFields(values);
   }
 
   function getMethodName(fieldName) {
     const method = infoFields
       .filter((field) => field.fieldName === fieldName)
-      .map((selectedField) => selectedField.fieldAbstraction.method);
+      .map((selectedField) => selectedField.abstractionTypes);
 
     if (method.length > 0 && method[0].length > 0) {
-      return method[0].map((name) => <option value={name}>{name}</option>);
+      return method[0].map((methodName) => (
+        <option
+          value={methodName.apiParam}
+          userDisplay={methodName.userDisplay}
+        >
+          {methodName.userDisplay}
+        </option>
+      ));
     }
     return null;
   }
+
   function handleAdd() {
     const values = [...fieldsRequested];
     values.push({
       fieldId: null,
       fieldName: '',
-      isAbstracted: '',
-      abstractionParams: [],
+      isAbstracted: false,
+      abstractionParam: '',
+      userDisplay: '',
     });
     setFields(values);
   }
@@ -83,8 +101,9 @@ export default function EditCustomRequests({ customrequest }) {
       {
         fieldId: null,
         fieldName: '',
-        isAbstracted: '',
-        abstractionParams: [],
+        isAbstracted: false,
+        abstractionParam: '',
+        userDisplay: '',
       },
     ]);
     setRequestName(' ');
@@ -100,7 +119,7 @@ export default function EditCustomRequests({ customrequest }) {
       name: customrequestname,
     };
     axiosInstance()
-      .post('/client/customRequest', data)
+      .put(`/client/customRequest/${customrequest._id}`, data)
       .then((res) => {
         if (res.status === 201 && res.data.dataAvailable) {
           alert(res.data.message);
@@ -191,7 +210,7 @@ export default function EditCustomRequests({ customrequest }) {
                       <select
                         class="form-control"
                         name={`infoFieldMethod-${idx}`}
-                        value={field.isAbstracted}
+                        value={field.abstractionParam}
                         onChange={(e) => handleMethodChange(idx, e)}
                         required
                       >
