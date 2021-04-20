@@ -26,6 +26,7 @@
     "react/no-array-index-key": "off",
     "no-underscore-dangle": "off",
     "jsx-a11y/anchor-is-valid": "off",
+    "prefer-destructuring": "off",
     "jsx-a11y/label-has-associated-control": [
       "error",
       {

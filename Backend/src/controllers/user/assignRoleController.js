@@ -8,10 +8,16 @@ module.exports = {
         userId: req.user.userId,
         username: req.user.username,
         email: req.user.email,
-      }
+      };
       const client = req.body.client;
       const role = req.body.role;
-      const data = await assignRoleService.createassignRole(user, client, role, req.body.requestId, req.body.action);
+      const data = await assignRoleService.createassignRole(
+        user,
+        client,
+        role,
+        req.body.requestId,
+        req.body.action
+      );
       if (!data) {
         return res.status(constants.STATUS_CODE.BAD_REQUEST_ERROR_STATUS).send({
           message: constants.MESSAGES.FAILED_ROLE_ASSIGN,
@@ -38,7 +44,10 @@ module.exports = {
   },
   postsForUser: async (req, res) => {
     try {
-      const result = await fetchInfoService.postsForUserService(req.params.email, req.query.option);
+      const result = await fetchInfoService.postsForUserService(
+        req.params.email,
+        req.query.option
+      );
 
       if (!result) {
         return res.status(constants.STATUS_CODE.BAD_REQUEST_ERROR_STATUS).send({

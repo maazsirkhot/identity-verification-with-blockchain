@@ -7,7 +7,8 @@ export default function NewRequest({ uniqueID, userDetails, infoFields }) {
       fieldId: null,
       fieldName: '',
       isAbstracted: false,
-      abstractionParams: '',
+      abstractionParam: '',
+      userDisplay: '',
     },
   ]);
 
@@ -39,7 +40,8 @@ export default function NewRequest({ uniqueID, userDetails, infoFields }) {
         fieldId: field.fieldId,
         fieldName: field.fieldName,
         isAbstracted: field.isAbstracted,
-        abstractionParams: field.abstractionParams,
+        abstractionParam: field.abstractionParam,
+        userDisplay: field.userDisplay,
       })
     );
 
@@ -57,7 +59,11 @@ export default function NewRequest({ uniqueID, userDetails, infoFields }) {
     if (event.target.value !== 'complete information') {
       values[i].isAbstracted = true;
     }
-    values[i].abstractionParams = event.target.value;
+
+    values[i].abstractionParam = event.target.value;
+    values[i].userDisplay = event.target.options[
+      event.target.options.selectedIndex
+    ].getAttribute('userDisplay');
     setFields(values);
   }
 
@@ -66,7 +72,9 @@ export default function NewRequest({ uniqueID, userDetails, infoFields }) {
       .filter((field) => field.fieldName === fieldName)
       .map((selectedField) => selectedField.abstractionTypes);
     return method[0].map((methodName) => (
-      <option value={methodName.apiParam}>{methodName.userDisplay}</option>
+      <option value={methodName.apiParam} userDisplay={methodName.userDisplay}>
+        {methodName.userDisplay}
+      </option>
     ));
   }
   function handleAdd() {
@@ -75,7 +83,8 @@ export default function NewRequest({ uniqueID, userDetails, infoFields }) {
       fieldId: null,
       fieldName: '',
       isAbstracted: false,
-      abstractionParams: '',
+      abstractionParam: '',
+      userDisplay: '',
     });
     setFields(values);
   }
@@ -94,7 +103,8 @@ export default function NewRequest({ uniqueID, userDetails, infoFields }) {
         fieldId: null,
         fieldName: '',
         isAbstracted: false,
-        abstractionParams: '',
+        abstractionParam: '',
+        userDisplay: '',
       },
     ]);
     window.$('#infoField-0').prop('selectedIndex', 0);
@@ -103,7 +113,7 @@ export default function NewRequest({ uniqueID, userDetails, infoFields }) {
 
   function onSubmit(e) {
     e.preventDefault();
-    const data = {
+    let data = {
       user: {
         userId: userDetails.userId,
         username: userDetails.username,
@@ -112,6 +122,16 @@ export default function NewRequest({ uniqueID, userDetails, infoFields }) {
       fieldsRequested,
       comment,
     };
+    if (comment === '') {
+      data = {
+        user: {
+          userId: userDetails.userId,
+          username: userDetails.username,
+          email: userDetails.email,
+        },
+        fieldsRequested,
+      };
+    }
 
     axiosInstance()
       .post('/client/request', data)
@@ -223,7 +243,7 @@ export default function NewRequest({ uniqueID, userDetails, infoFields }) {
                       <select
                         class="form-control"
                         name={`infoFieldMethod-${idx}`}
-                        value={field.abstractionParams}
+                        value={field.abstractionParam}
                         onChange={(e) => handleMethodChange(idx, e)}
                         required
                       >

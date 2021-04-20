@@ -5,8 +5,14 @@ import AssignRole from './AssignRole';
 
 export default function RequestInfo({ requestDetails }) {
   const [activeTabId, setactiveTabId] = useState(0);
-  const activeTab = [<AssignRequest />, <AssignRole />];
-
+  const activeTab = [
+    <AssignRequest requestId={requestDetails._id} />,
+    <AssignRole
+      requestId={requestDetails._id}
+      client={requestDetails.client}
+    />,
+  ];
+  console.log(requestDetails);
   return (
     <div>
       <button
@@ -91,7 +97,7 @@ export default function RequestInfo({ requestDetails }) {
                       <div class="col">
                         {fieldsRequested.fieldName}
                         <br />
-                        <small>(complete information)</small>
+                        <small>({fieldsRequested.userDisplay})</small>
                         <br />
                       </div>
                       <div class="col-1">

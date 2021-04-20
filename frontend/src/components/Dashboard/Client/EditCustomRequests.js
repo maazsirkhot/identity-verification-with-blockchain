@@ -7,7 +7,8 @@ export default function EditCustomRequests({ customrequest }) {
       fieldId: null,
       fieldName: '',
       isAbstracted: false,
-      abstractionParams: '',
+      abstractionParam: '',
+      userDisplay: '',
     },
   ]);
 
@@ -31,7 +32,8 @@ export default function EditCustomRequests({ customrequest }) {
         fieldId: field.fieldId,
         fieldName: field.fieldName,
         isAbstracted: field.isAbstracted,
-        abstractionParams: field.abstractionParams,
+        abstractionParam: field.abstractionParam,
+        userDisplay: field.userDisplay,
       })
     );
 
@@ -49,7 +51,10 @@ export default function EditCustomRequests({ customrequest }) {
     if (event.target.value !== 'complete information') {
       values[i].isAbstracted = true;
     }
-    values[i].abstractionParams = event.target.value;
+    values[i].abstractionParam = event.target.value;
+    values[i].userDisplay = event.target.options[
+      event.target.options.selectedIndex
+    ].getAttribute('userDisplay');
     setFields(values);
   }
 
@@ -60,7 +65,12 @@ export default function EditCustomRequests({ customrequest }) {
 
     if (method.length > 0 && method[0].length > 0) {
       return method[0].map((methodName) => (
-        <option value={methodName.apiParam}>{methodName.userDisplay}</option>
+        <option
+          value={methodName.apiParam}
+          userDisplay={methodName.userDisplay}
+        >
+          {methodName.userDisplay}
+        </option>
       ));
     }
     return null;
@@ -72,7 +82,8 @@ export default function EditCustomRequests({ customrequest }) {
       fieldId: null,
       fieldName: '',
       isAbstracted: false,
-      abstractionParams: '',
+      abstractionParam: '',
+      userDisplay: '',
     });
     setFields(values);
   }
@@ -91,7 +102,8 @@ export default function EditCustomRequests({ customrequest }) {
         fieldId: null,
         fieldName: '',
         isAbstracted: false,
-        abstractionParams: '',
+        abstractionParam: '',
+        userDisplay: '',
       },
     ]);
     setRequestName(' ');
@@ -198,7 +210,7 @@ export default function EditCustomRequests({ customrequest }) {
                       <select
                         class="form-control"
                         name={`infoFieldMethod-${idx}`}
-                        value={field.abstractionParams}
+                        value={field.abstractionParam}
                         onChange={(e) => handleMethodChange(idx, e)}
                         required
                       >

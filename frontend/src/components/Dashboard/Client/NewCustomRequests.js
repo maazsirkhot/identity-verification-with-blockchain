@@ -7,7 +7,8 @@ export default function NewCustomRequests() {
       fieldId: null,
       fieldName: '',
       isAbstracted: false,
-      abstractionParams: '',
+      abstractionParam: '',
+      userDisplay: '',
     },
   ]);
 
@@ -38,7 +39,10 @@ export default function NewCustomRequests() {
     if (event.target.value !== 'complete information') {
       values[i].isAbstracted = true;
     }
-    values[i].abstractionParams = event.target.value;
+    values[i].abstractionParam = event.target.value;
+    values[i].userDisplay = event.target.options[
+      event.target.options.selectedIndex
+    ].getAttribute('userDisplay');
     setFields(values);
   }
 
@@ -47,7 +51,9 @@ export default function NewCustomRequests() {
       .filter((field) => field.fieldName === fieldName)
       .map((selectedField) => selectedField.abstractionTypes);
     return method[0].map((methodName) => (
-      <option value={methodName.apiParam}>{methodName.userDisplay}</option>
+      <option value={methodName.apiParam} userDisplay={methodName.userDisplay}>
+        {methodName.userDisplay}
+      </option>
     ));
   }
 
@@ -57,7 +63,8 @@ export default function NewCustomRequests() {
       fieldId: null,
       fieldName: '',
       isAbstracted: false,
-      abstractionParams: '',
+      abstractionParam: '',
+      userDisplay: '',
     });
     setFields(values);
   }
@@ -76,7 +83,8 @@ export default function NewCustomRequests() {
         fieldId: null,
         fieldName: '',
         isAbstracted: false,
-        abstractionParams: '',
+        abstractionParam: '',
+        userDisplay: '',
       },
     ]);
     setRequestName(' ');
@@ -91,6 +99,7 @@ export default function NewCustomRequests() {
       fieldsAdded: fieldsRequested,
       name: customrequestname,
     };
+    console.log(data);
     axiosInstance()
       .post('/client/customRequest', data)
       .then((res) => {
@@ -183,7 +192,7 @@ export default function NewCustomRequests() {
                       <select
                         class="form-control"
                         name={`infoFieldMethod-${idx}`}
-                        value={field.abstractionParams}
+                        value={field.abstractionParam}
                         onChange={(e) => handleMethodChange(idx, e)}
                         required
                       >
