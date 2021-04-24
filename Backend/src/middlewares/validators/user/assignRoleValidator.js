@@ -19,4 +19,11 @@ getAssignRoleFields: (req, res, next) => {
 
   validators.validateQueryParam(req, next, schema);
   },
+revokeRole: (req, res, next) => {  
+  const schema = Joi.object({
+    requestId: Joi.string().required()
+  });
+
+  validators.validateQueryParam(req, next, schema);
+  },
 };

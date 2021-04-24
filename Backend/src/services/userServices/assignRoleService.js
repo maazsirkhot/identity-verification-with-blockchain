@@ -138,4 +138,16 @@ module.exports = {
       throw new Error(`Error Occurred in Service Layers: ${error}`);
     }
   },
+  revokeRole: async (requestId) => {
+    try {
+      const removedData = await roleAssignDao.deleteData({requestId});
+      updateRoleAssign = await dataRequestDao.updateDataRequest(
+        { _id: new ObjectId(requestId) },
+        { status: 'REVOKED' }
+      );
+      return removedData;
+    } catch (error) {
+      throw new Error(`Error Occurred in Service Layers: ${error}`);
+    }
+  },
 };

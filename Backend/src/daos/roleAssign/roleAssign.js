@@ -27,4 +27,12 @@ module.exports = {
       throw new Error(`Error Occurred in DAO Layers: ${error}`);
     }
   },
+  deleteData: async (param) => {
+    try {
+      return await roleAssign.deleteOne(param);
+    } catch (error) {
+      console.log(error);
+      throw new Error(`Error Occurred in DAO Layers: ${error}`);
+    }
+  },
 };
