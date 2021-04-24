@@ -66,6 +66,8 @@ module.exports = {
     ROLE_ASSIGN_CREATED: 'Successfully assigned the Role',
     FAILED_BLOCKCHAIN_STORE_INFORMATION: 'Failed to create digital credentials in Blockchain',
     SUCCESS_ROLE_ASSIGN: 'Fetched Role Assign Successfully',
+    DATA_REVOKE_SUCCESS: 'Role revoked sucessfully',
+    DATA_REVOKE_FAILED: 'Failed to revoke this role',
   },
   ENV_VARIABLES: {
     AWS_S3_ACCESS_KEY: process.env.AWS_S3_ACCESS_KEY,

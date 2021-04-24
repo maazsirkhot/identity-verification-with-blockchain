@@ -59,7 +59,7 @@ const dataRequestSchema = new mongoose.Schema(
     },
     status: {
       type: String,
-      enum: ['APPROVED', 'REJECTED', 'PENDING'],
+      enum: ['APPROVED', 'REJECTED', 'PENDING', 'REVOKED'],
       default: 'PENDING',
       required: true,
     },

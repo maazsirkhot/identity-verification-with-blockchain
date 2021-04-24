@@ -98,5 +98,30 @@ module.exports = {
           error,
         });
     }
-  }
+  },
+  revokeRole: async (req, res) => {
+    try {
+      const requestId = req.query.requestId;
+      const revokeRoleData = await assignRoleService.revokeRole(requestId);
+      if (revokeRoleData.deletedCount && revokeRoleData.deletedCount == 0) {
+        return res.status(constants.STATUS_CODE.BAD_REQUEST_ERROR_STATUS).send({
+          message: constants.MESSAGES.DATA_REVOKE_FAILED,
+          dataAvailable: result.dataAvailable,
+        });
+      }
+      return res.status(constants.STATUS_CODE.SUCCESS_STATUS).send({
+        message: constants.MESSAGES.DATA_REVOKE_SUCCESS,
+        dataAvailable: false,
+      });
+    } catch (error) {
+      console.log(error);
+      return res
+        .status(constants.STATUS_CODE.INTERNAL_SERVER_ERROR_STATUS)
+        .send({
+          message: constants.MESSAGES.SERVER_ERROR,
+          dataAvailable: false,
+          error,
+        });
+    }
+  },
 };

@@ -23,4 +23,13 @@ router.get(
   assignRoleController.getAssignRole,
 );
 
+router.get(
+  '/revoke',
+  assignRoleValidator.revokeRole,
+  passport.authenticate(['jwt'], {
+    session: false,
+  }),
+  assignRoleController.revokeRole,
+);
+
 module.exports = router;
