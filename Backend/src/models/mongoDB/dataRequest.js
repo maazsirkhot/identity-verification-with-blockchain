@@ -52,6 +52,11 @@ const dataRequestSchema = new mongoose.Schema(
         required: false,
       },
     }],
+    typeOfRequest: {
+      type: String,
+      enum: ['role_assign', 'time_based_access'],
+      default: 'time_based_access',
+    },
     status: {
       type: String,
       enum: ['APPROVED', 'REJECTED', 'PENDING'],

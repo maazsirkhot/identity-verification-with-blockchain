@@ -16,7 +16,7 @@ module.exports = {
         client,
         role,
         req.body.requestId,
-        req.body.action
+        req.body.action,
       );
       if (!data) {
         return res.status(constants.STATUS_CODE.BAD_REQUEST_ERROR_STATUS).send({
