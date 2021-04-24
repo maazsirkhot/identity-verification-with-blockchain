@@ -112,7 +112,7 @@ module.exports = {
 
       updateRoleAssign = await dataRequestDao.updateDataRequest(
         { _id: new ObjectId(requestId) },
-        { status: action }
+        { status: action, typeOfRequest: 'role_assign' }
       );
 
       if (!updateRoleAssign) {
