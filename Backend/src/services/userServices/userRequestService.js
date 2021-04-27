@@ -15,36 +15,38 @@ module.exports = {
         return false;
       }
 
-      const result = await dataRequestDao.getRequest({
+      let results = await dataRequestDao.getRequest({
         'user.email': userEmail,
       });
 
       const userFields = await userFieldsDao.getUserFields({ userEmail });
 
-      userFields.dataField = _.filter(userFields.dataField, (field) => field.isVerified === true && field.isCurrent === true);
+      userFields[0].dataField = _.filter(userFields[0].dataField, (field) => field.isVerified === true && field.isCurrent === true);
 
-      if (result.length === 0) {
+      userFields[0].dataField = utilFunctions.addAgeFieldToUserFields(userFields[0].dataField);
+      if (results.length === 0) {
         return {
           dataAvailable: false,
           data: [],
         };
       }
 
-      result.fieldsRequested = _.map(result.fieldsRequested, (field) => {
-        const userField = _.find(userFields.dataField, (entry) => entry.field_name === field.fieldName);
-
-        if (typeof userField === 'undefined') {
-          field.userField = false;
-        } else {
-          field.userField = userField;
-        }
-
-        return field;
+      results = _.map(results, (result) => {
+        result.fieldsRequested = _.map(result.fieldsRequested, (field) => {
+          const userField = _.find(userFields[0].dataField, (entry) => entry.field_name === field.fieldName);
+          if (typeof userField === 'undefined') {
+            field.userField = false;
+          } else {
+            field.userField = userField;
+          }
+          return field;
+        });
+        return result;
       });
 
       return {
         dataAvailable: true,
-        data: result,
+        data: results,
         message: constants.MESSAGES.DATA_REQUESTS_FETCHED,
       };
     } catch (error) {
@@ -74,6 +76,8 @@ module.exports = {
       const user = await userFieldsDao.getOneUserField({
         userEmail: dataRequest.user.email,
       });
+
+      user.dataField = utilFunctions.addAgeFieldToUserFields(user.dataField);
 
       const allFieldNames = _.map(
         dataRequest.fieldsRequested,

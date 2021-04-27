@@ -7,6 +7,7 @@ mongoose
     useUnifiedTopology: true,
     poolSize: 100,
     useFindAndModify: false,
+    useCreateIndex: true,
   })
   .then(() => console.log('MongoDB Connected'))
   .catch((err) => console.log(err));

@@ -1,6 +1,17 @@
 const _ = require('lodash');
 const dateAdder = require('date-fns/add');
 
+const calculateAgeForBirthDate = (birthdate) => {
+  const today = new Date();
+  const birthDate = new Date(birthdate);
+  let age = today.getFullYear() - birthDate.getFullYear();
+  const m = today.getMonth() - birthDate.getMonth();
+  if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+    age -= 1;
+  }
+  return age;
+};
+
 module.exports = {
   validateAttributesInObject:
   (obj, attributes) => {
@@ -47,5 +58,27 @@ module.exports = {
     }
 
     return dateAdder(Date.now(), adder);
+  },
+  addAgeFieldToUserFields: (dataField) => {
+    if (!_.isArray(dataField)) {
+      return dataField;
+    }
+    const birthDate = _.find(dataField, (entry) => entry.field_name === 'Date of Birth');
+
+    if (typeof birthDate === 'undefined') {
+      return dataField;
+    }
+
+    dataField.push({
+      field_id: birthDate.field_id,
+      field_name: 'Age',
+      field_value: calculateAgeForBirthDate(birthDate.field_value),
+      dataReference: birthDate.dataReference,
+      isVerified: true,
+      isCurrent: true,
+      verifierDoc: birthDate.verifierDoc,
+    });
+
+    return dataField;
   },
 };
