@@ -50,8 +50,14 @@ export default function AssignRequest({ requestId }) {
       action: 'APPROVED',
       expiry: expiry[expiryTime],
     };
-    console.log(data, requestId);
-    axiosInstance().post(`/user/request/${requestId}`, data);
+
+    axiosInstance()
+      .post(`/user/request/${requestId}`, data)
+      .then((res) => {
+        console.log(res);
+        alert('Your information has been shared!');
+        window.location.reload();
+      });
   }
   return (
     <form style={{ padding: '0 25px' }} onSubmit={onSubmit}>

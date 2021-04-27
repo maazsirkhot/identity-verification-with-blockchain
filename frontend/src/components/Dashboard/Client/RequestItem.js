@@ -43,14 +43,32 @@ export default function RequestItem({ requestDetails }) {
     const params = {
       requestId: requestDetails._id,
     };
-    axiosInstance()
-      .get('/user/assignRole', { params })
-      .then((res) => {
-        console.log(res.data.data);
-        if (res.data.data.length > 0)
-          setUserDetails(res.data.data[0].userDataFields);
-        else setUserDetails([]);
-      });
+    if (requestDetails.typeOfRequest === 'role_assign') {
+      axiosInstance()
+        .get('/user/assignRole', { params })
+        .then((res) => {
+          if (res.data.data.length > 0)
+            setUserDetails(res.data.data[0].userDataFields);
+          else setUserDetails([]);
+        })
+        .catch((err) => {
+          console.log(err);
+          alert('Something went wrong! Please try again later');
+        });
+    } else {
+      axiosInstance()
+        .get(`/client/fetch/post/${requestDetails._id}`)
+        .then((res) => {
+          console.log(res.data);
+          if (res.data.data.length > 0)
+            setUserDetails(res.data.data[0].userDataFields);
+          else setUserDetails([]);
+        })
+        .catch((err) => {
+          console.log(err);
+          alert('Something went wrong! Please try again later');
+        });
+    }
   }
   function getUserDetails() {
     if (userDetails.length > 0) {
@@ -82,23 +100,38 @@ export default function RequestItem({ requestDetails }) {
           <p> {date}</p>
         </div>
 
-        <button
-          className={`digitalid-status request-status ${statusClass}`}
-          data-toggle="modal"
-          data-target="#request-information"
-          type="button"
-          onClick={onClick}
-        >
-          <div className="col-xs-4 col-md-4 text-center pt-2 pb-2 bg-light-dark">
-            <i className={statusIcon} />
-          </div>
-          <div className="col-xs-8 col-md-8 pt-2 pb-2 text-center header">
-            <h4>{requestDetails.status}</h4>
-          </div>
-        </button>
+        {requestDetails.status === 'APPROVED' ? (
+          <button
+            className={`digitalid-status request-status ${statusClass}`}
+            data-toggle="modal"
+            data-target={`#request-information${requestDetails._id}`}
+            type="button"
+            onClick={onClick}
+          >
+            <div className="col-xs-4 col-md-4 text-center pt-2 pb-2 bg-light-dark">
+              <i className={statusIcon} />
+            </div>
+            <div className="col-xs-8 col-md-8 pt-2 pb-2 text-center header">
+              <h4>{requestDetails.status}</h4>
+            </div>
+          </button>
+        ) : (
+          <button
+            className={`digitalid-status request-status ${statusClass}`}
+            type="button"
+          >
+            <div className="col-xs-4 col-md-4 text-center pt-2 pb-2 bg-light-dark">
+              <i className={statusIcon} />
+            </div>
+            <div className="col-xs-8 col-md-8 pt-2 pb-2 text-center header">
+              <h4>{requestDetails.status}</h4>
+            </div>
+          </button>
+        )}
+
         <div
           className="modal modal-backdrop fade in"
-          id="request-information"
+          id={`request-information${requestDetails._id}`}
           tabIndex="-1"
           role="dialog"
           aria-hidden="true"
@@ -129,7 +162,7 @@ export default function RequestItem({ requestDetails }) {
                 ) : (
                   <>
                     <h5 style={{ textAlign: 'center' }}>
-                      Information Requested
+                      <strong>Information Requested</strong>
                     </h5>
                     <p>{getUserDetails()}</p>
                   </>

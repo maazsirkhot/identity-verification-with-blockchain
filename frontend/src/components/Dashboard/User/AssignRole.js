@@ -48,7 +48,7 @@ export default function AssignRole({ client, requestId }) {
       },
       action: 'APPROVED',
     };
-    console.log(data);
+
     axiosInstance()
       .post('/user/assignRole', data)
       .then((res) => {

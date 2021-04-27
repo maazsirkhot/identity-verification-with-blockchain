@@ -21,7 +21,7 @@ export const user = {
     {
       item: 'Settings',
       icon: 'fas fa-cog',
-      navigation: '/login',
+      navigation: '/user/profile',
       activeClass: 'active',
     },
   ],

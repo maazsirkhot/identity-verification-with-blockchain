@@ -98,8 +98,6 @@ export default function RequestInfo({ approvaldata, uniqueID }) {
       });
   }
 
-  console.log(user);
-
   return (
     <div>
       <button
