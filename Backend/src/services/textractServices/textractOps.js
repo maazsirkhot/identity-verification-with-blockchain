@@ -7,6 +7,7 @@ const UserField = require('../../models/mongoDB/userFields');
 const userDetailsDao = require('../../daos/textract/userDetailsDao');
 const constants = require('../../../utils/constants');
 const user = require('../../daos/user/user');
+const userFields = require('../../daos/userFields/userFields');
 
 module.exports = {
   getRelevantTextService: (data, keyValuePair) => {
@@ -88,19 +89,48 @@ module.exports = {
       throw new Error(`Error Occurred in DAO Layers:  + ${error}`);
     }
   },
-  createUserDetails: async (data, user, frontLink, backLink) => {
+  createUserDetails: async (data, user, frontLink, backLink, idType) => {
     try {
       console.log(data);
-      const userData = new UserField({
-        userId: user.userId,
-        userEmail: user.email,
-        dataField: data,
-        docImage: {
+      const userDataExists = await userFields.getUserFields({userEmail: user.email});
+      if(userDataExists.length == 0) {
+        const docImage = [];
+        docImage.push({
+          idType,
           front: frontLink,
-          back: backLink
+          back: backLink,
+        });
+        const verifierApproval = {
+          idType
         }
-      });
-      return await userDetailsDao.createUserDetails(userData);
+        const userData = new UserField({
+          userId: user.userId,
+          userEmail: user.email,
+          dataField: data,
+          docImage,
+          verifierApproval: verifierApproval, 
+        });
+        return await userDetailsDao.createUserDetails(userData);
+      } else {
+        let dataField = userDataExists[0].dataField;
+        dataField = dataField.concat(data);
+        let docImage = userDataExists[0].docImage;
+        docImage = docImage.concat([
+          {
+            idType,
+            front: frontLink,
+            back: backLink,
+          }
+        ]);
+        let verifierApproval = userDataExists[0].verifierApproval;
+        verifierApproval = verifierApproval.concat({
+          idType
+        });
+        userDataExists[0].dataField = dataField;
+        userDataExists[0].docImage = docImage;
+        userDataExists[0].verifierApproval = verifierApproval;
+        return await userDetailsDao.updateUserFields({userEmail:user.email}, userDataExists[0]);
+      }
     } catch (error) {
       throw new Error(`Error Occurred in DAO Layers:  ${error}`);
     }
@@ -114,7 +144,56 @@ module.exports = {
   },
   findUserDetails: async (userId) => {
     try {
-      return await userDetailsDao.findUserDetails(userId);
+      userData = await userDetailsDao.findUserDetails(userId);
+      const wholeUserArray = [];
+      docImages = userData[0].docImage;
+      verifierApprovals = userData[0].verifierApproval;
+      dataFields = userData[0].dataField;
+
+      idTypes = [];
+      _.each(docImages, (currentData) => {
+        idTypes.push(currentData.idType);
+      });
+
+      _.each(idTypes, (idtype) => {
+        docImage = {}
+        _.each(docImages, (doc) => {
+          if(doc.idType == idtype){
+            docImage.front = doc.front;
+            docImage.back = doc.back;
+            docImage.idType = idtype;
+          }
+        });
+        verifierApproval = {}
+        _.each(verifierApprovals, (va) => {
+          if(va.idType == idtype){
+            verifierApproval.status = va.status;
+            verifierApproval.comment = va.comment;
+            verifierApproval.verifiedBy = va.verifiedBy;
+            verifierApproval.idType = idtype;
+          }
+        });
+        dataField = []
+        _.each(dataFields, (df) => {
+          if(df.verifierDoc.docshortName == idtype){
+            dataField.push(df);
+          }
+        });
+        const userEntry = {
+          _id: userData[0]._id,
+          userId: userData[0].userId,
+          userEmail: userData[0].userEmail,
+          dataField,
+          docImage,
+          verifierApproval,
+          createdAt: userData[0].createdAt,
+          updatedAt: userData[0].updatedAt,
+          dataReference: dataField.length != 0?dataField[0].dataReference:null,
+          idType: idtype,
+        }
+        wholeUserArray.push(userEntry);
+      });
+      return wholeUserArray;
     } catch (error) {
       throw new Error(`Error Occurred in DAO Layers:  ${error}`);
     }

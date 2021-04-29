@@ -3,6 +3,7 @@ const verificationEntity = require('../../daos/verificationEntity/verificationEn
 const _ = require('lodash');
 const fetch = require('node-fetch');
 const constants = require('../../../utils/constants');
+const userFields = require('../../daos/userFields/userFields');
 
 module.exports = {
   getAllUsersByVerifierDoc: async (idType) => {
@@ -14,6 +15,31 @@ module.exports = {
           return _.includes(idType, currentObject.verifierDoc.docshortName);
         });
         currentData.dataField = updatedUserAllDataFields;
+
+        userAllverifierApproval = currentData.verifierApproval;
+        updatedUserAllverifierApproval = _.remove(userAllverifierApproval, (currentObject) => {
+          return _.includes(idType, currentObject.idType);
+        });
+        const verifierApproval = {
+          status : updatedUserAllverifierApproval[0].status,
+          comment : updatedUserAllverifierApproval[0].comment,
+          verifiedBy : updatedUserAllverifierApproval[0].verifiedBy,
+          idType,
+        }
+        _.omit(currentData, ['verifierApproval']);
+        currentData.verifierApproval = verifierApproval;
+
+        userAllDocImages = currentData.docImage;
+        updatedUserAllDocImages = _.remove(userAllDocImages, (currentObject) => {
+          return _.includes(idType, currentObject.idType);
+        });
+        const docImages = {
+          front : updatedUserAllDocImages[0].front,
+          back : updatedUserAllDocImages[0].back,
+          idType,
+        }
+        delete currentData['docImage'];
+        currentData.docImage = docImages;
       });
       return verifierData;
     } catch (error) {
@@ -28,14 +54,30 @@ module.exports = {
       throw new Error(`Error Occurred in Service Layers: ${error}`);
     }
   },
-  updateUserData: async (userDetails, verifierId, walletId) => {
+  updateUserData: async (userDetails, verifierId, walletId, idType) => {
     try {
-      userDetails.verifierApproval.verifiedBy = verifierId;
-      const dataField = userDetails.dataField;
-      _.each(dataField, (currentData) => {
-        currentData['dataReference'] = walletId;
+      const userData = await userFields.getUserFields({userEmail: userDetails.userEmail}); 
+      let userDataFields = userData[0].dataField;
+      let userVerifierApproval = userData[0].verifierApproval;
+
+      userDataFields = _.each(userDataFields, (currentData) => {
+        if(currentData.verifierDoc.docshortName == idType) {
+          currentData['dataReference'] = walletId;
+          currentData['isVerified'] = true;
+        }
       });
-      return await verifier.updateUserData(userDetails);
+      userData[0].dataField = userDataFields;
+
+      userVerifierApproval = _.each(userVerifierApproval, (currentData) => {
+        if(currentData.idType == idType) {
+          currentData['status'] = userDetails.verifierApproval[0].status;
+          currentData['comment'] = userDetails.verifierApproval[0].comment;
+          currentData.verifiedBy = verifierId;
+        }
+      });
+      userData[0].verifierApproval = userVerifierApproval;
+
+      return await verifier.updateUserData(userData[0]);
     } catch (error) {
       throw new Error(`Error Occurred in Service Layers: ${error}`);
     }

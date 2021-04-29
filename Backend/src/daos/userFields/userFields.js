@@ -10,7 +10,6 @@ module.exports = {
       throw new Error(`Error Occurred in DAO Layers: ${error}`);
     }
   },
-
   updateUserData: async (userDetails) => {
     try {
       return await userFields.findOneAndUpdate(

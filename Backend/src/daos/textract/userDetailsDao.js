@@ -64,9 +64,9 @@ module.exports = {
   },
   updateUserFields: async (options, updatedFields) => {
     try {
-      if (!_.isPlainObject(updatedFields) || !_.isPlainObject(options)) {
-        throw new Error('Parameters format is invalid.');
-      }
+      // if (!_.isPlainObject(updatedFields) || !_.isPlainObject(options)) {
+      //   throw new Error('Parameters format is invalid.');
+      // }
       return userFields.findOneAndUpdate(options, updatedFields, { new: true });
     } catch (error) {
       throw new Error(`Error Occurred in DAO Layers:  + ${error}`);
