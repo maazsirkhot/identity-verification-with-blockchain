@@ -32,7 +32,6 @@ export default function RequestInfo({ requestDetails }) {
         axiosInstance()
           .get('/user/assignRole', { params })
           .then((res) => {
-            console.log('I her', res.data);
             if (res.data.data.length > 0)
               setApprovedRequestInfo(res.data.data[0]);
             else setApprovedRequestInfo('');

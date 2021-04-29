@@ -27,17 +27,17 @@ export default function RequestInfo({ approvaldata, uniqueID }) {
 
   images = [
     {
-      original: approvaldata.docImage.front,
-      thumbnail: approvaldata.docImage.front,
+      original: approvaldata.docImage[0].front,
+      thumbnail: approvaldata.docImage[0].front,
     },
     {
-      original: approvaldata.docImage.back,
-      thumbnail: approvaldata.docImage.back,
+      original: approvaldata.docImage[0].back,
+      thumbnail: approvaldata.docImage[0].back,
     },
   ];
-  if (approvaldata.verifierApproval.status === 'APPROVED') {
+  if (approvaldata.verifierApproval[0].status === 'APPROVED') {
     approvalClassName = 'bg-success';
-  } else if (approvaldata.verifierApproval.status === 'PENDING') {
+  } else if (approvaldata.verifierApproval[0].status === 'PENDING') {
     approvalClassName = 'bg-warning';
   }
 
@@ -54,7 +54,7 @@ export default function RequestInfo({ approvaldata, uniqueID }) {
       comments,
       verifiedBy: null,
     };
-    approvaldata.verifierApproval = data;
+    approvaldata.verifierApproval[0] = data;
 
     const userData = {
       userDetails: approvaldata,
@@ -64,6 +64,7 @@ export default function RequestInfo({ approvaldata, uniqueID }) {
       .post('/verifier/fetch/updateUserData', userData)
       .then((res) => {
         if (res.status === 200) {
+          console.log(res);
           window.$(`request-info${uniqueID}`).modal('toggle');
           setTimeout(() => window.location.reload(), 500);
         }
@@ -79,7 +80,7 @@ export default function RequestInfo({ approvaldata, uniqueID }) {
       comments,
       verifiedBy: null,
     };
-    approvaldata.verifierApproval = data;
+    approvaldata.verifierApproval[0] = data;
 
     const userData = {
       userDetails: approvaldata,
@@ -154,7 +155,7 @@ export default function RequestInfo({ approvaldata, uniqueID }) {
                         class={`badge text-light ${approvalClassName}`}
                         style={{ fontSize: '16px' }}
                       >
-                        {approvaldata.verifierApproval.status}
+                        {approvaldata.verifierApproval[0].status}
                       </span>
 
                       <br />
@@ -162,7 +163,7 @@ export default function RequestInfo({ approvaldata, uniqueID }) {
                       {getDate(approvaldata.createdAt)}
                       <br />
 
-                      {approvaldata.verifierApproval.status !== 'PENDING' ? (
+                      {approvaldata.verifierApproval[0].status !== 'PENDING' ? (
                         <>
                           <strong>Verification Date : </strong>
                           {getDate(approvaldata.updatedAt)}
@@ -170,7 +171,7 @@ export default function RequestInfo({ approvaldata, uniqueID }) {
                           <br />
                           <p>
                             <strong> Comments: </strong>
-                            {approvaldata.verifierApproval.comments}
+                            {approvaldata.verifierApproval[0].comments}
                           </p>
                         </>
                       ) : (

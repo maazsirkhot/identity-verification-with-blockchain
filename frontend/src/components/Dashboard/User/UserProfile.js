@@ -7,9 +7,13 @@ import { user } from '../../../utils/sidebarConfig';
 export default function UserProfile() {
   useEffect(() => {
     const params = {
-      options: 'CURRENT',
+      options: 'ALL',
     };
-    axiosInstance().get('/user/fetch/profile', { params });
+    axiosInstance()
+      .get('/user/fetch/profile', { params })
+      .then((res) => {
+        console.log(res.data);
+      });
   }, []);
   return (
     <div className="main-wrapper">

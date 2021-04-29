@@ -59,6 +59,21 @@ export default function AssignRequest({ requestId }) {
         window.location.reload();
       });
   }
+  function onReject(e) {
+    e.preventDefault();
+
+    const data = {
+      action: 'REJECTED',
+    };
+
+    axiosInstance()
+      .post(`/user/request/${requestId}`, data)
+      .then((res) => {
+        console.log(res);
+        alert('The request has been rejected!');
+        window.location.reload();
+      });
+  }
   return (
     <form style={{ padding: '0 25px' }} onSubmit={onSubmit}>
       <div class="form-row mb-2">
@@ -91,7 +106,11 @@ export default function AssignRequest({ requestId }) {
       >
         Approve
       </button>
-      <button type="button" class="btn custom-btn3 bg-decline">
+      <button
+        type="button"
+        class="btn custom-btn3 bg-decline"
+        onClick={onReject}
+      >
         Reject
       </button>
     </form>
