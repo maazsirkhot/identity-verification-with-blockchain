@@ -10,7 +10,11 @@ const userFieldSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    verifierApproval: {
+    verifierApproval: [{
+      idType: {
+        type: String,
+        required: true,
+      },
       status: {
         type: String,
         enum: ['APPROVED', 'REJECTED', 'PENDING'],
@@ -24,8 +28,12 @@ const userFieldSchema = new mongoose.Schema(
         type: String,
         default: null,
       },
-    },
-    docImage: {
+    }],
+    docImage: [{
+      idType: {
+        type: String,
+        required: true,
+      },
       front: {
         type: String,
         required: true,
@@ -33,7 +41,7 @@ const userFieldSchema = new mongoose.Schema(
       back: {
         type: String,
       },
-    },
+    }],
     dataField: [
       {
         field_id: {

@@ -63,7 +63,7 @@ module.exports = {
       }
       const userDetails = req.body.userDetails;
       let walletId = "";
-      if (userDetails.verifierApproval.status === 'APPROVED') {
+      if (userDetails.verifierApproval[0].status === 'APPROVED') {
         walletId = await verifierService.getWalletIdFromBlockchainService(userDetails.userId, req.user.userId);
         if (!walletId) {
           return res.status(constants.STATUS_CODE.INTERNAL_SERVER_ERROR_STATUS).send({
@@ -72,7 +72,7 @@ module.exports = {
           });
         }
       }
-      const updatedUserData = await verifierService.updateUserData(userDetails, req.user.userId, walletId);
+      const updatedUserData = await verifierService.updateUserData(userDetails, req.user.userId, walletId, userDetails.verifierApproval[0].idType);
       if (!updatedUserData) {
         return res.status(constants.STATUS_CODE.BAD_REQUEST_ERROR_STATUS).send({
           message: constants.MESSAGES.FAILED_USER_UPDATE,

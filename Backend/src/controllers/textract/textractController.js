@@ -90,7 +90,7 @@ module.exports = {
       fs.unlinkSync(back.path);
       const validJsonData = textractService.ifValidJSON(req.body.relevantText);
       const userDetails = await textractService.createUserDetails(validJsonData,
-        req.user, frontImageLink, backImageLink);
+        req.user, frontImageLink, backImageLink, req.body.idType);
       if (!userDetails) {
         return res.status(constants.STATUS_CODE.BAD_REQUEST_ERROR_STATUS).send({
           message: constants.MESSAGES.USER_DETAILS_STORE_FAILED,
