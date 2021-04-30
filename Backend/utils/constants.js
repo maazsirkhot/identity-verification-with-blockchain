@@ -68,6 +68,9 @@ module.exports = {
     SUCCESS_ROLE_ASSIGN: 'Fetched Role Assign Successfully',
     DATA_REVOKE_SUCCESS: 'Role revoked sucessfully',
     DATA_REVOKE_FAILED: 'Failed to revoke this role',
+    USER_CREDENTIALS_NOT_EXIST: 'User credentials does not exist for this user',
+    USER_ID_UPLOADED: 'User had uploaded this ID. Cannot upload this document again.',
+    INFORMAION_NOT_VERIFIED: 'User Information is not verified yet',
   },
   ENV_VARIABLES: {
     AWS_S3_ACCESS_KEY: process.env.AWS_S3_ACCESS_KEY,

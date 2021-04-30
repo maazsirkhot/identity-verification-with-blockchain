@@ -32,14 +32,24 @@ module.exports = {
           'TABLES', 'FORMS',
         ],
       };
-
+      const ifDataExists = await textractService.ifUserAndIdTypeExists(req.user.userId,req.body.idType);
+      if(ifDataExists == 2) {
+        return res.status(constants.STATUS_CODE.BAD_REQUEST_ERROR_STATUS).send({
+          message: constants.MESSAGES.USER_ID_UPLOADED,
+          dataAvailable: false
+        });
+      }
       const keyValuePair = await textractService.getAllDataFields(req.body.idType);
+      
       /* uncomment this when not using textraxt APIs */
       /* fs.readFile('example.json', async (err, data) => { */
       const textract = new AWS.Textract();
       textract.analyzeDocument(params, async (err, data) => {
         if (err) throw err;
-        const relevantText = textractService.getRelevantTextService(data, keyValuePair);
+        const relevantText = textractService.getRelevantTextService(data, 
+          keyValuePair, 
+          ifDataExists
+        );
         fs.unlinkSync(front.path);
         fs.unlinkSync(back.path);
         return res.status(constants.STATUS_CODE.SUCCESS_STATUS).send({
@@ -122,6 +132,12 @@ module.exports = {
         });
       }
       const userDetails = await textractService.findUserDetails(req.user.userId);
+      if(!userDetails) {
+        return res.status(constants.STATUS_CODE.INTERNAL_SERVER_ERROR_STATUS).send({
+          message: constants.MESSAGES.USER_CREDENTIALS_NOT_EXIST,
+          userDetails,
+        });
+      }
       if (userDetails.length === 0) {
         return res.status(constants.STATUS_CODE.INTERNAL_SERVER_ERROR_STATUS).send({
           message: constants.MESSAGES.USER_NOT_EXIST,

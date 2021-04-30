@@ -8,7 +8,7 @@ const validator = require('../../middlewares/validators/user/fetchInfoValidator'
 router.get(
   '/posts/:email',
   validator.postsForUser,
-  passport.authorize(['jwt'], {
+  passport.authenticate(['jwt'], {
     session: false,
   }),
   fetchInfoController.postsForUser,
@@ -17,7 +17,7 @@ router.get(
 router.get(
   '/profile',
   validator.getProfile,
-  passport.authorize(['jwt'], {
+  passport.authenticate(['jwt'], {
     session: false,
   }),
   fetchInfoController.profileForUser,
@@ -26,7 +26,7 @@ router.get(
 router.put(
   'profile/setdocument',
   // validator.setDocumentForUser,
-  passport.authorize(['jwt'], {
+  passport.authenticate(['jwt'], {
     session: false,
   }),
   fetchInfoController.setDocumentForUser,
