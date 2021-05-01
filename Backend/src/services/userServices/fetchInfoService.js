@@ -19,11 +19,11 @@ module.exports = {
           data: [],
         };
       }
-      result.dataField = _.filter(result.dataField, (field) => field.isVerified === true);
+      result[0].dataField = _.filter(result[0].dataField, (field) => field.isVerified === true);
       console.log(result);
       return {
         dataAvailable: true,
-        data: result,
+        data: result[0],
         message: constants.MESSAGES.USER_DETAILS,
       };
     } catch (error) {
@@ -114,7 +114,7 @@ module.exports = {
 
       const userFields = await userDetailsDao.findUserDetailsByEmail(user.email);
 
-      const userDataFields = userFields.dataField;
+      const userDataFields = userFields[0].dataField;
 
       const updatedUserDataFields = _.map(userDataFields, (datafield) => {
         const dataFieldWithDoc = _.find(dataFieldsWithDoc, (entry) => entry.fieldName === datafield.field_name);

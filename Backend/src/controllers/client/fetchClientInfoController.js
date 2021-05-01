@@ -48,7 +48,7 @@ module.exports = {
   fetchPost: async (req, res) => {
     try {
       const result = await fetchClientInfoService.fetchPostService(
-        req.params.dataRequestId
+        req.params.dataRequestId,
       );
 
       if (!result) {

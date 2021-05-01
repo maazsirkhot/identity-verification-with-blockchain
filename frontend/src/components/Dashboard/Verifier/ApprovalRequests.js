@@ -50,9 +50,10 @@ export class ApprovalRequests extends Component {
                       class="mb-0 table-responsive-sm"
                     >
                       <tbody>
-                        {this.state.verifierrequests.map((data) => (
-                          <RequestItem userdata={data} />
-                        ))}
+                        {this.state.verifierrequests.length > 0 &&
+                          this.state.verifierrequests.map((data) => (
+                            <RequestItem userdata={data} />
+                          ))}
                       </tbody>
                     </table>
                   ) : (

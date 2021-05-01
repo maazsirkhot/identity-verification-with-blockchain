@@ -113,9 +113,12 @@ export default function SentRequests() {
             <div className="card">
               <div className="card-body">
                 <br />
-                {sentRequests.map((requestDetails) => (
-                  <RequestItem requestDetails={requestDetails} />
-                ))}
+
+                {sentRequests.length > 0
+                  ? sentRequests.map((requestDetails) => (
+                      <RequestItem requestDetails={requestDetails} />
+                    ))
+                  : 'You have not sent any requests yet!'}
               </div>
             </div>
           </div>

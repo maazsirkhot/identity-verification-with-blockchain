@@ -19,9 +19,9 @@ export default function RequestItems({ userdata }) {
 
   const [date, setDate] = useState(' ');
   let statusClassName = 'bg-danger';
-  if (userdata.verifierApproval.status === 'APPROVED') {
+  if (userdata.verifierApproval[0].status === 'APPROVED') {
     statusClassName = 'bg-success';
-  } else if (userdata.verifierApproval.status === 'PENDING') {
+  } else if (userdata.verifierApproval[0].status === 'PENDING') {
     statusClassName = 'bg-warning';
   }
 
@@ -41,7 +41,7 @@ export default function RequestItems({ userdata }) {
         <div style={{ fontSize: '14px' }}>
           <strong>Status:{'  '}</strong>
           <span class={`badge text-light ${statusClassName}`}>
-            {userdata.verifierApproval.status}
+            {userdata.verifierApproval[0].status}
           </span>
         </div>
         <br />
@@ -55,7 +55,7 @@ export default function RequestItems({ userdata }) {
         <p>{date}</p>
       </td>
 
-      <RequestInfo userdata={userdata} uniqueID={userdata.userId} />
+      <RequestInfo approvaldata={userdata} uniqueID={userdata.userId} />
     </tr>
   );
 }

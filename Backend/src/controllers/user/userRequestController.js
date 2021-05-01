@@ -6,6 +6,7 @@ module.exports = {
     try {
       const result = await userRequestService.getUserRequestService(
         req.user.email,
+        // req.params.userEmail,
       );
 
       if (!result) {

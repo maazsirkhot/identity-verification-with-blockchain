@@ -48,11 +48,13 @@ export default function AssignRole({ client, requestId }) {
       },
       action: 'APPROVED',
     };
-    console.log(data);
+
     axiosInstance()
       .post('/user/assignRole', data)
       .then((res) => {
         console.log(res.data);
+        alert('Your information has been shared!');
+        window.location.reload();
       });
   }
 

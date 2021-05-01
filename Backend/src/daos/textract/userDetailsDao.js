@@ -29,14 +29,14 @@ module.exports = {
   },
   findUserDetails: async (userId) => {
     try {
-      return await userFields.find({}).where({ userId });
+      return await userFields.find({}).where({ userId }).lean();
     } catch (error) {
       throw new Error(`Error Occurred in DAO Layers:  + ${error}`);
     }
   },
   findUserDetailsByEmail: async (email) => {
     try {
-      return await userFields.find({ userEmail: email });
+      return await userFields.find({ userEmail: email }).lean();
     } catch (error) {
       throw new Error(`Error Occurred in DAO Layers:  + ${error}`);
     }

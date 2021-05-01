@@ -16,7 +16,7 @@ module.exports = {
   },
   getRequest: async (options) => {
     try {
-      return await DataRequest.find(options);
+      return await DataRequest.find(options).lean();
     } catch (error) {
       throw new Error(`Error Occurred in DAO Layers: ${error}`);
     }
@@ -30,8 +30,8 @@ module.exports = {
       let count = 0;
       let result = null;
       if (user === '') {
-        count = await DataRequest.find({'client.userId':clientId}).count();
-        result = await DataRequest.find({'client.userId':clientId})
+        count = await DataRequest.find({ 'client.userId': clientId }).count();
+        result = await DataRequest.find({ 'client.userId': clientId })
           .sort({ createdAt: 'desc' })
           .limit(parseInt(options.limit))
           .skip(options.limit * options.pageNumber);
@@ -96,7 +96,9 @@ module.exports = {
       if (!_.isPlainObject(updatedFields) || !_.isPlainObject(options)) {
         throw new Error('Parameters format is invalid.');
       }
-      return DataRequest.findOneAndUpdate(options, updatedFields, { new: true });
+      const data = await DataRequest.findOneAndUpdate(options, updatedFields, { new: true });
+      console.log(data);
+      return await DataRequest.findOneAndUpdate(options, updatedFields, { new: true });
     } catch (error) {
       throw new Error(`Error Occurred in DAO Layers: ${error}`);
     }

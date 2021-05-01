@@ -16,7 +16,18 @@ export default function DigitalID({ userDetails }) {
       <div className="digitalid-card">
         <div className="digitalid-info">
           <img src={fingerprint} width="72" height="80" alt="digital-id" />
-          <h6>Driver&apos;s License</h6>
+          <h6>
+            Driver&apos;s License
+            <br />
+            {userDetails.verifierApproval.status === 'APPROVED' ? (
+              <>
+                <p style={{ fontSize: '10px', marginTop: '5px' }}>
+                  <strong>Wallet ID:</strong>
+                  <br /> {userDetails.dataReference}
+                </p>
+              </>
+            ) : null}
+          </h6>
         </div>
         <span className={`digitalid-status ${statusClass}`}>
           {userDetails.verifierApproval.status}

@@ -1,5 +1,6 @@
 /* eslint-disable max-len */
 const _ = require('lodash');
+const mongoose = require('mongoose');
 const constants = require('../../../utils/constants');
 const utilFunctions = require('../../helpers/utilFunctions');
 const dataRequestDao = require('../../daos/dataRequest/dataRequest');
@@ -15,7 +16,7 @@ module.exports = {
         return false;
       }
 
-      const result = await dataRequestDao.getRequest({
+      let results = await dataRequestDao.getRequest({
         'user.email': userEmail,
       });
 
@@ -23,7 +24,8 @@ module.exports = {
 
       userFields[0].dataField = _.filter(userFields[0].dataField, (field) => field.isVerified === true && field.isCurrent === true);
 
-      if (result.length === 0) {
+      userFields[0].dataField = utilFunctions.addAgeFieldToUserFields(userFields[0].dataField);
+      if (results.length === 0) {
         return {
           dataAvailable: false,
           data: [],
@@ -73,7 +75,7 @@ module.exports = {
 
       if (action === 'REJECTED') {
         const result = await dataRequestDao.updateDataRequest(
-          { id: requestId },
+          { _id: requestId },
           { status: action },
         );
         return {
@@ -87,6 +89,8 @@ module.exports = {
       const user = await userFieldsDao.getUserFields({
         userEmail: dataRequest[0].user.email,
       });
+
+      user.dataField = utilFunctions.addAgeFieldToUserFields(user.dataField);
 
       const allFieldNames = _.map(
         dataRequest[0].fieldsRequested,

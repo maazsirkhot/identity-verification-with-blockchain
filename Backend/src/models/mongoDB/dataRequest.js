@@ -41,7 +41,7 @@ const dataRequestSchema = new mongoose.Schema(
       },
       // Below two fields are added to permissions model as well to handle requesting roles
       isAbstracted: { // From Frontend
-        type: String,
+        type: Boolean,
         required: true,
       },
       abstractionParam: { // From Frontend

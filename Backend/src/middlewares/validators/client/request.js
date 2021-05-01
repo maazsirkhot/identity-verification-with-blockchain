@@ -21,7 +21,6 @@ module.exports = {
   },
   searchrequest: (req, res, next) => {
     const schema = Joi.object({
-      
       limit: Joi.number().required(),
       pageNumber: Joi.number().required(),
     });
