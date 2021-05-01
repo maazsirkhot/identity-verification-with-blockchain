@@ -58,6 +58,14 @@ const postSchema = new mongoose.Schema(
         type: String,
         required: false,
       },
+      abstractionParam: {
+        type: String,
+        required: false,
+      },
+      userDisplay: {
+        type: String,
+        required: false,
+      },
     }],
     dataRequest: {
       type: String,

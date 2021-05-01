@@ -10,7 +10,7 @@ const user = require('../../daos/user/user');
 const userFields = require('../../daos/userFields/userFields');
 
 module.exports = {
-  getRelevantTextService: (data, keyValuePair) => {
+  getRelevantTextService: (data, keyValuePair, ifDataExists) => {
     try {
       const blocks = data.Blocks;
       const output = [];
@@ -25,6 +25,9 @@ module.exports = {
             d.field_name = 'First Name';
             d.field_value = innerdata.Text.substring(2);
             d.verifierDoc = keyValuePair.idType;
+            if (ifDataExists == 0) {
+              d.isCurrent = true;
+            }
             output.push(d);
           } else if (innerdata.Text
               && innerdata.Text.substring(0, 2) === 'LN'
@@ -34,6 +37,9 @@ module.exports = {
             d.field_name = 'Last Name';
             d.field_value = innerdata.Text.substring(2);
             d.verifierDoc = keyValuePair.idType;
+            if (ifDataExists == 0) {
+              d.isCurrent = true;
+            }
             output.push(d);
           } else if (innerdata.Text
               && innerdata.Text.substring(0, 3) === 'DOB'
@@ -43,6 +49,9 @@ module.exports = {
             d.field_name = 'Date of Birth';
             d.field_value = innerdata.Text.substring(4);
             d.verifierDoc = keyValuePair.idType;
+            if (ifDataExists == 0) {
+              d.isCurrent = true;
+            }
             output.push(d);
           } else if (innerdata.Text
               && innerdata.Text.substring(0, 3) === 'EXP'
@@ -52,6 +61,9 @@ module.exports = {
             d.field_name = 'DL Expiry Date';
             d.field_value = innerdata.Text.substring(4);
             d.verifierDoc = keyValuePair.idType;
+            if (ifDataExists == 0) {
+              d.isCurrent = true;
+            }
             output.push(d);
           } else if (innerdata.Text
               && innerdata.Text.substring(0, 3) === 'SEX'
@@ -61,6 +73,9 @@ module.exports = {
             d.field_name = 'Sex';
             d.field_value = innerdata.Text.substring(4);
             d.verifierDoc = keyValuePair.idType;
+            if (ifDataExists == 0) {
+              d.isCurrent = true;
+            }
             output.push(d);
           }
         }
@@ -145,6 +160,9 @@ module.exports = {
   findUserDetails: async (userId) => {
     try {
       userData = await userDetailsDao.findUserDetails(userId);
+      if(userData.length == 0) {
+        return false;
+      }
       const wholeUserArray = [];
       docImages = userData[0].docImage;
       verifierApprovals = userData[0].verifierApproval;
@@ -249,5 +267,18 @@ module.exports = {
     } catch (error) {
       return data;
     }
+  },
+  ifUserAndIdTypeExists: async (userId, idType) => {
+    const userExists = await userDetailsDao.findUserDetails(userId);
+    if (userExists.length == 0) {
+      return 0; //user doesn't exist
+    }
+    const userData = await userDetailsDao.findByUserandId(userId, idType);
+    if (!userData)
+      return 1; // user can upload document
+    else if (userData.length == 0)
+      return 1; // user can upload document
+    else
+      return 2; // User cannot upload document
   },
 };

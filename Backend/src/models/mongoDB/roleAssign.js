@@ -57,6 +57,14 @@ const roleAssignSchema = new mongoose.Schema(
       dataReference: { // Comes from userDataField --> Blockchain
         type: String,
       },
+      abstractionParam: {
+        type: String,
+        required: false,
+      },
+      userDisplay: {
+        type: String,
+        required: false,
+      },
     }],
   },
   {

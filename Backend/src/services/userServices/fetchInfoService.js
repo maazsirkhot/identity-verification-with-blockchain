@@ -91,9 +91,14 @@ module.exports = {
       if (option === 'CURRENT') {
         result[0].dataField = _.filter(result[0].dataField, (field) => field.isCurrent === true && field.isVerified === true);
       } else {
-        result[0].dataField = _.filter(result.dataField, (field) => field.isVerified === true);
+        result[0].dataField = _.filter(result[0].dataField, (field) => field.isVerified === true);
       }
-
+      if (result[0].dataField.length == 0) {
+        return {
+          dataAvailable: false,
+          message: constants.MESSAGES.INFORMAION_NOT_VERIFIED,
+        };
+      }
       return {
         dataAvailable: true,
         data: result[0],

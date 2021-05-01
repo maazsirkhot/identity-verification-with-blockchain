@@ -72,4 +72,11 @@ module.exports = {
       throw new Error(`Error Occurred in DAO Layers:  + ${error}`);
     }
   },
+  findByUserandId: async (user, idtype) => {
+    try {
+      return await userFields.find({userId: user, "dataField.verifierDoc.shortName":idtype});
+    } catch {
+      throw new Error(`Error Occurred in DAO Layers:  + ${error}`);
+    }
+  }
 };

@@ -52,13 +52,11 @@ module.exports = {
       }
 
       const userDataFieldsFromDB = userFields[0].dataField;
-
-      //get fieldname->idtype from profile
-      //to be removed
-      idType = 'CADL';
+      const requests = await dataRequestDao.getRequest({_id: new ObjectId(requestId)});
       const roleDataFields = await roleDao.getRole({ _id: role.roleId });
       const userDataFields = [];
       let fieldName = '';
+      let requestField = {};
       _.forEach(roleDataFields[0].dataFields, async (roleField) => {
         let fieldValue = '';
         found = false;
@@ -72,7 +70,7 @@ module.exports = {
           }
           if (
             userField.field_name === checkFieldName &&
-            userField.verifierDoc.docshortName == idType
+            userField.isCurrent && userField.isVerified
           ) {
             found = true;
             userData = userField;
@@ -86,22 +84,38 @@ module.exports = {
             }
           }
         });
+        
+        for(i in requests[0].fieldsRequested) {
+          if(requests[0].fieldsRequested[i].fieldName == fieldName) {
+            requestField = requests[0].fieldsRequested[i];
+          }
+        }
         if (found == false) {
           userDataFields.push({
             field_name: fieldName,
             field_value: 'Information not found',
             dataReference: '',
+            abstractionParam: '',
+            userDisplay: '',
           });
         } else {
           userDataFields.push({
             field_name: fieldName,
             field_value: fieldValue,
             dataReference: userData.dataReference,
+            abstractionParam: requestField.abstractionParam,
+            userDisplay: requestField.userDisplay,
           });
         }
       });
       
-      const roleAssignData = await roleAssignDao.createRoleAssign(user, client, role, userDataFields, requestId);
+      const roleAssignData = await roleAssignDao.createRoleAssign(
+        user, 
+        client, 
+        role, 
+        userDataFields, 
+        requestId
+      );
 
       if (!roleAssignData) {
         return {
