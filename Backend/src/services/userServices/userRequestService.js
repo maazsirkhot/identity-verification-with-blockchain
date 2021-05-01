@@ -6,6 +6,7 @@ const dataRequestDao = require('../../daos/dataRequest/dataRequest');
 const userFieldsDao = require('../../daos/userFields/userFields');
 const postDao = require('../../daos/post/post');
 const fieldAbstractionMethods = require('../../helpers/fieldAbstractionMethods');
+const mongoose = require('mongoose');
 
 module.exports = {
   getUserRequestService: async (userEmail) => {
@@ -20,7 +21,7 @@ module.exports = {
 
       const userFields = await userFieldsDao.getUserFields({ userEmail });
 
-      userFields.dataField = _.filter(userFields.dataField, (field) => field.isVerified === true && field.isCurrent === true);
+      userFields[0].dataField = _.filter(userFields[0].dataField, (field) => field.isVerified === true && field.isCurrent === true);
 
       if (result.length === 0) {
         return {
@@ -29,21 +30,35 @@ module.exports = {
         };
       }
 
-      result.fieldsRequested = _.map(result.fieldsRequested, (field) => {
-        const userField = _.find(userFields.dataField, (entry) => entry.field_name === field.fieldName);
+      allRequests = [];
+      _.forEach(result, (request) => {
+        updatedData = _.map(request.fieldsRequested, (field) => {
+          if (field.fieldName == 'Age')
+            fieldName = 'Date of Birth';
+          else
+            fieldName = field.fieldName;
+          const userField = _.find(userFields[0].dataField, (entry) => entry.field_name === fieldName);
 
-        if (typeof userField === 'undefined') {
-          field.userField = false;
-        } else {
-          field.userField = userField;
-        }
-
-        return field;
+          const new_field = field.toObject({ getters: true });
+          if (field.fieldName == 'Age') {
+            new_field.fieldName = 'Age'
+          }
+            
+          if (typeof userField === 'undefined') {
+            new_field.isAvailable = false;
+          } else {
+            new_field.isAvailable = true;
+          }
+          return new_field;
+        });
+        const res = request.toObject({ getters: true });
+        res.fieldsRequested = updatedData;
+        allRequests.push(res);
       });
 
       return {
         dataAvailable: true,
-        data: result,
+        data: allRequests,
         message: constants.MESSAGES.DATA_REQUESTS_FETCHED,
       };
     } catch (error) {
@@ -68,17 +83,33 @@ module.exports = {
         };
       }
 
-      const dataRequest = await dataRequestDao.getRequest({ id: requestId });
+      const dataRequest = await dataRequestDao.getRequest({ _id: mongoose.Types.ObjectId(requestId) });
       const user = await userFieldsDao.getUserFields({
-        userEmail: dataRequest.user.email,
+        userEmail: dataRequest[0].user.email,
       });
 
       const allFieldNames = _.map(
-        dataRequest.fieldsRequested,
-        (field) => field.fieldName,
+        dataRequest[0].fieldsRequested,
+        (field) => {
+          if (field.fieldName == 'Age') {
+            return {
+              req: field.fieldName,
+              need : 'Date of Birth',
+              abstractionParam: field.abstractionParam,
+              userDisplay: field.userDisplay,
+            }
+          } else {
+            return {
+              req: field.fieldName,
+              need : field.fieldName,
+              abstractionParam: field.abstractionParam,
+              userDisplay: field.userDisplay,
+            }
+          }
+        }
       );
 
-      const userFields = user.dataField;
+      const userFields = user[0].dataField;
       const expiry = {
         expireTime: utilFunctions.timestampAdderToCurrentTime(
           expiryDurationObj,
@@ -89,40 +120,56 @@ module.exports = {
       // Build the userDataFields Object --> Possible future scope to refactor and split this activity
       const userDataFields = [];
       _.forEach(userFields, async (userField) => {
-        if (_.includes(allFieldNames, userField.field_name && userField.isVerified)) {
-          const requestField = _.remove(
-            dataRequest.fieldsRequested,
-            (field) => field.fieldName === userField.field_name,
-          );
+        _.forEach(allFieldNames, (field) => {
+          if (field.need === userField.field_name &&
+            userField.isCurrent && userField.isVerified) {
+          
+            let requestField = {} 
+            for (request in dataRequest[0].fieldsRequested) {
+                if(field.req === dataRequest[0].fieldsRequested[request].fieldName) {
+                  requestField = dataRequest[0].fieldsRequested[request]; 
+                  break;
+                }
+            };
 
-          let fieldValue;
-          if (requestField.isAbstracted) {
-            fieldValue = fieldAbstractionMethods[userField.field_name](requestField.abstractionParam, userField.field_value);
-          } else {
-            fieldValue = userField.field_value;
+            let fieldValue;
+            if (requestField.isAbstracted == 'true') {
+              fieldValue = fieldAbstractionMethods[field.req](requestField.abstractionParam, userField.field_value);
+            } else {
+              fieldValue = userField.field_value;
+            }
+
+            userDataFields.push({
+              field_id: userField.field_id,
+              field_name: requestField.fieldName,
+              field_value: fieldValue,
+              dataReference: userField.dataReference,
+              abstractionParam: requestField.abstractionParam,
+              userDisplay: requestField.userDisplay,
+            });
           }
-
-          userDataFields.push({
-            field_id: userField.field_id,
-            field_name: userField.field_name,
-            field_value: fieldValue,
-            dataReference: userField.dataReference,
-          });
-        }
+        });
       });
 
       const createPost = await postDao.createPost({
-        client: dataRequest.client,
-        user: dataRequest.user,
+        client: dataRequest[0].client,
+        user: dataRequest[0].user,
         expiry,
         userDataFields,
-        dataRequest: dataRequest.id.toString(),
+        dataRequest: dataRequest[0].id.toString(),
       });
 
-      await dataRequestDao.updateDataRequest(
-        { id: requestId },
-        { status: action },
+      updatePost = await dataRequestDao.updateDataRequest(
+        { _id: mongoose.Types.ObjectId(requestId) },
+        { status: action }
       );
+
+      if (!updatePost) {
+        return {
+          dataAvailable: false,
+          message: constants.MESSAGES.FAILED_ROLE_ASSIGN,
+        };
+      }
 
       return {
         dataAvailable: true,
