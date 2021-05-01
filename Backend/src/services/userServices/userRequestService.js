@@ -7,7 +7,6 @@ const dataRequestDao = require('../../daos/dataRequest/dataRequest');
 const userFieldsDao = require('../../daos/userFields/userFields');
 const postDao = require('../../daos/post/post');
 const fieldAbstractionMethods = require('../../helpers/fieldAbstractionMethods');
-const mongoose = require('mongoose');
 
 module.exports = {
   getUserRequestService: async (userEmail) => {
@@ -16,7 +15,7 @@ module.exports = {
         return false;
       }
 
-      let results = await dataRequestDao.getRequest({
+      let result = await dataRequestDao.getRequest({
         'user.email': userEmail,
       });
 
@@ -24,8 +23,8 @@ module.exports = {
 
       userFields[0].dataField = _.filter(userFields[0].dataField, (field) => field.isVerified === true && field.isCurrent === true);
 
-      userFields[0].dataField = utilFunctions.addAgeFieldToUserFields(userFields[0].dataField);
-      if (results.length === 0) {
+      //userFields[0].dataField = utilFunctions.addAgeFieldToUserFields(userFields[0].dataField);
+      if (result.length === 0) {
         return {
           dataAvailable: false,
           data: [],
@@ -41,21 +40,21 @@ module.exports = {
             fieldName = field.fieldName;
           const userField = _.find(userFields[0].dataField, (entry) => entry.field_name === fieldName);
 
-          const new_field = field.toObject({ getters: true });
-          if (field.fieldName == 'Age') {
-            new_field.fieldName = 'Age'
-          }
+          // const new_field = field.toObject({ getters: true });
+          // if (field.fieldName == 'Age') {
+          //   new_field.fieldName = 'Age'
+          // }
             
           if (typeof userField === 'undefined') {
-            new_field.isAvailable = false;
+            field.isAvailable = false;
           } else {
-            new_field.isAvailable = true;
+            field.isAvailable = true;
           }
-          return new_field;
+          return field;
         });
-        const res = request.toObject({ getters: true });
-        res.fieldsRequested = updatedData;
-        allRequests.push(res);
+        // const res = request.toObject({ getters: true });
+        request.fieldsRequested = updatedData;
+        allRequests.push(request);
       });
 
       return {
