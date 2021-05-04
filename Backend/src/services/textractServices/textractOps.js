@@ -14,10 +14,31 @@ module.exports = {
     try {
       const blocks = data.Blocks;
       const output = [];
-
+      let nextLine = false;
+      let nextAddressLine = 0;
+      let address = "";
       _.each(blocks, (innerdata) => {
         if (innerdata.BlockType === 'LINE') {
-          if (innerdata.Text
+          if ((nextAddressLine == 1 || nextAddressLine == 2) 
+              &&  keyValuePair['Address'] 
+              && innerdata.Text) {
+            address += innerdata.Text;
+            nextAddressLine += 1;
+            if (nextAddressLine == 2) {
+              address += "\n";
+            }
+            if (nextAddressLine == 3) {
+              const d = {};
+              d.field_id = keyValuePair['Address'];
+              d.field_name = 'Address';
+              d.field_value = address;
+              d.verifierDoc = keyValuePair.idType;
+              if (ifDataExists == 0) {
+                d.isCurrent = true;
+              }
+              output.push(d);
+            }
+          } else if (innerdata.Text
               && innerdata.Text.substring(0, 2) === 'FN'
               && keyValuePair['First Name']) {
             const d = {};
@@ -29,6 +50,7 @@ module.exports = {
               d.isCurrent = true;
             }
             output.push(d);
+            nextAddressLine = 1;
           } else if (innerdata.Text
               && innerdata.Text.substring(0, 2) === 'LN'
               && keyValuePair['Last Name']) {
@@ -77,7 +99,30 @@ module.exports = {
               d.isCurrent = true;
             }
             output.push(d);
-          }
+          } else if (nextLine == true && 
+            keyValuePair['Driver License']) {
+              const d = {};
+              d.field_id = keyValuePair['Driver License'];
+              d.field_name = 'Driver License';
+              d.field_value = innerdata.Text;
+              d.verifierDoc = keyValuePair.idType;
+              d.isCurrent = true;
+              output.push(d);
+              nextLine = false;
+          } else if (nextLine == true && 
+            keyValuePair['Driver License']) {
+              const d = {};
+              d.field_id = keyValuePair['Driver License'];
+              d.field_name = 'Driver License';
+              d.field_value = innerdata.Text;
+              d.verifierDoc = keyValuePair.idType;
+              d.isCurrent = true;
+              output.push(d);
+              nextLine = false;
+          } else if (innerdata.Text
+            && innerdata.Text.substring(0, 2) === 'DL') {
+              nextLine = true;
+          } 
         }
       });
       return output;
