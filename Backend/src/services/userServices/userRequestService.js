@@ -159,7 +159,7 @@ module.exports = {
         user: dataRequest[0].user,
         expiry,
         userDataFields,
-        dataRequest: dataRequest[0].id.toString(),
+        dataRequest: dataRequest[0]._id.toString(),
       });
 
       updatePost = await dataRequestDao.updateDataRequest(
