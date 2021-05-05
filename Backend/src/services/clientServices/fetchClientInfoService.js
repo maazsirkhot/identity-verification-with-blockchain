@@ -3,6 +3,8 @@ const constants = require('../../../utils/constants');
 const userDao = require('../../daos/user/user');
 const postDao = require('../../daos/post/post');
 const utilFunctions = require('../../helpers/utilFunctions');
+const mongoose = require('mongoose');
+const fetch = require('node-fetch');
 
 module.exports = {
   searchUserService: async (user, type, options) => {
@@ -40,18 +42,37 @@ module.exports = {
         return false;
       }
 
-      const data = await postDao.getPost({ dataRequest: dataRequestId });
+      let postData = await postDao.getPost({ _id: mongoose.Types.ObjectId(dataRequestId) });
 
-      if (data.length === 0) {
+      if (postData.length === 0) {
         return {
           dataAvailable: false,
           data: [],
         };
       }
 
+      postData = postData[0].toObject({ getters: true });
+      let userDataFields = postData.userDataFields;
+      let keyValuePair = {};
+      for(i in userDataFields) {
+        walletId = userDataFields[i].dataReference;
+        if(walletId in keyValuePair) {
+          userDataFields[i].isValid = keyValuePair[walletId];
+        } else {
+          const blockchainResponseData = await fetch(constants.ENV_VARIABLES.BLOCKCHAIN_HOST + '/resources/'+walletId, {method: 'GET'});
+          const blockchainResponseJson = await blockchainResponseData.json();
+          if (blockchainResponseJson.isValid !== undefined)
+            userDataFields[i].isValid = blockchainResponseJson.isValid;
+          else
+            userDataFields[i].isValid = false;
+          keyValuePair[walletId] = userDataFields[i].isValid;
+        }
+      }
+      
+
       return {
         dataAvailable: true,
-        data,
+        postData,
         message: constants.MESSAGES.POST_FETCHED,
       };
     } catch (error) {
