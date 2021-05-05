@@ -16,7 +16,7 @@ module.exports = {
   },
   getRequest: async (options) => {
     try {
-      return await DataRequest.find(options).lean();
+      return await DataRequest.find(options);
     } catch (error) {
       throw new Error(`Error Occurred in DAO Layers: ${error}`);
     }

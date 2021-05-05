@@ -7,6 +7,7 @@ const dataRequestDao = require('../../daos/dataRequest/dataRequest');
 const userFieldsDao = require('../../daos/userFields/userFields');
 const postDao = require('../../daos/post/post');
 const fieldAbstractionMethods = require('../../helpers/fieldAbstractionMethods');
+const ObjectId = require('mongodb').ObjectId;
 
 module.exports = {
   getUserRequestService: async (userEmail) => {
@@ -84,12 +85,12 @@ module.exports = {
         };
       }
 
-      const dataRequest = await dataRequestDao.getRequest({ _id: mongoose.Types.ObjectId(requestId) });
+      const dataRequest = await dataRequestDao.getRequest({_id: new ObjectId(requestId)});
       const user = await userFieldsDao.getUserFields({
         userEmail: dataRequest[0].user.email,
       });
 
-      user.dataField = utilFunctions.addAgeFieldToUserFields(user.dataField);
+      //user.dataField = utilFunctions.addAgeFieldToUserFields(user.dataField);
 
       const allFieldNames = _.map(
         dataRequest[0].fieldsRequested,
@@ -136,7 +137,7 @@ module.exports = {
             };
 
             let fieldValue;
-            if (requestField.isAbstracted == 'true') {
+            if (requestField.isAbstracted == true) {
               fieldValue = fieldAbstractionMethods[field.req](requestField.abstractionParam, userField.field_value);
             } else {
               fieldValue = userField.field_value;
