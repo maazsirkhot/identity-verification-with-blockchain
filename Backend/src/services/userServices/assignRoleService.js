@@ -7,6 +7,8 @@ const _ = require('lodash');
 const dataRequestDao = require('../../daos/dataRequest/dataRequest');
 const ObjectId = require('mongodb').ObjectId;
 const fieldAbstractionMethods = require('../../helpers/fieldAbstractionMethods');
+const fetch = require('node-fetch');
+const mongoose = require('mongoose');
 
 module.exports = {
   createassignRole: async (user, client, role, requestId, action) => {
@@ -147,7 +149,25 @@ module.exports = {
   },
   getAssignRole: async (requestId) => {
     try {
-      return await roleAssignDao.findData({requestId});
+      let roleAssignData = await roleAssignDao.findData({requestId});
+      roleAssignData = roleAssignData[0].toObject({ getters: true });
+      let userDataFields = roleAssignData.userDataFields;
+      let keyValuePair = {};
+      for(i in userDataFields) {
+        walletId = userDataFields[i].dataReference;
+        if(walletId in keyValuePair) {
+          userDataFields[i].isValid = keyValuePair[walletId];
+        } else {
+          const blockchainResponseData = await fetch(constants.ENV_VARIABLES.BLOCKCHAIN_HOST + '/resources/'+walletId, {method: 'GET'});
+          const blockchainResponseJson = await blockchainResponseData.json();
+          if (blockchainResponseJson.isValid !== undefined)
+            userDataFields[i].isValid = blockchainResponseJson.isValid;
+          else
+            userDataFields[i].isValid = false;
+          keyValuePair[walletId] = userDataFields[i].isValid;
+        }
+      }
+      return roleAssignData;
     } catch (error) {
       throw new Error(`Error Occurred in Service Layers: ${error}`);
     }
