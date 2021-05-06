@@ -515,7 +515,8 @@ DOCUMENT UPLOAD
   opacity: 1;
   background-color: rgba(0, 0, 0, 0.5);
 }
-#document-upload .modal-body {
+#document-upload .modal-body,
+#editdocument-upload .modal-body {
   padding: 20px 50px 50px;
 }
 
@@ -570,7 +571,8 @@ DOCUMENT UPLOAD
   padding-right: 5px;
 }
 
-#document-upload .next-btn {
+#document-upload .next-btn,
+#editdocument-upload .next-btn {
   width: 100%;
   display: block;
   text-align: center;
@@ -582,7 +584,8 @@ DOCUMENT UPLOAD
   background: #5469d4;
 }
 
-#document-upload .back-btn {
+#document-upload .back-btn,
+#editdocument-upload .back-btn {
   position: absolute;
   left: 15px;
   top: 0px;

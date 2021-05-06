@@ -1,8 +1,12 @@
 import React, { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { DOCUMENT_TYPE } from '../../../actions/types';
+import EditDocument from '../../Verification/EditDocument';
 import fingerprint from '../../../assets/img/fingerprint.png';
 
 export default function DigitalID({ userDetails }) {
   const [statusClass, setStatusClass] = useState('reject');
+  const dispatch = useDispatch();
   useEffect(() => {
     if (userDetails.verifierApproval.status === 'APPROVED') {
       setStatusClass('success');
@@ -10,6 +14,13 @@ export default function DigitalID({ userDetails }) {
       setStatusClass('pending');
     }
   }, []);
+
+  function onClick() {
+    dispatch({
+      type: DOCUMENT_TYPE,
+      payload: userDetails.idType,
+    });
+  }
 
   return (
     <div className="col-xl-10 col-lg-12 col-md-12">
@@ -29,9 +40,17 @@ export default function DigitalID({ userDetails }) {
             ) : null}
           </h6>
         </div>
-        <span className={`digitalid-status ${statusClass}`}>
-          {userDetails.verifierApproval.status}
-        </span>
+        <div
+          style={{ display: 'flex', flexDirection: 'row' }}
+          onClick={onClick}
+          aria-hidden
+        >
+          <EditDocument />
+
+          <span className={`digitalid-status ${statusClass}`}>
+            {userDetails.verifierApproval.status}
+          </span>
+        </div>
       </div>
     </div>
   );

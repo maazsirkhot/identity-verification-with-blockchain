@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
-
+import AboutDocumentUpload from './AboutDocumentUpload';
+import DocumentType from './DocumentType';
 import DocumentPictures from './DocumentPictures';
 import DocumentData from './DocumentData';
 
 export default function EditDocument() {
-  const [activeTabId, setactiveTabId] = useState(0);
+  const [activeTabId, setactiveTabId] = useState(2);
   const activeTab = [
+    <AboutDocumentUpload activeTabChange={setactiveTabId} />,
+    <DocumentType activeTabChange={setactiveTabId} />,
     <DocumentPictures activeTabChange={setactiveTabId} />,
     <DocumentData activeTabChange={setactiveTabId} />,
   ];
@@ -13,18 +16,21 @@ export default function EditDocument() {
   return (
     <div>
       <button
-        className="custom-btn add-btn"
+        style={{
+          border: 'none',
+          backgroundColor: 'transparent',
+          outline: 'none',
+        }}
         data-toggle="modal"
-        data-target="#document-upload"
+        data-target="#editdocument-upload"
         type="button"
       >
-        <i className="fas fa-plus" />
-        <span>Add New</span>
+        <i class="fas fa-edit" />
       </button>
 
       <div
         className="modal modal-backdrop fade in"
-        id="document-upload"
+        id="editdocument-upload"
         tabIndex="-1"
         role="dialog"
         aria-hidden="true"
