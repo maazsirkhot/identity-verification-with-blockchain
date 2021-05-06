@@ -9,6 +9,7 @@ const constants = require('../../../utils/constants');
 const user = require('../../daos/user/user');
 const userFields = require('../../daos/userFields/userFields');
 const idType = require('../../models/mongoDB/idType');
+const fetch = require('node-fetch');
 
 module.exports = {
   getRelevantTextService: (data, keyValuePair, ifDataExists) => {
@@ -252,11 +253,21 @@ module.exports = {
       } else {
         let oldDataField = userDataExists[0].dataField;
         let dataField = [];
+        let walletId = "";
         _.forEach(oldDataField, (field) => {
           if (field.verifierDoc.docshortName != idType) {
             dataField.push(field);
+          } else {
+            walletId = field.dataReference;
           }
         });
+        if (walletId != undefined && walletId != "") {
+          const blockchainResponseData = await fetch(constants.ENV_VARIABLES.BLOCKCHAIN_HOST + '/resources/delete/'+walletId, {method: 'POST'});
+          const blockchainResponseJson = await blockchainResponseData.json();
+          if (blockchainResponseJson.status != '200')
+            return false;
+        }
+        
         dataField = dataField.concat(data);
         let oldDocImage = userDataExists[0].docImage;
         docImage = [];
