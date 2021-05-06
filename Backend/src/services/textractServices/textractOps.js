@@ -8,6 +8,7 @@ const userDetailsDao = require('../../daos/textract/userDetailsDao');
 const constants = require('../../../utils/constants');
 const user = require('../../daos/user/user');
 const userFields = require('../../daos/userFields/userFields');
+const idType = require('../../models/mongoDB/idType');
 
 module.exports = {
   getRelevantTextService: (data, keyValuePair, ifDataExists) => {
@@ -130,6 +131,83 @@ module.exports = {
       throw new Error(`Error Occurred in DAO Layers:  + ${error}`);
     }
   },
+  getRelevantTextServiceFromPass: async (data, keyValuePair, ifDataExists) => {
+    var blocks = data["Blocks"];
+    var wordsjson = {};
+    var keyJson = [];
+    var valueJson = [];
+
+    blocks.forEach(function(innerdata) {
+        var BlockType = innerdata.BlockType;
+        var TextType = innerdata.TextType;
+        if(BlockType == "WORD" && TextType == "PRINTED"){
+            wordsjson[innerdata.Id] = innerdata.Text;
+        }
+        else if(BlockType == "KEY_VALUE_SET"){
+            var EntityTypes = innerdata.EntityTypes;
+            var relationships = innerdata.Relationships;
+            if(EntityTypes[0] == "KEY"){
+                var inn = {};
+                relationships.forEach(function(keyblock) {
+                    var ids = keyblock.Ids;
+                    var type = keyblock.Type;
+                    if(type == "CHILD"){
+                        inn["child"] = ids;
+                    }
+                    if(type == "VALUE"){
+                        inn["value"] = ids;
+                    }
+                });
+                keyJson.push(inn);
+            }else if(EntityTypes[0] == "VALUE"){
+                var inn = {};
+                relationships.forEach(function(valueblock) {
+                    var ids = valueblock.Ids;
+                    var type = valueblock.Type;
+                    if(type == "CHILD"){
+                        inn["child"] = ids;
+                        inn["mainid"] = innerdata.Id;
+                    }
+                });
+                valueJson.push(inn);
+            }
+        }
+    });
+    // console.log(wordsjson);
+    console.log(keyJson);
+    // console.log(valueJson);
+
+    // forming the output data
+
+    output = [];
+    keyJson.forEach(function(key) {
+        var keyword = "";
+        var valueword = "";
+        var innerout = {};
+        var childs = key.child;
+        if (childs) {
+          childs.forEach(function(c) {
+            keyword+= wordsjson[c] + " ";
+          });
+        }
+        innerout["key"] = keyword;
+
+        var values = key.value;
+        values.forEach(function(v) {
+            valueJson.forEach(function(vj) {
+                if(vj.mainid == v){
+                    var vjchilds = vj.child;
+                    vjchilds.forEach(function(vjc) {
+                        valueword+=wordsjson[vjc] + " ";
+                    });
+                }
+            });
+        });
+        innerout["value"] = valueword;
+        output.push(innerout);
+    });
+    console.log(output);
+  },
   getAllDataFields: async (idType) => {
     try {
       const dataFieldData = await userDetailsDao.findAllDataFields();
@@ -172,9 +250,21 @@ module.exports = {
         });
         return await userDetailsDao.createUserDetails(userData);
       } else {
-        let dataField = userDataExists[0].dataField;
+        let oldDataField = userDataExists[0].dataField;
+        let dataField = [];
+        _.forEach(oldDataField, (field) => {
+          if (field.verifierDoc.docshortName != idType) {
+            dataField.push(field);
+          }
+        });
         dataField = dataField.concat(data);
-        let docImage = userDataExists[0].docImage;
+        let oldDocImage = userDataExists[0].docImage;
+        docImage = [];
+        _.forEach (oldDocImage, (image) => {
+          if (image.idType !== idType) {
+            docImage.push(image);
+          }
+        });
         docImage = docImage.concat([
           {
             idType,
@@ -182,7 +272,13 @@ module.exports = {
             back: backLink,
           }
         ]);
-        let verifierApproval = userDataExists[0].verifierApproval;
+        let oldVerifierApproval = userDataExists[0].verifierApproval;
+        verifierApproval = [];
+        _.forEach (oldVerifierApproval, (app) => {
+          if (app.idType !== idType) {
+            verifierApproval.push(app);
+          }
+        });
         verifierApproval = verifierApproval.concat({
           idType
         });
