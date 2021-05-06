@@ -10,6 +10,7 @@ const user = require('../../daos/user/user');
 const userFields = require('../../daos/userFields/userFields');
 const idType = require('../../models/mongoDB/idType');
 const fetch = require('node-fetch');
+const { forEach } = require('lodash');
 
 module.exports = {
   getRelevantTextService: (data, keyValuePair, ifDataExists) => {
@@ -35,9 +36,7 @@ module.exports = {
               d.field_name = 'Address';
               d.field_value = address;
               d.verifierDoc = keyValuePair.idType;
-              if (ifDataExists == 0) {
-                d.isCurrent = true;
-              }
+              d.isCurrent = true;
               output.push(d);
             }
           } else if (innerdata.Text
@@ -85,9 +84,7 @@ module.exports = {
             d.field_name = 'DL Expiry Date';
             d.field_value = innerdata.Text.substring(4);
             d.verifierDoc = keyValuePair.idType;
-            if (ifDataExists == 0) {
-              d.isCurrent = true;
-            }
+            d.isCurrent = true;
             output.push(d);
           } else if (innerdata.Text
               && innerdata.Text.substring(0, 3) === 'SEX'
@@ -101,16 +98,6 @@ module.exports = {
               d.isCurrent = true;
             }
             output.push(d);
-          } else if (nextLine == true && 
-            keyValuePair['Driver License']) {
-              const d = {};
-              d.field_id = keyValuePair['Driver License'];
-              d.field_name = 'Driver License';
-              d.field_value = innerdata.Text;
-              d.verifierDoc = keyValuePair.idType;
-              d.isCurrent = true;
-              output.push(d);
-              nextLine = false;
           } else if (nextLine == true && 
             keyValuePair['Driver License']) {
               const d = {};
@@ -267,7 +254,11 @@ module.exports = {
           if (blockchainResponseJson.status != '200')
             return false;
         }
-        
+        if(dataField.length == 0) {
+          data = _.forEach(data, (d) => {
+            d.isCurrent = true;
+          });
+        }
         dataField = dataField.concat(data);
         let oldDocImage = userDataExists[0].docImage;
         docImage = [];
