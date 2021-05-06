@@ -42,7 +42,7 @@ module.exports = {
         return false;
       }
 
-      let postData = await postDao.getPost({ _id: mongoose.Types.ObjectId(dataRequestId) });
+      let postData = await postDao.getPost({ dataRequest: mongoose.Types.ObjectId(dataRequestId) });
 
       if (postData.length === 0) {
         return {
