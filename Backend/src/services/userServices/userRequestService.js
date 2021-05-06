@@ -16,7 +16,7 @@ module.exports = {
         return false;
       }
 
-      let result = await dataRequestDao.getRequest({
+      const result = await dataRequestDao.getRequest({
         'user.email': userEmail,
       });
 
