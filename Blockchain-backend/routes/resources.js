@@ -17,16 +17,16 @@ router.post('/', async (request, response) => {
         return;
     }
 
-    // const data = {...request.body}
+    const data = {...request.body}
 
-    // mainNetwork = await network.setup();
+    mainNetwork = await network.setup();
 
-    // const contract = mainNetwork.getContract('resources');
+    const contract = mainNetwork.getContract('resources');
 
-    // // CreateIdentity(ctx contractapi.TransactionContextInterface, userId string, docType string, verifier string)
-    // const createResp = await contract.submitTransaction('CreateIdentity', data.userId, data.docType, data.verifier)
-    // console.log(createResp);
-    // response.status(200).end('Added new wallet');
+    // CreateIdentity(ctx contractapi.TransactionContextInterface, userId string, docType string, verifier string)
+    const createResp = await contract.submitTransaction('CreateIdentity', data.userId, data.docType, data.verifier)
+    console.log(createResp);
+    response.status(200).end('Added new wallet');
 
 
     //Dummy data 
@@ -37,13 +37,13 @@ router.post('/', async (request, response) => {
 	// 		IsValid: false,
 	// 		Message:  "Error saving to ledger",
 	// 	}
-    const results = {"status":200,"walletId":"Mzd5YWZkc3lnZTIzUGFzc3BvcnQ2MDdiODc0ZA==","isValid":true,"message":"Successfully read from ledger"}
+    // const results = {"status":200,"walletId":"Mzd5YWZkc3lnZTIzUGFzc3BvcnQ2MDdiODc0ZA==","isValid":true,"message":"Successfully read from ledger"}
 
-    response.writeHead(200,{
-        'Content-Type' : 'application/json'
-    })
-    console.log('results: ', results);
-    response.end(JSON.stringify(results));
+    // response.writeHead(200,{
+    //     'Content-Type' : 'application/json'
+    // })
+    // console.log('results: ', results);
+    // response.end(JSON.stringify(results));
 })
 
 //Fetch wallet ID

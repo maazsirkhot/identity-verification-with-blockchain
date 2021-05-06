@@ -3,7 +3,7 @@ const fs = require('fs');
 
 const mspID = process.env.MSPID || 'verify'
 // const crytoPath = `${process.env.ENV == 'dev' ? '../crypto-config' : '/tmp/crypto'}`
-const cryptoPath = '/host/files/crypto-config'
+const cryptoPath = '/tmp/crypto'
 
 async function setup(user = 'Admin') {
     // User validation check... there's a better way
@@ -41,7 +41,9 @@ async function setup(user = 'Admin') {
     };
     // read a common connection profile in json format
     const data = fs.readFileSync(connectionProfilePath);
+    console.log('data received from readFilesync', data)
     const connectionProfile = JSON.parse(data);
+    console.log('connectionProfile', connectionProfile)
 
     // use the loaded connection profile
     const gateway = new fabric.Gateway();

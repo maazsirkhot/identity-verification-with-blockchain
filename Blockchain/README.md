@@ -214,15 +214,25 @@ Do not use existing binaries as is in bin/ folder, they may not work on your sys
 
 15. Test chaincode
     // CreateIdentity(ctx contractapi.TransactionContextInterface, userId string, docType string, verifier string)
-    kubectl exec -it $(kubectl get pods -o=name | grep cli-peer0-verify-deployment | sed "s/^.\{4\}//") -- bash -c 'peer chaincode invoke -C mainchannel -n resources -c '\''{"Args":["CreateIdentity","regy3fh334","Passport","Passport Authority"]}'\'' -o orderer0-service:7050 --tls --cafile=/etc/hyperledger/orderers/msp/tlscacerts/orderers-ca-service-7054.pem'
 
-    //ReadIdentity(ctx contractapi.TransactionContextInterface, walletId string)
-    kubectl exec -it $(kubectl get pods -o=name | grep cli-peer0-verify-deployment | sed "s/^.\{4\}//") -- bash -c 'peer chaincode query -C mainchannel -n resources -c '\''{"Args":["ReadIdentity","cmVneTNmaDMzNERMNjA3Y2M1NmQ="]}'\'' -o orderer0-service:7050 --tls --cafile=/etc/hyperledger/orderers/msp/tlscacerts/orderers-ca-service-7054.pem'
+    CREATE IDENTITY
+    kubectl exec -it $(kubectl get pods -o=name | grep cli-peer0-verify-deployment | sed "s/^.\{4\}//") -- bash -c 'peer chaincode invoke -C mainchannel -n resources -c '\''{"Args":["CreateIdentity","hdw3278ycbjceuh","Passport","Passport Authority"]}'\'' -o orderer0-service:7050 --tls --cafile=/etc/hyperledger/orderers/msp/tlscacerts/orderers-ca-service-7054.pem'
+
+    //READ IDENTITY (ctx contractapi.TransactionContextInterface, walletId string)
+    kubectl exec -it $(kubectl get pods -o=name | grep cli-peer0-verify-deployment | sed "s/^.\{4\}//") -- bash -c 'peer chaincode query -C mainchannel -n resources -c '\''{"Args":["ReadIdentity","aGR3MzI3OHljYmpjZXVoUGFzc3BvcnQ2MDkzNTc4NQ=="]}'\'' -o orderer0-service:7050 --tls --cafile=/etc/hyperledger/orderers/msp/tlscacerts/orderers-ca-service-7054.pem'
 
     cmVneTNmaDMzNERMNjA3Y2M1NmQ=
 
-    //UpdateIdentity(ctx contractapi.TransactionContextInterface, userId string, docType string, verifier string, walletId string)
-    kubectl exec -it $(kubectl get pods -o=name | grep cli-peer0-verify-deployment | sed "s/^.\{4\}//") -- bash -c 'peer chaincode invoke -C mainchannel -n resources -c '\''{"Args":["UpdateIdentity","regy3fh334","DL","DL Authority","cmVneTNmaDMzNFBhc3Nwb3J0NjA3Y2M0NDg="]}'\'' -o orderer0-service:7050 --tls --cafile=/etc/hyperledger/orderers/msp/tlscacerts/orderers-ca-service-7054.pem'
+    //UPDATE IDENTITY UpdateIdentity(ctx contractapi.TransactionContextInterface, userId string, docType string, verifier string, walletId string)
+    kubectl exec -it $(kubectl get pods -o=name | grep cli-peer0-verify-deployment | sed "s/^.\{4\}//") -- bash -c 'peer chaincode invoke -C mainchannel -n resources -c '\''{"Args":["UpdateIdentity","hdw3278ycbjceuh","DL","DL Authority","aGR3MzI3OHljYmpjZXVoREw2MDdlNGE3Yg=="]}'\'' -o orderer0-service:7050 --tls --cafile=/etc/hyperledger/orderers/msp/tlscacerts/orderers-ca-service-7054.pem'
 
-    //Delete wallet/identity for the user
-    kubectl exec -it $(kubectl get pods -o=name | grep cli-peer0-verify-deployment | sed "s/^.\{4\}//") -- bash -c 'peer chaincode invoke -C mainchannel -n resources -c '\''{"Args":["DeleteIdentity","cmVneTNmaDMzNERMNjA3Y2M1NmQ="]}'\'' -o orderer0-service:7050 --tls --cafile=/etc/hyperledger/orderers/msp/tlscacerts/orderers-ca-service-7054.pem'
+    //DELETE WALLET/IDENTITY
+    kubectl exec -it $(kubectl get pods -o=name | grep cli-peer0-verify-deployment | sed "s/^.\{4\}//") -- bash -c 'peer chaincode invoke -C mainchannel -n resources -c '\''{"Args":["DeleteIdentity","aGR3MzI3OHljYmpjZXVoUGFzc3BvcnQ2MDkzNTc0Yg=="]}'\'' -o orderer0-service:7050 --tls --cafile=/etc/hyperledger/orderers/msp/tlscacerts/orderers-ca-service-7054.pem'
+
+16. Deploy backend
+
+    kubectl apply -f fabric-be-deployment.yaml
+    kubectl apply -f fabric-be-service.yaml
+
+
+

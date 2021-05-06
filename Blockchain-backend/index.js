@@ -27,5 +27,5 @@ app.use(cors({ origin: '*', credentials: false }));
 app.use('/resources', require('./routes/resources'));
 
 app.listen(port, async () => {
-    console.log('Server running on port', port);
+    console.log('v6: Server running on port', port);
 })

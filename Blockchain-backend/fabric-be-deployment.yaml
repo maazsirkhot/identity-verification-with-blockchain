@@ -23,7 +23,7 @@ spec:
             path: /var/run
       containers:
       - name: node-app
-        image: krutikavk/fabric-be:v3
+        image: krutikavk/fabric-be:v6
         ports:
           - containerPort: 4000
         volumeMounts:
