@@ -36,7 +36,7 @@ module.exports = {
       const ifDataExists = await textractService.ifUserAndIdTypeExists(req.user.userId,req.body.idType);
       
       const keyValuePair = await textractService.getAllDataFields(req.body.idType);
-      
+      const idType = req.body.idType;
       /* uncomment this when not using textraxt APIs */
       /* fs.readFile('example.json', async (err, data) => { */
       const textract = new AWS.Textract();
