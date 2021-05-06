@@ -1,7 +1,7 @@
 const fabric = require('fabric-network');
 const fs = require('fs');
 
-const mspID = process.env.MSPID || 'verify'
+const mspID = 'verify'
 // const crytoPath = `${process.env.ENV == 'dev' ? '../crypto-config' : '/tmp/crypto'}`
 const cryptoPath = '/tmp/crypto'
 

@@ -6,18 +6,9 @@
       "orderers": [
           "orderer0"
       ],
-			"peers": {
-				"peer0-verify": {
-          "endorsingPeer": true,
-          "chaincodeQuery": true,
-          "eventSource": true
-        },
-        "peer1-verify": {
-          "endorsingPeer": true,
-          "chaincodeQuery": true,
-          "eventSource": true
-        }
-      },
+			"peers": [
+				"peer0-verify",
+      ],
 			"connection": {
 				"timeout": {
 					"peer": {
@@ -33,11 +24,11 @@
 		"verify": {
 			"mspid": "verify",
 			"adminPrivateKey": {
-				"path": "/host/files/crypto-config/peerOrganizations/verify/users/Admin@verify/msp/keystore/pvt-cert.pem"
+				"path": "/tmp/crypto/peerOrganizations/verify/users/Admin@verify/msp/keystore/pvt-cert.pem"
 			},
 			"peers": ["peer0-verify", "peer1-verify"],
 			"signedCert": {
-				"path": "/host/files/crypto-config/peerOrganizations/verify/users/Admin@verify/msp/signcerts/Admin@verify-cert.pem"
+				"path": "/tmp/crypto/peerOrganizations/verify/users/Admin@verify/msp/signcerts/Admin@verify-cert.pem"
 			}
 		}
   },
@@ -48,7 +39,7 @@
             "ssl-target-name-override": "orderer0"
         },
         "tlsCACerts": {
-            "path": "/host/files/crypto-config/ordererOrganizations/orderer/orderers/orderer0/msp/tlscacerts/tlsca.orderer-cert.pem"
+            "path": "/tmp/crypto/ordererOrganizations/orderer/orderers/orderer0/msp/tlscacerts/tlsca.orderer-cert.pem"
         }
     }
   },
@@ -56,7 +47,7 @@
 		"peer0-verify": {
 			"url": "grpcs://peer0-verify-service:7051",
 			"tlsCACerts": {
-				"path": "/host/files/crypto-config/peerOrganizations/verify/peers/peer0-verify/tls/ca.crt"
+				"path": "/tmp/crypto/peerOrganizations/verify/peers/peer0-verify/tls/ca.crt"
 			},
       "grpcOptions": {
         "ssl-target-name-override": "peer0-verify"
