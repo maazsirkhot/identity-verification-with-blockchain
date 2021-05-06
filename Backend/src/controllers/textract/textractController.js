@@ -7,6 +7,7 @@ const DataField = require('../../models/mongoDB/dataField');
 const constants = require('../../../utils/constants');
 const textractService = require('../../services/textractServices/textractOps');
 const IdType = require('../../models/mongoDB/idType');
+const idType = require('../../models/mongoDB/idType');
 
 module.exports = {
   /* extract user details from ID Card */
@@ -33,12 +34,7 @@ module.exports = {
         ],
       };
       const ifDataExists = await textractService.ifUserAndIdTypeExists(req.user.userId,req.body.idType);
-      if(ifDataExists == 2) {
-        return res.status(constants.STATUS_CODE.BAD_REQUEST_ERROR_STATUS).send({
-          message: constants.MESSAGES.USER_ID_UPLOADED,
-          dataAvailable: false
-        });
-      }
+      
       const keyValuePair = await textractService.getAllDataFields(req.body.idType);
       
       /* uncomment this when not using textraxt APIs */
@@ -46,10 +42,20 @@ module.exports = {
       const textract = new AWS.Textract();
       textract.analyzeDocument(params, async (err, data) => {
         if (err) throw err;
-        const relevantText = textractService.getRelevantTextService(data, 
-          keyValuePair, 
-          ifDataExists
-        );
+        console.log(data);
+        let relevantText = {}
+        if (idType == 'CADL') {
+          relevantText = textractService.getRelevantTextService(data, 
+            keyValuePair, 
+            ifDataExists
+          );
+        } else {
+          relevantText = textractService.getRelevantTextServiceFromPass(data, 
+            keyValuePair, 
+            ifDataExists
+          );
+        }
+
         fs.unlinkSync(front.path);
         fs.unlinkSync(back.path);
         return res.status(constants.STATUS_CODE.SUCCESS_STATUS).send({
@@ -70,7 +76,6 @@ module.exports = {
   },
   storeUserDatainDatabase: async (req, res) => {
     try {
-     
       if (!req.user) {
         return res.status(constants.STATUS_CODE.BAD_REQUEST_ERROR_STATUS).send({
           message: constants.MESSAGES.USER_NOT_LOGGED_IN,
