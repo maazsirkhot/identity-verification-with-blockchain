@@ -3,7 +3,7 @@ import ImageGallery from 'react-image-gallery';
 import user from '../../../assets/img/default_user.png';
 import axiosInstance from '../../../utils/axiosInstance';
 
-export default function RequestInfo({ approvaldata, uniqueID }) {
+export default function RequestInfo({ approvaldata, uniqueID, idType }) {
   let approvalClassName = 'bg-danger';
 
   const [comments, setComments] = useState('');
@@ -53,6 +53,7 @@ export default function RequestInfo({ approvaldata, uniqueID }) {
       status: 'APPROVED',
       comments,
       verifiedBy: null,
+      idType,
     };
     approvaldata.verifierApproval[0] = data;
 
@@ -64,7 +65,6 @@ export default function RequestInfo({ approvaldata, uniqueID }) {
       .post('/verifier/fetch/updateUserData', userData)
       .then((res) => {
         if (res.status === 200) {
-          console.log(res);
           window.$(`request-info${uniqueID}`).modal('toggle');
           setTimeout(() => window.location.reload(), 500);
         }

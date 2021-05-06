@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axiosInstance from '../../../utils/axiosInstance';
 
-export default function AssignRole({ client, requestId }) {
+export default function AssignRole({ client, requestId, isDisabled }) {
   const [defaultRoles, setDefaultRoles] = useState([]);
   const [roleName, setRole] = useState('');
   const [roleId, setRoleId] = useState('');
@@ -39,23 +39,27 @@ export default function AssignRole({ client, requestId }) {
   }
   function onSubmit(e) {
     e.preventDefault();
-    const data = {
-      requestId,
-      client,
-      role: {
-        roleName,
-        roleId,
-      },
-      action: 'APPROVED',
-    };
+    if (isDisabled()) {
+      alert('You do not have all the information uploaded!');
+    } else {
+      const data = {
+        requestId,
+        client,
+        role: {
+          roleName,
+          roleId,
+        },
+        action: 'APPROVED',
+      };
 
-    axiosInstance()
-      .post('/user/assignRole', data)
-      .then((res) => {
-        console.log(res.data);
-        alert('Your information has been shared!');
-        window.location.reload();
-      });
+      axiosInstance()
+        .post('/user/assignRole', data)
+        .then((res) => {
+          console.log(res.data);
+          alert('Your information has been shared!');
+          window.location.reload();
+        });
+    }
   }
 
   return (

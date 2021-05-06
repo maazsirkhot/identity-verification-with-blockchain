@@ -20,6 +20,7 @@ export class ApprovalRequests extends Component {
     axiosInstance()
       .get('/verifier/fetch/getVerifierData')
       .then((res) => {
+        console.log('In Main', res.data.verifierData);
         this.setState({
           verifierrequests: res.data.verifierData,
         });

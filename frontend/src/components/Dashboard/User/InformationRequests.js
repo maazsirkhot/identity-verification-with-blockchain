@@ -14,6 +14,7 @@ export default function InformationRequests() {
     axiosInstance()
       .get('/user/request')
       .then((res) => {
+        console.log(res.data.data);
         setRequestDetails(res.data.data);
       })
       .catch((err) => {

@@ -55,7 +55,11 @@ export default function RequestItems({ userdata }) {
         <p>{date}</p>
       </td>
 
-      <RequestInfo approvaldata={userdata} uniqueID={userdata.userId} />
+      <RequestInfo
+        approvaldata={userdata}
+        uniqueID={userdata.userId}
+        idType={userdata.verifierApproval[0].idType}
+      />
     </tr>
   );
 }

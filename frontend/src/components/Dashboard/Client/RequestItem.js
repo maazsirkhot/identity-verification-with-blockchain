@@ -47,9 +47,7 @@ export default function RequestItem({ requestDetails }) {
       axiosInstance()
         .get('/user/assignRole', { params })
         .then((res) => {
-          if (res.data.data.length > 0)
-            setUserDetails(res.data.data[0].userDataFields);
-          else setUserDetails([]);
+          setUserDetails(res.data.data.userDataFields);
         })
         .catch((err) => {
           console.log(err);
@@ -59,10 +57,7 @@ export default function RequestItem({ requestDetails }) {
       axiosInstance()
         .get(`/client/fetch/post/${requestDetails._id}`)
         .then((res) => {
-          console.log(res.data);
-          if (res.data.data.length > 0)
-            setUserDetails(res.data.data[0].userDataFields);
-          else setUserDetails([]);
+          setUserDetails(res.data.postData.userDataFields);
         })
         .catch((err) => {
           console.log(err);
@@ -74,7 +69,9 @@ export default function RequestItem({ requestDetails }) {
     if (userDetails.length > 0) {
       return userDetails.map((fieldsRequested) => (
         <>
-          {fieldsRequested.field_name}: {fieldsRequested.field_value}
+          {fieldsRequested.field_name}
+          <small>({fieldsRequested.userDisplay})</small>:{' '}
+          {fieldsRequested.field_value}
           <br />
         </>
       ));

@@ -9,11 +9,18 @@ export default function RequestInfo({ requestDetails }) {
   const [activeTabId, setactiveTabId] = useState(0);
   const [showtab, setShowTab] = useState(false);
   const [approvedRequestInfo, setApprovedRequestInfo] = useState('');
+  const [notavailableFields, setNotAvailableFields] = useState([]);
+  function isDisabled() {
+    if (notavailableFields.length > 0) return true;
+    return false;
+  }
+
   const activeTab = [
-    <AssignRequest requestId={requestDetails._id} />,
+    <AssignRequest requestId={requestDetails._id} isDisabled={isDisabled} />,
     <AssignRole
       requestId={requestDetails._id}
       client={requestDetails.client}
+      isDisabled={isDisabled}
     />,
   ];
 
@@ -21,13 +28,18 @@ export default function RequestInfo({ requestDetails }) {
     if (requestDetails.status === 'PENDING') {
       setShowTab(true);
     }
+    setNotAvailableFields(
+      requestDetails.fieldsRequested.filter(
+        (field) => field.isAvailable === false
+      )
+    );
   }, []);
 
   function getRequestDetails() {
     const params = {
       requestId: requestDetails._id,
     };
-    if (requestDetails.status !== 'PENDING') {
+    if (requestDetails.status === 'APPROVED') {
       if (requestDetails.typeOfRequest === 'role_assign') {
         axiosInstance()
           .get('/user/assignRole', { params })
@@ -44,9 +56,7 @@ export default function RequestInfo({ requestDetails }) {
         axiosInstance()
           .get(`/client/fetch/post/${requestDetails._id}`)
           .then((res) => {
-            if (res.data.data.length > 0)
-              setApprovedRequestInfo(res.data.data[0]);
-            else setApprovedRequestInfo('');
+            setApprovedRequestInfo(res.data.postData);
           })
           .catch((err) => {
             console.log(err);
@@ -154,10 +164,19 @@ export default function RequestInfo({ requestDetails }) {
                             <br />
                           </div>
                           <div class="col-1">
-                            <i
-                              class="far fa-check-circle"
-                              style={{ color: 'green' }}
-                            />
+                            {fieldsRequested.isAvailable ? (
+                              <i
+                                class="far fa-check-circle"
+                                style={{ color: 'green' }}
+                              />
+                            ) : (
+                              <>
+                                <i
+                                  class="fas fa-times-circle"
+                                  style={{ color: 'red' }}
+                                />
+                              </>
+                            )}
                           </div>
                         </div>
                       ))}

@@ -7,7 +7,7 @@ import { user } from '../../../utils/sidebarConfig';
 export default function UserProfile() {
   useEffect(() => {
     const params = {
-      options: 'ALL',
+      option: 'ALL',
     };
     axiosInstance()
       .get('/user/fetch/profile', { params })

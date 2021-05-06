@@ -79,7 +79,6 @@ export default function DocumentPictures({ activeTabChange }) {
         })
         .catch((err) => {
           console.log(err);
-          alert(err.response.data.message);
         });
     }
   }

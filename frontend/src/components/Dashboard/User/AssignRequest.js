@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axiosInstance from '../../../utils/axiosInstance';
 
-export default function AssignRequest({ requestId }) {
+export default function AssignRequest({ requestId, isDisabled }) {
   const [expiryTime, setExpiryTime] = useState('');
 
   const expiry = {
@@ -46,18 +46,21 @@ export default function AssignRequest({ requestId }) {
   function onSubmit(e) {
     e.preventDefault();
 
-    const data = {
-      action: 'APPROVED',
-      expiry: expiry[expiryTime],
-    };
-
-    axiosInstance()
-      .post(`/user/request/${requestId}`, data)
-      .then((res) => {
-        console.log(res);
-        alert('Your information has been shared!');
-        window.location.reload();
-      });
+    if (isDisabled()) {
+      alert('You do not have all the information uploaded!');
+    } else {
+      const data = {
+        action: 'APPROVED',
+        expiry: expiry[expiryTime],
+      };
+      axiosInstance()
+        .post(`/user/request/${requestId}`, data)
+        .then((res) => {
+          console.log(res);
+          alert('Your information has been shared!');
+          window.location.reload();
+        });
+    }
   }
   function onReject(e) {
     e.preventDefault();
