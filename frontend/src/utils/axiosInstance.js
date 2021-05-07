@@ -1,8 +1,7 @@
 import axios from 'axios';
 
 export default (history = null) => {
-  // const baseURL = 'http://54.183.134.75:5000/';
-  const baseURL = 'http://localhost:5000/';
+  const baseURL = 'http://localhost:5000';
   const headers = {};
 
   if (localStorage.token) {

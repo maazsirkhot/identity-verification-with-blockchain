@@ -22,7 +22,6 @@ export default function RequestItem({ requestDetails }) {
   const [statusClass, setStatusClass] = useState('reject');
   const [statusIcon, setStatusIcon] = useState('fas fa-user-times');
   const [userDetails, setUserDetails] = useState([]);
-
   useEffect(() => {
     const currentdate = new Date(requestDetails.createdAt);
     setDate(
@@ -66,27 +65,13 @@ export default function RequestItem({ requestDetails }) {
         });
     }
   }
-
-  function getMessage() {
-    if (userDetails.length > 0) {
-      const notallAvailable = userDetails.filter(
-        (fieldsRequested) => !fieldsRequested.isValid
-      );
-      console.log(notallAvailable);
-
-      if (notallAvailable.length > 0) {
-        return 'User has updated the information. Please send a new request to get the latest information';
-      }
-    }
-    return '';
-  }
   function getUserDetails() {
     if (userDetails.length > 0) {
       return userDetails.map((fieldsRequested) => (
         <>
           {fieldsRequested.field_name}
           <small>({fieldsRequested.userDisplay})</small>:{' '}
-          {fieldsRequested.isValid ? <>{fieldsRequested.field_value}</> : 'N/A'}
+          {fieldsRequested.field_value}
           <br />
         </>
       ));
@@ -177,9 +162,6 @@ export default function RequestItem({ requestDetails }) {
                       <strong>Information Requested</strong>
                     </h5>
                     <p>{getUserDetails()}</p>
-                    <small>
-                      <em>{getMessage()}</em>
-                    </small>
                   </>
                 )}
               </div>
