@@ -239,6 +239,7 @@ Do not use existing binaries as is in bin/ folder, they may not work on your sys
 -----------------------PRODUCTION ENVIRONMENT------------------------------
 
 1. Install kops and aws cli
+    Create IAM user
 2. aws configure 
     k8s-hyperledger-fabric-2.2 [master] ⚡  aws configure
     AWS Access Key ID [****************IGXO]: xxxxxxx
@@ -247,6 +248,7 @@ Do not use existing binaries as is in bin/ folder, they may not work on your sys
     Default output format [json]: 
 
 3. Test AWS cli
+    aws sts get-caller-identity
     aws ec2 describe-availability-zones --region us-west-1
 
 4. S3 bucket: idverfbucket
@@ -290,6 +292,7 @@ Do not use existing binaries as is in bin/ folder, they may not work on your sys
     
     Check if cluster is built 
     kops validate cluster
+    if deleted: kops update cluster --yes
 
     INSTANCE GROUPS
     NAME                    ROLE    MACHINETYPE     MIN     MAX     SUBNETS
@@ -317,6 +320,7 @@ Do not use existing binaries as is in bin/ folder, they may not work on your sys
 
     Delete cluster if anything is incorrect
     kops delete cluster hyperledger.k8s.local
+    kops delete cluster --name hyperledger.k8s.local --yes
 
 7. After the cluster is created, need to add some secrets to the network
 
@@ -340,7 +344,6 @@ Do not use existing binaries as is in bin/ folder, they may not work on your sys
     file-system-id.efs.aws-region.amazonaws.com
     Ref: https://docs.aws.amazon.com/efs/latest/ug/mounting-fs-mount-cmd-dns-name.html
 
-    ```bash
     kubectl apply -f Blockchain/production/storage/pv.yaml 
     kubectl apply -f Blockchain/production/storage/pvc.yaml
     kubectl apply -f Blockchain/minikube/storage/tests 
@@ -372,6 +375,12 @@ Do not use existing binaries as is in bin/ folder, they may not work on your sys
 
 13. Time to generate the artifacts inside one of the containers and in the files folder
 
+    apt-get update
+    apt-get install curl -y
+    cd /host/files
+    curl -sSL https://bit.ly/2ysbOFE | bash -s -- 2.2.1 1.4.7
+
+    
     rm -rf orderer channels
     mkdir -p orderer channels
     bin/configtxgen -profile OrdererGenesis -channelID syschannel -outputBlock ./orderer/genesis.block
@@ -472,4 +481,24 @@ Do not use existing binaries as is in bin/ folder, they may not work on your sys
 
     //DELETE WALLET/IDENTITY
     kubectl exec -it $(kubectl get pods -o=name | grep cli-peer0-verify-deployment | sed "s/^.\{4\}//") -- bash -c 'peer chaincode invoke -C mainchannel -n resources -c '\''{"Args":["DeleteIdentity","aGR3MzI3OHljYmpjZXVoUGF
+
+16. Deploy backend
+    docker build -t krutikavk/fabric-be:v6 .
+    docker push krutikavk/fabric-be:v6
+    kubectl apply -f Blockchain/production/backend
+
+
+17. Try to curl inside verify-ca-client-677d58f984-rk99v to check if Blockchain-backend api works
+    
+    kubectl exec -it verify-ca-client-677d58f984-rk99v -- bash
+
+    curl http://api-service:4000/resources/gud23734fhiuegc2x
+    {"status":200,"walletId":"Mzd5YWZkc3lnZTIzUGFzc3BvcnQ2MDdiODc0ZA==","isValid":false,"message":"Successfully read from ledger"}root@verify-ca-client-677d58f984-rk99v:/# curl -X POST http://api-service:4000/resources -d '{"userId": "gud23734f2x","docType": "Passport","verifier": "Passport Authority"}]}'
+
+
+    curl -i -X POST -H "Content-Type: application/json" -d '{"userId": "gud23734fhiuegc2x","docType": "Passport","verifier": "Passport Authority"}' http://api-service:4000/resources
+
+
+
+    
 

@@ -18,4 +18,4 @@ spec:
     - retrans=2
   nfs:
     path: /
-    server: fs-019d9a06.efs.us-west-2.amazonaws.com
+    server: fs-da5355dd.efs.us-west-2.amazonaws.com

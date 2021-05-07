@@ -18,28 +18,10 @@ metadata:
       }
 spec:
   rules:
-    - host: api.udemy-hyperledger.com
+    - host: ac5fa17ad445843dc9cdeb0c97fc3eef-129211992.us-west-2.elb.amazonaws.com
       http:
         paths:
           - path: /
             backend:
               serviceName: api-service
               servicePort: 4000
-    - host: www.udemy-hyperledger.com
-      http:
-        paths:
-          - path: /
-            backend:
-              serviceName: web-service
-              servicePort: 3000
-    - http:
-        paths:
-          - path: /
-            backend: 
-              serviceName: web-service
-              servicePort: 3000
-
-  tls:
-    - hosts:
-        - udemy-hyperledger.com
-      secretName: udemy-hyperledger.com

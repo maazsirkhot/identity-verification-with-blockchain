@@ -24,8 +24,10 @@ router.post('/', async (request, response) => {
     const contract = mainNetwork.getContract('resources');
 
     // CreateIdentity(ctx contractapi.TransactionContextInterface, userId string, docType string, verifier string)
+    console.log('data: ', data);
     const createResp = await contract.submitTransaction('CreateIdentity', data.userId, data.docType, data.verifier)
-    console.log(createResp);
+    console.log('createResp:', JSON.stringify(JSON.stringify(createResp).data));
+    // response.end(JSON.stringify(createResp));
     response.status(200).end('Added new wallet');
 
 
