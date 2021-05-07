@@ -34,7 +34,7 @@ module.exports = {
               const d = {};
               d.field_id = keyValuePair['Address'];
               d.field_name = 'Address';
-              d.field_value = address;
+              d.field_value = address.trim();
               d.verifierDoc = keyValuePair.idType;
               d.isCurrent = true;
               output.push(d);
@@ -45,11 +45,9 @@ module.exports = {
             const d = {};
             d.field_id = keyValuePair['First Name'];
             d.field_name = 'First Name';
-            d.field_value = innerdata.Text.substring(2);
+            d.field_value = innerdata.Text.substring(2).trim();
             d.verifierDoc = keyValuePair.idType;
-            if (ifDataExists == 0) {
-              d.isCurrent = true;
-            }
+            d.isCurrent = true;
             output.push(d);
             nextAddressLine = 1;
           } else if (innerdata.Text
@@ -58,11 +56,9 @@ module.exports = {
             const d = {};
             d.field_id = keyValuePair['Last Name'];
             d.field_name = 'Last Name';
-            d.field_value = innerdata.Text.substring(2);
+            d.field_value = innerdata.Text.substring(2).trim();
             d.verifierDoc = keyValuePair.idType;
-            if (ifDataExists == 0) {
-              d.isCurrent = true;
-            }
+            d.isCurrent = true;
             output.push(d);
           } else if (innerdata.Text
               && innerdata.Text.substring(0, 3) === 'DOB'
@@ -70,11 +66,9 @@ module.exports = {
             const d = {};
             d.field_id = keyValuePair['Date of Birth'];
             d.field_name = 'Date of Birth';
-            d.field_value = innerdata.Text.substring(4);
+            d.field_value = innerdata.Text.substring(4).trim();
             d.verifierDoc = keyValuePair.idType;
-            if (ifDataExists == 0) {
-              d.isCurrent = true;
-            }
+            d.isCurrent = true;
             output.push(d);
           } else if (innerdata.Text
               && innerdata.Text.substring(0, 3) === 'EXP'
@@ -82,7 +76,7 @@ module.exports = {
             const d = {};
             d.field_id = keyValuePair['DL Expiry Date'];
             d.field_name = 'DL Expiry Date';
-            d.field_value = innerdata.Text.substring(4);
+            d.field_value = innerdata.Text.substring(4).trim();
             d.verifierDoc = keyValuePair.idType;
             d.isCurrent = true;
             output.push(d);
@@ -92,26 +86,25 @@ module.exports = {
             const d = {};
             d.field_id = keyValuePair.Sex;
             d.field_name = 'Sex';
-            d.field_value = innerdata.Text.substring(4);
+            d.field_value = innerdata.Text.substring(4).trim();
             d.verifierDoc = keyValuePair.idType;
-            if (ifDataExists == 0) {
-              d.isCurrent = true;
-            }
+            d.isCurrent = true;
             output.push(d);
-          } else if (nextLine == true && 
-            keyValuePair['Driver License']) {
+          } else if (innerdata.Text
+            && innerdata.Text.substring(0, 2) === 'DL'
+            && keyValuePair['Driver License']) {
               const d = {};
               d.field_id = keyValuePair['Driver License'];
               d.field_name = 'Driver License';
-              d.field_value = innerdata.Text;
+              d.field_value = innerdata.Text.substring(2).trim();
               d.verifierDoc = keyValuePair.idType;
               d.isCurrent = true;
               output.push(d);
-              nextLine = false;
-          } else if (innerdata.Text
-            && innerdata.Text.substring(0, 2) === 'DL') {
-              nextLine = true;
-          } 
+            }
+          // } else if (innerdata.Text
+          //   && innerdata.Text.substring(0, 2) === 'DL') {
+          //     nextLine = true;
+          // } 
         }
       });
       return output;
