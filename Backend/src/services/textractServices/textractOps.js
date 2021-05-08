@@ -11,6 +11,8 @@ const userFields = require('../../daos/userFields/userFields');
 const idType = require('../../models/mongoDB/idType');
 const fetch = require('node-fetch');
 const { forEach } = require('lodash');
+const https = require('https');
+const axios = require('axios');
 
 module.exports = {
   getRelevantTextService: (data, keyValuePair, ifDataExists) => {
@@ -238,15 +240,25 @@ module.exports = {
           if (field.verifierDoc.docshortName != idType) {
             dataField.push(field);
           } else {
-            walletId = field.dataReference;
+              walletId = field.dataReference;
           }
         });
-        if (walletId != undefined && walletId != "") {
-          const blockchainResponseData = await fetch(constants.ENV_VARIABLES.BLOCKCHAIN_HOST + '/resources/delete/'+walletId, {method: 'POST'});
-          const blockchainResponseJson = await blockchainResponseData.json();
-          if (blockchainResponseJson.status != '200')
-            return false;
-        }
+        const agent = new https.Agent({  
+          rejectUnauthorized: false
+         });
+         const bdata = {};
+        blockchainResponseJson = await axios.post(constants.ENV_VARIABLES.BLOCKCHAIN_HOST + '/resources/delete/'+walletId, bdata, { httpsAgent: agent });
+        console.log(blockchainResponseJson);
+        if (blockchainResponseJson.status != 200)
+          return false;
+        
+        
+        // if (walletId != undefined && walletId != "") {
+        //   const blockchainResponseData = await fetch(constants.ENV_VARIABLES.BLOCKCHAIN_HOST + '/resources/delete/'+walletId, {method: 'POST'});
+        //   const blockchainResponseJson = await blockchainResponseData.json();
+        //   if (blockchainResponseJson.status != '200')
+        //     return false;
+        // }
         if(dataField.length == 0) {
           data = _.forEach(data, (d) => {
             d.isCurrent = true;

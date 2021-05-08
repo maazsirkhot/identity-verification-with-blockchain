@@ -4,6 +4,8 @@ const _ = require('lodash');
 const fetch = require('node-fetch');
 const constants = require('../../../utils/constants');
 const userFields = require('../../daos/userFields/userFields');
+const https = require('https');
+const axios = require('axios');
 
 module.exports = {
   getAllUsersByVerifierDoc: async (idType) => {
@@ -84,20 +86,20 @@ module.exports = {
   },
   getWalletIdFromBlockchainService: async (userId, verifierId) => {
     try {
-      const verfierData = await verificationEntity.findVerifierById(verifierId);
-      const blockchainData = {
-        userId,
-        docType: verfierData.idtype,
-        verifier: verfierData.idtype == 'CADL'?'DL Authority':'Passport Authority',
-      }
+      process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = 0;
       
-      const blockchainResponseData = await fetch(constants.ENV_VARIABLES.BLOCKCHAIN_HOST + '/resources', {method: 'POST', body: blockchainData});
-      const blockchainResponseJson = await blockchainResponseData.json();
+      //const verfierData = await verificationEntity.findVerifierById(verifierId);
+      
+      // const blockchainResponseJson = await fetch(, {
+      //   method: 'POST',
+      //   body: blockchainData,
+      //   agent: httpsAgent,
+      // });
+      
+      //const blockchainResponseData = await fetch(, {method: 'POST', body: blockchainData});
+      //const blockchainResponseJson = await blockchainResponseData.json();
 
-      if (blockchainResponseJson.status == '200')
-        return blockchainResponseJson.walletId;
-      else
-        return false;
+      
     } catch (error) {
       console.log(error);
       throw new Error(`Error Occurred in Service Layers: ${error}`);

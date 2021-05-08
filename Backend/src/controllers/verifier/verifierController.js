@@ -1,6 +1,9 @@
 const verifierService = require('../../services/verifierServices/verify');
 const constants = require('../../../utils/constants');
 const _ = require('lodash');
+const verificationEntity = require('../../daos/verificationEntity/verificationEntity');
+const https = require('https');
+const axios = require('axios');
 
 module.exports = {
   getVerifierData: async (req, res) => {
@@ -62,28 +65,49 @@ module.exports = {
         }); 
       }
       const userDetails = req.body.userDetails;
-      let walletId = "";
       if (userDetails.verifierApproval[0].status === 'APPROVED') {
-        walletId = await verifierService.getWalletIdFromBlockchainService(userDetails.userId, req.user.userId);
-        if (!walletId) {
-          return res.status(constants.STATUS_CODE.INTERNAL_SERVER_ERROR_STATUS).send({
-            message: constants.MESSAGES.FAILED_BLOCKCHAIN_STORE_INFORMATION,
-            dataAvailable: false,
-          });
+        const verfierData = await verificationEntity.findVerifierById(req.user.userId);
+        const blockchainData = {
+          userId: req.user.userId,
+          docType: verfierData.idtype,
+          verifier: verfierData.idtype == 'CADL'?'DL Authority':'Passport Authority',
         }
-      }
-      const updatedUserData = await verifierService.updateUserData(userDetails, req.user.userId, walletId, userDetails.verifierApproval[0].idType);
-      if (!updatedUserData) {
-        return res.status(constants.STATUS_CODE.BAD_REQUEST_ERROR_STATUS).send({
-          message: constants.MESSAGES.FAILED_USER_UPDATE,
-          dataAvailable: false,
-        });
-      }
-      return res.status(constants.STATUS_CODE.SUCCESS_STATUS).send({
-        message: constants.MESSAGES.UPDATE_USER_DATA_SUCCESS,
-        updatedUserData,
-        dataAvailable: !!_.isPlainObject(updatedUserData),
-      });
+  
+        const agent = new https.Agent({  
+          rejectUnauthorized: false
+         });
+         
+         axios.post(constants.ENV_VARIABLES.BLOCKCHAIN_HOST + '/resources', blockchainData, { httpsAgent: agent })
+         .then(async (blockchainResponseJson) => {
+           console.log(blockchainResponseJson.data);
+           if (blockchainResponseJson.status == '200') {
+            const walletId = blockchainResponseJson.data.walletId;
+            if (!walletId) {
+              return res.status(constants.STATUS_CODE.INTERNAL_SERVER_ERROR_STATUS).send({
+                message: constants.MESSAGES.FAILED_BLOCKCHAIN_STORE_INFORMATION,
+                dataAvailable: false,
+              });
+            }
+
+            const updatedUserData = await verifierService.updateUserData(userDetails, req.user.userId, walletId, userDetails.verifierApproval[0].idType);
+              if (!updatedUserData) {
+                return res.status(constants.STATUS_CODE.BAD_REQUEST_ERROR_STATUS).send({
+                  message: constants.MESSAGES.FAILED_USER_UPDATE,
+                  dataAvailable: false,
+                });
+              }
+              return res.status(constants.STATUS_CODE.SUCCESS_STATUS).send({
+                message: constants.MESSAGES.UPDATE_USER_DATA_SUCCESS,
+                updatedUserData,
+                dataAvailable: !!_.isPlainObject(updatedUserData),
+              });
+          }
+          
+         });
+  
+        //await verifierService.getWalletIdFromBlockchainService(userDetails.userId, req.user.userId);
+      
+        }
     } catch (error) {
       console.log(error);
       return res

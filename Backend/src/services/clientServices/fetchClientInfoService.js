@@ -5,6 +5,8 @@ const postDao = require('../../daos/post/post');
 const utilFunctions = require('../../helpers/utilFunctions');
 const mongoose = require('mongoose');
 const fetch = require('node-fetch');
+const https = require('https');
+const axios = require('axios');
 
 module.exports = {
   searchUserService: async (user, type, options) => {
@@ -53,21 +55,35 @@ module.exports = {
 
       postData = postData[0].toObject({ getters: true });
       let userDataFields = postData.userDataFields;
-      let keyValuePair = {};
-      for(i in userDataFields) {
-        walletId = userDataFields[i].dataReference;
-        if(walletId in keyValuePair) {
-          userDataFields[i].isValid = keyValuePair[walletId];
-        } else {
-          const blockchainResponseData = await fetch(constants.ENV_VARIABLES.BLOCKCHAIN_HOST + '/resources/'+walletId, {method: 'GET'});
-          const blockchainResponseJson = await blockchainResponseData.json();
-          if (blockchainResponseJson.isValid !== undefined)
-            userDataFields[i].isValid = blockchainResponseJson.isValid;
-          else
-            userDataFields[i].isValid = false;
-          keyValuePair[walletId] = userDataFields[i].isValid;
+
+      const agent = new https.Agent({  
+        rejectUnauthorized: false
+       });
+
+       const walletId = userDataFields[0].dataReference;
+
+       blockchainResponseJson = await axios.get(constants.ENV_VARIABLES.BLOCKCHAIN_HOST + '/resources/'+walletId, { httpsAgent: agent });
+        if (blockchainResponseJson.data.isValid !== undefined) {
+          const isValid = blockchainResponseJson.data.isValid;
+          for(i in userDataFields) {
+            userDataFields[i].isValid = isValid;
+          }
         }
-      }
+      // let keyValuePair = {};
+      // for(i in userDataFields) {
+      //   walletId = userDataFields[i].dataReference;
+      //   if(walletId in keyValuePair) {
+      //     userDataFields[i].isValid = keyValuePair[walletId];
+      //   } else {
+      //     const blockchainResponseData = await fetch(constants.ENV_VARIABLES.BLOCKCHAIN_HOST + '/resources/'+walletId, {method: 'GET'});
+      //     const blockchainResponseJson = await blockchainResponseData.json();
+      //     if (blockchainResponseJson.isValid !== undefined)
+      //       userDataFields[i].isValid = blockchainResponseJson.isValid;
+      //     else
+      //       userDataFields[i].isValid = false;
+      //     keyValuePair[walletId] = userDataFields[i].isValid;
+      //   }
+      // }
       
 
       return {

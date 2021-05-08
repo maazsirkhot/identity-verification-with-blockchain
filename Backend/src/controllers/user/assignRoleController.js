@@ -1,6 +1,7 @@
 const constants = require('../../../utils/constants');
 const assignRoleService = require('../../services/userServices/assignRoleService');
 
+
 module.exports = {
   createAssignRole: async (req, res) => {
     try {
@@ -77,7 +78,7 @@ module.exports = {
     try {
       const requestId = req.query.requestId;
       const assignRoleData = await assignRoleService.getAssignRole(requestId);
-      if (!assignRoleData) {
+      if (await !assignRoleData) {
         return res.status(constants.STATUS_CODE.BAD_REQUEST_ERROR_STATUS).send({
           message: constants.MESSAGES.NO_DATA_AVAILABLE,
           dataAvailable: result.dataAvailable,
