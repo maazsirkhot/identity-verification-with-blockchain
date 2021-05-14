@@ -33,26 +33,6 @@ Organizations:
       Endorsement:
         Type: Signature
         Rule: "OR('verify.member')"
-  - &oracle
-    Name: oracle
-    ID: oracle
-    MSPDir: /host/files/crypto-config/peerOrganizations/oracle/msp
-    AnchorPeers:
-      - Host: peer0-oracle-service
-        Port: 7051
-    Policies:
-      Readers:
-        Type: Signature
-        Rule: "OR('oracle.member')"
-      Writers:
-        Type: Signature
-        Rule: "OR('oracle.member')"
-      Admins:
-        Type: Signature
-        Rule: "OR('oracle.admin')"
-      Endorsement:
-        Type: Signature
-        Rule: "OR('oracle.member')"
 
 Capabilities:
   Global: &ChannelCapabilities

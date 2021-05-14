@@ -18,16 +18,15 @@ spec:
         - name: my-pv-storage
           persistentVolumeClaim:
             claimName: my-pv-claim
-        - name: host
-          hostPath:
-            path: /var/run
       containers:
       - name: node-app
-        image: krutikavk/fabric-be:v3
+        image: krutikavk/fabric-be:v1
         ports:
           - containerPort: 4000
         volumeMounts:
-            - mountPath: /host
-              name: my-pv-storage
-            - mountPath: /var/run
-              name: host
+          - mountPath: /files
+            name: my-pv-storage
+            subPath: files
+          - mountPath: /tmp/crypto
+            name: my-pv-storage
+            subPath: files/crypto-config

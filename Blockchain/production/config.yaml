@@ -39,7 +39,7 @@ client:
 channels:
   mainchannel:
     peers:
-      peer0-ibm-service:
+      peer0-verify-service:
         endorsingPeer: true
         chaincodeQuery: true
         ledgerQuery: true
