@@ -21,7 +21,7 @@ spec:
             claimName: my-pv-claim
       containers:
         - name: api
-          image: krutikavk/fabric-be:v6
+          image: krutikavk/fabric:v6
           env:
               - name: ENV
                 value: prod

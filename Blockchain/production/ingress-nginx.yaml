@@ -1,7 +1,7 @@
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: udemy-hyperledger
+  name: krutika-katelia
   annotations:
     kubernetes.io/ingress.class: "nginx"
     ingress.kubernetes.io/aws-load-balancer-backend-protocol: "http"
@@ -18,8 +18,7 @@ metadata:
       }
 spec:
   rules:
-    - host: ac5fa17ad445843dc9cdeb0c97fc3eef-129211992.us-west-2.elb.amazonaws.com
-      http:
+    - http:
         paths:
           - path: /
             backend:

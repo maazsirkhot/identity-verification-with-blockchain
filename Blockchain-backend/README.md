@@ -39,10 +39,10 @@ All paths relative to Blockchain-backend folder
 
 
 6. Change port for new deployment
-    curl http://127.0.0.1:55524/resources/gud23734fhiuegc2x
+    curl http://api-service:4000/resources/gud23734fhiuegc2x
     {"status":200,"walletId":"Mzd5YWZkc3lnZTIzUGFzc3BvcnQ2MDdiODc0ZA==","isValid":false,"message":"Successfully read from ledger"}%
 
-    curl -X POST http://127.0.0.1:55524/resources -d '{"userId": "gud23734fhiuegc2x","docType": "Passport","verifier": "Passport Authority"}]}'
+    curl -X POST http://api-service:4000/resources -d '{"userId": "gud23734fhiuegc2x","docType": "Passport","verifier": "Passport Authority"}]}'
 
    
 

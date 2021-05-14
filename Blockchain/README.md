@@ -252,6 +252,7 @@ Do not use existing binaries as is in bin/ folder, they may not work on your sys
     aws ec2 describe-availability-zones --region us-west-1
 
 4. S3 bucket: idverfbucket
+
     export KOPS_CLUSTER_NAME=hyperledger.k8s.local
     export KOPS_STATE_STORE=s3://idverfbucket
     export AWS_ACCESS_KEY_ID=$(aws configure get aws_access_key_id)
@@ -333,10 +334,17 @@ Do not use existing binaries as is in bin/ folder, they may not work on your sys
         --docker-email=krutikavk@gmail.com
 
 8. Adding nginx to our network
+    Add load balancer's DNS name to ingress-nginx.yaml
 
     kubectl apply -f https://raw.githubusercontent.com/kubernetes/kops/master/addons/ingress-nginx/v1.6.0.yaml
+
+    A load balancer will be created with this command
+    Add this load balancer to 
+
     kubectl create secret tls udemy-hyperledger.com --key ~/udemy-hyperledger.com/privkey.pem --cert ~/udemy-hyperledger.com/cert.pem
     kubectl apply -f Blockchain/production/ingress-nginx.yaml
+
+    kubectl delete -f Blockchain/production/ingress-nginx.yaml
 
 9. Now, lets add the NFS file system. Go ahead and login to your AWS account and go to EFS. Create a NFS file system in the same REGION as the cluster and make sure to SET THE VPC the same as the network. VERY IMPORTANT!!!! Also, create mount points and set them to include ALL of the permissions for the network (should be for of them). Now, we can create the storage by using the PV and PVC yaml files. We're going to use multiple PVC's just to show how to do that.
 
@@ -360,6 +368,8 @@ Do not use existing binaries as is in bin/ folder, they may not work on your sys
     kubectl cp ./Blockchain/production/configtx.yaml $(kubectl get pods -o=name | grep example1 | sed "s/^.\{4\}//"):/host/files
     kubectl cp ./Blockchain/production/config.yaml $(kubectl get pods -o=name | grep example1 | sed "s/^.\{4\}//"):/host/files
     kubectl cp ./chaincode/resources $(kubectl get pods -o=name | grep example1 | sed "s/^.\{4\}//"):/host/files/chaincode
+    
+    //not needed as system different from mac
     kubectl cp Blockchain/fabric-samples/bin $(kubectl get pods -o=name | grep example1 | sed "s/^.\{4\}//"):/host/files
 
     (same as minikube)
@@ -442,8 +452,8 @@ Do not use existing binaries as is in bin/ folder, they may not work on your sys
     krutikavk@Krutikas-MacBook-Pro resources % go build resourcescc.go 
 
     Package chaincode
-    kubectl exec -it $(kubectl get pods -o=name | grep cli-peer0-verify-deployment | sed "s/^.\{4\}//") -- bash -c 'peer lifecycle chaincode package resources.tar.gz --path /opt/gopath/src/resources --lang golang --label resources_1'
-    kubectl exec -it $(kubectl get pods -o=name | grep cli-peer1-verify-deployment | sed "s/^.\{4\}//") -- bash -c 'peer lifecycle chaincode package resources.tar.gz --path /opt/gopath/src/resources --lang golang --label resources_1'
+    kubectl exec -it $(kubectl get pods -o=name | grep cli-peer0-verify-deployment | sed "s/^.\{4\}//") -- bash -c 'peer lifecycle chaincode package resources.tar.gz --path /opt/gopath/src/resources --lang golang --label resources_2'
+    kubectl exec -it $(kubectl get pods -o=name | grep cli-peer1-verify-deployment | sed "s/^.\{4\}//") -- bash -c 'peer lifecycle chaincode package resources.tar.gz --path /opt/gopath/src/resources --lang golang --label resources_2'
 
     Install chaincode (takes a bit)
     kubectl exec -it $(kubectl get pods -o=name | grep cli-peer0-verify-deployment | sed "s/^.\{4\}//") -- bash -c 'peer lifecycle chaincode install resources.tar.gz &> pkg.txt'
@@ -452,10 +462,10 @@ Do not use existing binaries as is in bin/ folder, they may not work on your sys
     (kubectl logs -f $(kubectl get pods -o=name | grep peer0-verify-deployment | sed "s/^.\{4\}//") to check chaincode installation logs)
 
     Approval for chaincode
-    kubectl exec -it $(kubectl get pods -o=name | grep cli-peer0-verify-deployment | sed "s/^.\{4\}//") -- bash -c 'peer lifecycle chaincode approveformyorg -o orderer0-service:7050 --tls --cafile=/etc/hyperledger/orderers/msp/tlscacerts/orderers-ca-service-7054.pem --channelID mainchannel --collections-config /opt/gopath/src/resources/collections-config.json --name resources --version 1.0 --sequence 1 --package-id $(tail -n 1 pkg.txt | awk '\''NF>1{print $NF}'\'')'
+    kubectl exec -it $(kubectl get pods -o=name | grep cli-peer0-verify-deployment | sed "s/^.\{4\}//") -- bash -c 'peer lifecycle chaincode approveformyorg -o orderer0-service:7050 --tls --cafile=/etc/hyperledger/orderers/msp/tlscacerts/orderers-ca-service-7054.pem --channelID mainchannel --collections-config /opt/gopath/src/resources/collections-config.json --name resources --version 1.1 --sequence 3 --package-id $(tail -n 1 pkg.txt | awk '\''NF>1{print $NF}'\'')'
 
     Commit chaincode
-    kubectl exec -it $(kubectl get pods -o=name | grep cli-peer0-verify-deployment | sed "s/^.\{4\}//") -- bash -c 'peer lifecycle chaincode commit -o orderer0-service:7050 --tls --cafile=/etc/hyperledger/orderers/msp/tlscacerts/orderers-ca-service-7054.pem --channelID mainchannel --collections-config /opt/gopath/src/resources/collections-config.json --name resources --version 1.0 --sequence 1'
+    kubectl exec -it $(kubectl get pods -o=name | grep cli-peer0-verify-deployment | sed "s/^.\{4\}//") -- bash -c 'peer lifecycle chaincode commit -o orderer0-service:7050 --tls --cafile=/etc/hyperledger/orderers/msp/tlscacerts/orderers-ca-service-7054.pem --channelID mainchannel --collections-config /opt/gopath/src/resources/collections-config.json --name resources --version 1.1 --sequence 3'
 
     NOTE:
     Error on peer0-verify-deployment: streaming call completed grpc.service=protos.Deliver grpc.method=DeliverFiltered grpc.request_deadline=2021-04-17T05:51:48.753Z grpc.peer_address=172.17.0.1:39553 error="context finished before block retrieved: context canceled" grpc.code=Unknown grpc.call_duration=2.1417194s
@@ -472,32 +482,45 @@ Do not use existing binaries as is in bin/ folder, they may not work on your sys
     kubectl exec -it $(kubectl get pods -o=name | grep cli-peer0-verify-deployment | sed "s/^.\{4\}//") -- bash -c 'peer chaincode invoke -C mainchannel -n resources -c '\''{"Args":["CreateIdentity","hdw3278ycbjceuh","Passport","Passport Authority"]}'\'' -o orderer0-service:7050 --tls --cafile=/etc/hyperledger/orderers/msp/tlscacerts/orderers-ca-service-7054.pem'
 
     //READ IDENTITY (ctx contractapi.TransactionContextInterface, walletId string)
-    kubectl exec -it $(kubectl get pods -o=name | grep cli-peer0-verify-deployment | sed "s/^.\{4\}//") -- bash -c 'peer chaincode query -C mainchannel -n resources -c '\''{"Args":["ReadIdentity","aGR3MzI3OHljYmpjZXVoUGFzc3BvcnQ2MDkzZDVkNA=="]}'\'' -o orderer0-service:7050 --tls --cafile=/etc/hyperledger/orderers/msp/tlscacerts/orderers-ca-service-7054.pem'
+    kubectl exec -it $(kubectl get pods -o=name | grep cli-peer0-verify-deployment | sed "s/^.\{4\}//") -- bash -c 'peer chaincode query -C mainchannel -n resources -c '\''{"Args":["ReadIdentity","Z3VkMjM3MzRmaGl1ZWdjMnhQYXNzcG9ydDYwOTVlYTQ1"]}'\'' -o orderer0-service:7050 --tls --cafile=/etc/hyperledger/orderers/msp/tlscacerts/orderers-ca-service-7054.pem'
 
     cmVneTNmaDMzNERMNjA3Y2M1NmQ=
 
     //UPDATE IDENTITY UpdateIdentity(ctx contractapi.TransactionContextInterface, userId string, docType string, verifier string, walletId string)
-    kubectl exec -it $(kubectl get pods -o=name | grep cli-peer0-verify-deployment | sed "s/^.\{4\}//") -- bash -c 'peer chaincode invoke -C mainchannel -n resources -c '\''{"Args":["UpdateIdentity","hdw3278ycbjceuh","DL","DL Authority","aGR3MzI3OHljYmpjZXVoREw2MDdlNGE3Yg=="]}'\'' -o orderer0-service:7050 --tls --cafile=/etc/hyperledger/orderers/msp/tlscacerts/orderers-ca-service-7054.pem'
+    kubectl exec -it $(kubectl get pods -o=name | grep cli-peer0-verify-deployment | sed "s/^.\{4\}//") -- bash -c 'peer chaincode invoke -C mainchannel -n resources -c '\''{"Args":["UpdateIdentity","hdw3278ycbjceuh","DL","DL Authority","aGR3MzI3OHljYmpjZXVoUGFzc3BvcnQ2MDk1ZTYxNQ=="]}'\'' -o orderer0-service:7050 --tls --cafile=/etc/hyperledger/orderers/msp/tlscacerts/orderers-ca-service-7054.pem'
 
     //DELETE WALLET/IDENTITY
-    kubectl exec -it $(kubectl get pods -o=name | grep cli-peer0-verify-deployment | sed "s/^.\{4\}//") -- bash -c 'peer chaincode invoke -C mainchannel -n resources -c '\''{"Args":["DeleteIdentity","aGR3MzI3OHljYmpjZXVoUGF
+    kubectl exec -it $(kubectl get pods -o=name | grep cli-peer0-verify-deployment | sed "s/^.\{4\}//") -- bash -c 'peer chaincode invoke -C mainchannel -n resources -c '\''{"Args":["DeleteIdentity","aGR3MzI3OHljYmpjZXVoUGFzc3BvcnQ2MDk1ZTYxNQ=="]}'\'' -o orderer0-service:7050 --tls --cafile=/etc/hyperledger/orderers/msp/tlscacerts/orderers-ca-service-7054.pem'
 
 16. Deploy backend
-    docker build -t krutikavk/fabric-be:v6 .
-    docker push krutikavk/fabric-be:v6
+    docker build -t krutikavk/fabric:v6 .
+    docker push krutikavk/fabric:v6
+    cd ..
     kubectl apply -f Blockchain/production/backend
+
+    kubectl delete -f Blockchain/production/backend
 
 
 17. Try to curl inside verify-ca-client-677d58f984-rk99v to check if Blockchain-backend api works
+    root@example1-79dfd5bb95-z7wjp:/# apt-get update
+    root@example1-79dfd5bb95-z7wjp:/# apt-get install curl -y
     
-    kubectl exec -it verify-ca-client-677d58f984-rk99v -- bash
+    kubectl exec -it verify-ca-client-677d58f984-jfkhl -- bash
+    READ
+    curl http://api-service:4000/resources/Z3VkMjM3MzRmaGl1ZWdjMnhQYXNzcG9ydDYwOTVmOWI2
+    curl a9d8f9d2f7570421fa2e6c6768e56afa-1233238198.us-west-2.elb.amazonaws.com/resources/gud23734fhiuegc2x
 
-    curl http://api-service:4000/resources/gud23734fhiuegc2x
-    {"status":200,"walletId":"Mzd5YWZkc3lnZTIzUGFzc3BvcnQ2MDdiODc0ZA==","isValid":false,"message":"Successfully read from ledger"}root@verify-ca-client-677d58f984-rk99v:/# curl -X POST http://api-service:4000/resources -d '{"userId": "gud23734f2x","docType": "Passport","verifier": "Passport Authority"}]}'
+    {"status":200,"walletId":"Z3VkMjM3MzRmaGl1ZWdjMnhQYXNzcG9ydDYwOTVmOTdk==","isValid":false,"message":"Successfully read from ledger"}root@verify-ca-client-677d58f984-rk99v:/# curl -X POST http://api-service:4000/resources -d '{"userId": "gud23734f2x","docType": "Passport","verifier": "Passport Authority"}]}'
 
-
+    CREATE
     curl -i -X POST -H "Content-Type: application/json" -d '{"userId": "gud23734fhiuegc2x","docType": "Passport","verifier": "Passport Authority"}' http://api-service:4000/resources
+    curl -i -X POST -H "Content-Type: application/json" -d '{"userId": "gud23734fhiuegc2x","docType": "Passport","verifier": "Passport Authority"}' a9d8f9d2f7570421fa2e6c6768e56afa-1233238198.us-west-2.elb.amazonaws.com/resources
 
+    UPDATE
+    curl -i -X POST -H "Content-Type: application/json" -d '{"userId": "gud23734fhiuegc2x","docType": "Passport","verifier": "Passport Authority1"}' http://api-service:4000/resources/update/Z3VkMjM3MzRmaGl1ZWdjMnhQYXNzcG9ydDYwOTVmOTdk
+
+    DELETE
+    curl -i -X POST -H "Content-Type: application/json" -d '{"userId": "gud23734fhiuegc2x"}' http://api-service:4000/resources/delete/Z3VkMjM3MzRmaGl1ZWdjMnhQYXNzcG9ydDYwOTVmOWI2
 
 
     
